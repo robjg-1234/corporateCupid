@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProfileScript : MonoBehaviour
+public class ProfileScript
 {
     string characterName;
     int age;

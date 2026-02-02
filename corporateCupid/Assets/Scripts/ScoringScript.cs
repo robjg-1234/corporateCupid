@@ -44,16 +44,19 @@ public class ScoringScript
                 if ((profileOne[i].Item2 > 0 && profileTwo[i].Item2>0) || (profileOne[i].Item2 < 0 && profileTwo[i].Item2 < 0))
                 {
                     result = Mathf.Min(Mathf.Abs(profileTwo[value].Item2), Mathf.Abs(profileOne[i].Item2));
+                    Debug.Log(potentialValues[result-1]);
                     score += potentialValues[result-1];
                 }
                 else
                 {
                     result = Mathf.Min(profileTwo[value].Item2, profileOne[i].Item2);
+                    Debug.Log(potentialValues[(result * -1) - 1]);
                     score -= potentialValues[(result*-1)-1];
                 }
             }
             else
             {
+                Debug.Log(1);
                 score += 1;
             }
         }
@@ -61,6 +64,7 @@ public class ScoringScript
         {
             score = 0;
         }
+        Debug.Log(score);
         score /= 30;
        
         return score;

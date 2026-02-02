@@ -1,28 +1,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameplayCount : MonoBehaviour
+public class GameplayScript : MonoBehaviour
 {
     string[] preferences = {"Food", "Fashion", "Alcohol", "Literature", "Philosophy", "Maths", "Music", "Astrology", "Movies", "Anime", "Bugs", "Games", "Partying", "Long Walk on the Beach" };
     List<ProfileScript> People = new List<ProfileScript>();
+    ProfileScript currentProfile = null;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         for (int i = 0; i < 2;i++)
         {
-            ProfileScript newProfile = new ProfileScript();
+            ProfileScript newProfile= new();
             newProfile.CreateProfile("Test", RandomizePreferences());
             People.Add(newProfile);
         }
         float val = ScoringScript.CalculateScores(People[0].GetPreferences(), People[1].GetPreferences());
         Debug.Log(val);
         //Randomize choosing
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     List<(string, int)> RandomizePreferences()
