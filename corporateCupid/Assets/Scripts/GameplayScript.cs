@@ -3,23 +3,41 @@ using UnityEngine;
 
 public class GameplayScript : MonoBehaviour
 {
+    public static GameplayScript instance;
     string[] preferences = {"Food", "Fashion", "Alcohol", "Literature", "Philosophy", "Maths", "Music", "Astrology", "Movies", "Anime", "Bugs", "Games", "Partying", "Long Walk on the Beach" };
     List<ProfileScript> People = new List<ProfileScript>();
-    ProfileScript currentProfile = null;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    Queue<ProfileScript> availableProfiles = new Queue<ProfileScript>();
+    public ProfileScript currentProfile = null;
+
+    //Day and player information
+    int day = 0;
+    int profilesMatched = 0;
+    int profilesShredded = 0;
+    float overallReputation = 0;
+    float time = 0;
+    int batchSize = 5;
+    int waves = 3;
+
+
+
     void Start()
     {
+        instance = this;
+        // --Temp--
         for (int i = 0; i < 2;i++)
         {
-            ProfileScript newProfile= new();
-            newProfile.CreateProfile("Test", RandomizePreferences());
+            ProfileScript newProfile= new("Test", RandomizePreferences());
             People.Add(newProfile);
+            availableProfiles.Enqueue(newProfile);
         }
-        float val = ScoringScript.CalculateScores(People[0].GetPreferences(), People[1].GetPreferences());
-        Debug.Log(val);
         //Randomize choosing
+
+        //Possibly generate a list of possible Profiles at the beginning of the day in queue format so that we can introduce "Scripted Profiles"
     }
 
+    /// <summary>
+    /// Randomly selects Preferences and assigns a value, three positives and three negatives.
+    /// </summary>
     List<(string, int)> RandomizePreferences()
     {
         List<(string, int)> newList = new List<(string, int)>();
@@ -57,17 +75,27 @@ public class GameplayScript : MonoBehaviour
         return newList;
     }
 
-    bool ContainsNumber(int[] myArray, int num)
+    /// <summary>
+    /// Checks if an integer array contains a specific value and returns true if it does.
+    /// </summary>
+    bool ContainsNumber(int[] array, int num)
     {
         bool found = false;
-        for (int i = 0; i <myArray.Length; i++)
+        for (int i = 0; i < array.Length; i++)
         {
-            if (num == myArray[i])
+            if (num == array[i])
             {
                 found = true;
                 break;
             }
         }
         return found;
+    }
+    /// <summary>
+    /// Chooses the profiles attached to the letters.
+    /// </summary>
+    public ProfileScript PickProfile()
+    {
+        return availableProfiles.Dequeue();
     }
 }

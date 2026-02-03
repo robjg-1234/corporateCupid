@@ -8,21 +8,8 @@ public class ProfileScript
     int age;
     string profession;
     List<(string, int)> preferences;
-    
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public ProfileScript(string newName, List<(string, int)> newPreferences)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    public void CreateProfile(string newName, List<(string,int)> newPreferences)
-    {
-
         characterName = newName;
         age = 22;
         profession = "Bell Ringer";
