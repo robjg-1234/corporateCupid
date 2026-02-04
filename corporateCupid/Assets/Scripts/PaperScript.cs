@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -6,6 +7,7 @@ public class PaperScript : MonoBehaviour
 {
     GameplayScript instance;
     ProfileScript identity;
+    
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -18,12 +20,18 @@ public class PaperScript : MonoBehaviour
         instance = null;
         identity = null;
     }
-    private void OnMouseDrag()
-    {
-        Debug.Log("hi");
-    }
     public ProfileScript GetProfile()
     {
         return identity;
+    }
+    public IEnumerator HoldObject()
+    {
+        while (Mouse.current.leftButton.isPressed)
+        {
+            Debug.Log("I'm here");
+            transform.position = Mouse.current.position.ReadDefaultValue();
+            yield return null;
+        }
+        GameplayScript.player.Unselect();
     }
 }

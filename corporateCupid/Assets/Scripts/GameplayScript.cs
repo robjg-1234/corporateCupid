@@ -4,6 +4,7 @@ using UnityEngine;
 public class GameplayScript : MonoBehaviour
 {
     public static GameplayScript instance;
+    public static Player player;
     string[] preferences = {"Food", "Fashion", "Alcohol", "Literature", "Philosophy", "Maths", "Music", "Astrology", "Movies", "Anime", "Bugs", "Games", "Partying", "Long Walk on the Beach" };
     List<ProfileScript> People = new List<ProfileScript>();
     Queue<ProfileScript> availableProfiles = new Queue<ProfileScript>();
@@ -24,12 +25,17 @@ public class GameplayScript : MonoBehaviour
     {
         instance = this;
         // --Temp--
-        for (int i = 0; i < 2;i++)
+        for (int i = 0; i < 21;i++)
         {
             ProfileScript newProfile= new("Test", RandomizePreferences());
             People.Add(newProfile);
             availableProfiles.Enqueue(newProfile);
         }
+        for (int i = 0;i < 10; i ++)
+        {
+            overallReputation += SubmitScript.CalculateScores(availableProfiles.Dequeue().GetPreferences(),availableProfiles.Dequeue().GetPreferences());
+        }
+        Debug.Log((overallReputation / 10f) * 100);
         //Randomize choosing
 
         //Possibly generate a list of possible Profiles at the beginning of the day in queue format so that we can introduce "Scripted Profiles"
@@ -96,6 +102,6 @@ public class GameplayScript : MonoBehaviour
     /// </summary>
     public ProfileScript PickProfile()
     {
-        return availableProfiles.Dequeue();
+        return availableProfiles.Peek();
     }
 }

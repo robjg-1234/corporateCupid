@@ -57,7 +57,7 @@ public class SubmitScript : MonoBehaviour
     /// <param name="profileOne"></param>
     /// <param name="profileTwo"></param>
     /// <returns></returns>
-    float CalculateScores(List<(string, int)> profileOne, List<(string, int)> profileTwo)
+    public static float CalculateScores(List<(string, int)> profileOne, List<(string, int)> profileTwo)
     {
         //strongly likes + strongly likes + 5
         /*
@@ -75,9 +75,11 @@ public class SubmitScript : MonoBehaviour
          * 
          */
         float score = 0;
+        int bestScore = 0;
         int[] potentialValues = new int[] { 2, 3, 5 };
         for (int i = 0; i < profileOne.Count; i++)
         {
+            bestScore += Mathf.Abs(profileOne[i].Item2);
             bool found = false;
             int value = -1;
             for (int j = 0; j < profileTwo.Count; j++)
@@ -95,19 +97,23 @@ public class SubmitScript : MonoBehaviour
                 if ((profileOne[i].Item2 > 0 && profileTwo[i].Item2 > 0) || (profileOne[i].Item2 < 0 && profileTwo[i].Item2 < 0))
                 {
                     result = Mathf.Min(Mathf.Abs(profileTwo[value].Item2), Mathf.Abs(profileOne[i].Item2));
-                    Debug.Log(potentialValues[result - 1]);
-                    score += potentialValues[result - 1];
+                    if (result == 3)
+                    {
+                        score += potentialValues[result - 1];
+                    }
+                    else 
+                    {
+                        score += (potentialValues[result]+ potentialValues[result - 1])/2;
+                    }
                 }
                 else
                 {
                     result = Mathf.Min(profileTwo[value].Item2, profileOne[i].Item2);
-                    Debug.Log(potentialValues[(result * -1) - 1]);
                     score -= potentialValues[(result * -1) - 1];
                 }
             }
             else
             {
-                Debug.Log(1);
                 score += 1;
             }
         }
@@ -115,8 +121,8 @@ public class SubmitScript : MonoBehaviour
         {
             score = 0;
         }
-        Debug.Log(score);
-        score /= 30;
+        score /= bestScore;
+        Debug.Log(bestScore);
 
         return score;
 
