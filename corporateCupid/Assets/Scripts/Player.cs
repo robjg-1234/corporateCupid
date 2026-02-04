@@ -13,20 +13,15 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Mouse.current.rightButton.wasPressedThisFrame)
-        {
-            Debug.Log(Mouse.current.position.ReadValue());
-        }
         if (Mouse.current.leftButton.wasPressedThisFrame && selectedObject == null)
         {
-            RaycastHit2D hit = Physics2D.BoxCast(Mouse.current.position.ReadValue(), new Vector2(1f,1f), 0, new Vector2(0,-1));
+            RaycastHit2D hit = Physics2D.BoxCast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue())+new Vector3(0.25f,0.25f, 0), new Vector2(0.5f,0.5f), 0, new Vector2(0,-1));
             if (hit.collider != null)
             {
                 if (hit.collider.CompareTag("Interactable"))
                 {
                     selectedObject = hit.collider.GetComponent<PaperScript>();
                     StartCoroutine(selectedObject.HoldObject());
-                    Debug.Log("Hi");
                 }
             }
         }
@@ -38,10 +33,5 @@ public class Player : MonoBehaviour
         {
             selectedObject = null;
         }
-    }
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(Mouse.current.position.ReadUnprocessedValue(), new Vector3(1f, 1f, 0));
     }
 }

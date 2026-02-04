@@ -26,12 +26,19 @@ public class PaperScript : MonoBehaviour
     }
     public IEnumerator HoldObject()
     {
-        while (Mouse.current.leftButton.isPressed)
+        bool selected = true;
+        while (selected)
         {
-            Debug.Log("I'm here");
-            transform.position = Mouse.current.position.ReadDefaultValue();
+            if (Mouse.current.leftButton.wasReleasedThisFrame)
+            {
+                selected = false;
+            }
+            Vector3 newPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+            newPosition.z = 0;
+            transform.position = newPosition;
             yield return null;
         }
         GameplayScript.player.Unselect();
+        yield return null;
     }
 }
