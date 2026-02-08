@@ -4,25 +4,33 @@ using UnityEngine;
 public class SubmitScript : MonoBehaviour
 {
     //Keep a reference of the selected letters.
+    GameplayScript instance;
     PaperScript submissionOne;
     PaperScript submissionTwo;
     int id = 1;
     float totalScore = 0;
-    Dictionary<int, float> relationshipMatches;
+    Dictionary<int, float> relationshipMatches = new Dictionary<int, float>();
 
+    private void Start()
+    {
+        instance = GameplayScript.instance;
+    }
 
     /// <summary>
     /// Adds a profile to the submission.
     /// </summary>
-    public void AddProfile(PaperScript selection)
+    public bool AddProfile(PaperScript selection)
     {
-        if (submissionOne != null)
-        {
-            submissionTwo = selection;
-        }
-        else if (submissionTwo != null)
+        bool admitted = false;
+        if (submissionOne == null)
         {
             submissionOne = selection;
+            admitted = true;
+        }
+        else if (submissionTwo == null)
+        {
+            submissionTwo = selection;
+            admitted = true;
         }
         else
         {
@@ -30,6 +38,7 @@ public class SubmitScript : MonoBehaviour
             //Handle when the submission is full.
             Debug.Log("Envelope is full.");
         }
+        return admitted;
     }
 
     /// <summary>
@@ -39,13 +48,16 @@ public class SubmitScript : MonoBehaviour
     {
         if (submissionOne != null && submissionTwo != null)
         {
+            //To-do
+            //Add confirmation
             totalScore = CalculateScores(submissionOne.GetProfile().GetPreferences(), submissionTwo.GetProfile().GetPreferences());
-            relationshipMatches[id] = totalScore;
+            relationshipMatches.Add(id, totalScore);
             id++;
             Destroy(submissionOne.gameObject);
             Destroy(submissionTwo.gameObject);
             submissionTwo = null;
             submissionOne = null;
+            instance.CallInteraction(instance.currentProfiles);
             Debug.Log(totalScore);
         }
     }
@@ -79,7 +91,7 @@ public class SubmitScript : MonoBehaviour
         int[] potentialValues = new int[] { 2, 3, 5 };
         for (int i = 0; i < profileOne.Count; i++)
         {
-            bestScore += Mathf.Abs(profileOne[i].Item2);
+            bestScore += potentialValues[Mathf.Abs(profileOne[i].Item2)-1];
             bool found = false;
             int value = -1;
             for (int j = 0; j < profileTwo.Count; j++)
@@ -125,8 +137,17 @@ public class SubmitScript : MonoBehaviour
         Debug.Log(bestScore);
 
         return score;
+    }
 
-
-
+    public void RemoveProfile(PaperScript profile)
+    {
+        if (submissionOne == profile)
+        {
+            submissionOne = null;
+        }
+        else if (submissionTwo == profile)
+        {
+            submissionTwo = null;
+        }
     }
 }

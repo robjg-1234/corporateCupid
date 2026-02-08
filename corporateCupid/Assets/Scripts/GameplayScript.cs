@@ -13,7 +13,6 @@ public class GameplayScript : MonoBehaviour
     string[] lastNames = { "Cupidson" };
     List<ProfileScript> People = new List<ProfileScript>();
     Queue<ProfileScript> availableProfiles = new Queue<ProfileScript>();
-    public ProfileScript currentProfile = null;
     public Action<int, int> objectInteracted;
     //Day and player information
     int day = 0;
@@ -37,11 +36,6 @@ public class GameplayScript : MonoBehaviour
             People.Add(newProfile);
             availableProfiles.Enqueue(newProfile);
         }
-        for (int i = 0;i < 10; i ++)
-        {
-            overallReputation += SubmitScript.CalculateScores(availableProfiles.Dequeue().GetPreferences(),availableProfiles.Dequeue().GetPreferences());
-        }
-        Debug.Log((overallReputation / 10f) * 100);
         //Randomize choosing
 
         //Possibly generate a list of possible Profiles at the beginning of the day in queue format so that we can introduce "Scripted Profiles"
@@ -119,6 +113,6 @@ public class GameplayScript : MonoBehaviour
     public ProfileScript PickProfile()
     {
         currentProfiles += 1;
-        return availableProfiles.Peek();
+        return availableProfiles.Dequeue();
     }
 }

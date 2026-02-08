@@ -5,12 +5,12 @@ TagManager:
   serializedVersion: 3
   tags:
   - Interactable
-  - mailbox
+  - Mailbox
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Interactable
   - Water
   - UI
   - 
