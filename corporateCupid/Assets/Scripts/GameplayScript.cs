@@ -1,15 +1,20 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GameplayScript : MonoBehaviour
 {
     public static GameplayScript instance;
     public static Player player;
+    public int currentProfiles = 0;
     string[] preferences = {"Food", "Fashion", "Alcohol", "Literature", "Philosophy", "Maths", "Music", "Astrology", "Movies", "Anime", "Bugs", "Games", "Partying", "Long Walk on the Beach" };
+    string[] names = {"Cupid"};
+    string[] lastNames = { "Cupidson" };
     List<ProfileScript> People = new List<ProfileScript>();
     Queue<ProfileScript> availableProfiles = new Queue<ProfileScript>();
     public ProfileScript currentProfile = null;
-
+    public Action<int, int> objectInteracted;
     //Day and player information
     int day = 0;
     int profilesMatched = 0;
@@ -19,6 +24,7 @@ public class GameplayScript : MonoBehaviour
     int batchSize = 5;
     int waves = 3;
 
+    
 
 
     void Start()
@@ -39,6 +45,16 @@ public class GameplayScript : MonoBehaviour
         //Randomize choosing
 
         //Possibly generate a list of possible Profiles at the beginning of the day in queue format so that we can introduce "Scripted Profiles"
+    }
+    /// <summary>
+    /// A global call to update rendering priority.
+    /// </summary>
+    public void CallInteraction(int targetPrev)
+    {
+        if (objectInteracted != null)
+        {
+            objectInteracted(targetPrev,currentProfiles);
+        }
     }
 
     /// <summary>
@@ -102,6 +118,7 @@ public class GameplayScript : MonoBehaviour
     /// </summary>
     public ProfileScript PickProfile()
     {
+        currentProfiles += 1;
         return availableProfiles.Peek();
     }
 }

@@ -65,7 +65,7 @@ public class SubmitScript : MonoBehaviour
          * 
          * prefer + prefer + 2
          * 
-         * if both like but some people more than others round down
+         * if both like but some people more than others get the average
          * 
          * same rules for dislike
          * 

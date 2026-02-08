@@ -40,8 +40,19 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: background
+    uniqueID: 2813072079
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Priority
+    uniqueID: 3179741091
+    locked: 0
+  - name: Top
+    uniqueID: 1399473003
+    locked: 0
   m_RenderingLayers:
   - Default
+  - PaperBatch
+  - Top
