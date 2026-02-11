@@ -22,12 +22,12 @@ public class SubmitScript : MonoBehaviour
     public bool AddProfile(PaperScript selection)
     {
         bool admitted = false;
-        if (submissionOne == null)
+        if (submissionOne == null && submissionTwo != selection)
         {
             submissionOne = selection;
             admitted = true;
         }
-        else if (submissionTwo == null)
+        else if (submissionTwo == null && submissionOne != selection)
         {
             submissionTwo = selection;
             admitted = true;

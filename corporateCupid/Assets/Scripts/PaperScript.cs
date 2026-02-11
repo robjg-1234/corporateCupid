@@ -84,16 +84,16 @@ public class PaperScript : MonoBehaviour
     /// </summary>
     public IEnumerator HoldObject()
     {
+        Vector3 newPosition = new Vector3(0,0,0);
         bool selected = true;
-        bool insideZoom = false;
-        transform.localScale = new Vector3(1.45f, 1.45f);
+        //transform.localScale = new Vector3(1.45f, 1.45f);
         while (selected)
         {
             if (Mouse.current.leftButton.wasReleasedThisFrame)
             {
                 selected = false;
             }
-            Vector3 newPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+            newPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             newPosition.z = 0;
             transform.position = newPosition;
             yield return null;
@@ -121,12 +121,44 @@ public class PaperScript : MonoBehaviour
                 attachedBoard.RemoveProfile(this);
                 attachedBoard = null;
             }
-        }
-        if (!insideZoom)
-        {
-            transform.localScale = new Vector3(0.5f, 0.5f);
+            returnToDesk(newPosition);
         }
         yield return null;
+    }
+    
+    public IEnumerator Enhance()
+    {
+        transform.localScale = new Vector3(1.45f, 1.45f);
+        transform.position = new Vector3(0, 0, 0);
+        while (!Mouse.current.leftButton.wasPressedThisFrame || !Mouse.current.rightButton.wasPressedThisFrame || !Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            yield return null;
+        }
+    }
+
+    void returnToDesk(Vector3 prevPos)
+    {
+        float top = -1f;
+        float bottom = -3f;
+        float left = -2.25f;
+        float right = 6.25f;
+        if (prevPos.x < left)
+        {
+            prevPos.x = left;
+        }
+        if (prevPos.x > right)
+        {
+            prevPos.x = right;
+        }
+        if (prevPos.y < bottom)
+        {
+            prevPos.y = bottom;
+        }
+        if (prevPos.y > top)
+        {
+            prevPos.y = top;
+        }
+        transform.position = prevPos;
     }
     //private void OnDrawGizmos()
     //{
