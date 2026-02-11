@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Interactable
   - Mailbox
+  - Zoom
   layers:
   - Default
   - TransparentFX

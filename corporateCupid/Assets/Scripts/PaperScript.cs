@@ -32,6 +32,9 @@ public class PaperScript : MonoBehaviour
         instance.currentProfiles--;
         instance.objectInteracted -= ChangePriority;
     }
+    /// <summary>
+    /// Compares the priority of thepaper that was interacted with, and updates its order inside the layer.
+    /// </summary>
     public void ChangePriority(int target, int totalProfiles)
     {
         if (target == recency)
@@ -76,10 +79,14 @@ public class PaperScript : MonoBehaviour
         return identity;
     }
 
+    /// <summary>
+    /// Coroutine to handle paper movement and other interactions (pin to pinboard, shred).
+    /// </summary>
     public IEnumerator HoldObject()
     {
         bool selected = true;
-        transform.localScale = new Vector3(1f, 1f);
+        bool insideZoom = false;
+        transform.localScale = new Vector3(1.45f, 1.45f);
         while (selected)
         {
             if (Mouse.current.leftButton.wasReleasedThisFrame)
@@ -115,7 +122,10 @@ public class PaperScript : MonoBehaviour
                 attachedBoard = null;
             }
         }
-        transform.localScale = new Vector3(0.5f, 0.5f);
+        if (!insideZoom)
+        {
+            transform.localScale = new Vector3(0.5f, 0.5f);
+        }
         yield return null;
     }
     //private void OnDrawGizmos()

@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
     {
         if (Mouse.current.leftButton.wasPressedThisFrame && selectedObject == null)
         {
-            RaycastHit2D hit = Physics2D.BoxCast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), new Vector2(0.1f,0.1f), 0, new Vector2(0,0));
+            RaycastHit2D hit = Physics2D.BoxCast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), new Vector2(0.1f,0.1f), 0, new Vector2(0,0), LayerMask.GetMask("Default"));
             if (hit.collider != null)
             {
                 if (hit.collider.CompareTag("Interactable"))
