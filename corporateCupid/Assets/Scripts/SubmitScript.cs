@@ -4,9 +4,12 @@ using UnityEngine;
 public class SubmitScript : MonoBehaviour
 {
     //Keep a reference of the selected letters.
+    [SerializeField] GameObject matchObject;
     GameplayScript instance;
     PaperScript submissionOne;
     PaperScript submissionTwo;
+    public bool isFull = false;
+    public bool available = true;
     int id = 1;
     float totalScore = 0;
     Dictionary<int, float> relationshipMatches = new Dictionary<int, float>();
@@ -14,6 +17,7 @@ public class SubmitScript : MonoBehaviour
     private void Start()
     {
         instance = GameplayScript.instance;
+        GameplayScript.mailInstance = this;
     }
 
     /// <summary>
@@ -22,21 +26,42 @@ public class SubmitScript : MonoBehaviour
     public bool AddProfile(PaperScript selection)
     {
         bool admitted = false;
-        if (submissionOne == null && submissionTwo != selection)
+        if (available)
         {
-            submissionOne = selection;
-            admitted = true;
-        }
-        else if (submissionTwo == null && submissionOne != selection)
-        {
-            submissionTwo = selection;
-            admitted = true;
-        }
-        else
-        {
-            //T0-DO
-            //Handle when the submission is full.
-            Debug.Log("Envelope is full.");
+            if (submissionOne == null && submissionTwo != selection)
+            {
+                if (submissionTwo != null)
+                {
+                    submissionOne = submissionTwo;
+                    submissionTwo = selection;
+                    submissionOne.transform.position = transform.position - new Vector3(0.3f, 0, 0);
+                    submissionTwo.transform.position = transform.position;
+                }
+                else
+                {
+                    submissionOne = selection;
+                    submissionOne.transform.position = transform.position;
+                }
+                admitted = true;
+            }
+            else if (submissionTwo == null && submissionOne != selection)
+            {
+                submissionTwo = selection;
+                submissionOne.transform.position = transform.position - new Vector3(0.3f, 0, 0);
+                submissionTwo.transform.position = transform.position;
+                admitted = true;
+            }
+            else
+            {
+                //T0-DO
+                //Handle when the submission is full.
+                //Possible replacing mechanic
+                Debug.Log("Envelope is full.");
+            }
+            if (submissionOne != null || submissionTwo != null)
+            {
+                isFull = true;
+            }
         }
         return admitted;
     }
@@ -44,24 +69,31 @@ public class SubmitScript : MonoBehaviour
     /// <summary>
     /// Checks if there are two profiles submitted and calculates their compatibility.
     /// </summary>
-    public void Submit()
+    public void Submit(AttachedLetter selection)
+    {
+        //To-do
+        //Add confirmation
+        totalScore = CalculateScores(selection.prof1.GetProfile().GetPreferences(), selection.prof2.GetProfile().GetPreferences());
+        relationshipMatches.Add(id, totalScore);
+        id++;
+        Destroy(selection);
+        instance.CallInteraction(instance.currentProfiles);
+        Debug.Log(totalScore);
+        
+    }
+    public void CreateMatch()
     {
         if (submissionOne != null && submissionTwo != null)
         {
-            //To-do
-            //Add confirmation
-            totalScore = CalculateScores(submissionOne.GetProfile().GetPreferences(), submissionTwo.GetProfile().GetPreferences());
-            relationshipMatches.Add(id, totalScore);
-            id++;
-            Destroy(submissionOne.gameObject);
-            Destroy(submissionTwo.gameObject);
+            AttachedLetter newMatch = Instantiate(matchObject, transform.position, Quaternion.identity).GetComponent<AttachedLetter>();
+            newMatch.JoinPapers(submissionOne, submissionTwo);
             submissionTwo = null;
             submissionOne = null;
-            instance.CallInteraction(instance.currentProfiles);
-            Debug.Log(totalScore);
+            newMatch.attachedBoard = this;
+            isFull = true;
+            available = false;
         }
     }
-
 
     /// <summary>
     /// Compares the preferences of both of the submitted profiles and returns the compatibility score between them.
@@ -148,6 +180,14 @@ public class SubmitScript : MonoBehaviour
         else if (submissionTwo == profile)
         {
             submissionTwo = null;
+            if (submissionOne != null)
+            {
+                submissionOne.transform.position = transform.position;
+            }
+        }
+        if (submissionTwo == null && submissionOne == null)
+        {
+            isFull = false;
         }
     }
 }

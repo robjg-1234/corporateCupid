@@ -7,6 +7,7 @@ public class GameplayScript : MonoBehaviour
 {
     public static GameplayScript instance;
     public static Player player;
+    public static SubmitScript mailInstance;
     public int currentProfiles = 0;
     string[] preferences = {"Food", "Fashion", "Alcohol", "Literature", "Philosophy", "Maths", "Music", "Astrology", "Movies", "Anime", "Bugs", "Games", "Partying", "Long Walk on the Beach" };
     string[] names = {"Cupid"};

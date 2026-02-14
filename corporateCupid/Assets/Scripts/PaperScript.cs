@@ -84,6 +84,11 @@ public class PaperScript : MonoBehaviour
     /// </summary>
     public IEnumerator HoldObject()
     {
+        if (attachedBoard != null)
+        {
+            attachedBoard.RemoveProfile(this);
+            attachedBoard = null;
+        }
         Vector3 newPosition = new Vector3(0,0,0);
         bool selected = true;
         //transform.localScale = new Vector3(1.45f, 1.45f);
@@ -108,10 +113,20 @@ public class PaperScript : MonoBehaviour
                 if (!attachedBoard.AddProfile(this))
                 {
                     attachedBoard = null;
+                    returnToDesk(newPosition);
                 }
                 //To-do
                 //Fix position of the paper
                 //Add a way to replace existing paper
+            }
+            else
+            {
+                if (attachedBoard != null)
+                {
+                    attachedBoard.RemoveProfile(this);
+                    attachedBoard = null;
+                }
+                returnToDesk(newPosition);
             }
         }
         else
@@ -123,23 +138,41 @@ public class PaperScript : MonoBehaviour
             }
             returnToDesk(newPosition);
         }
-        yield return null;
     }
     
     public IEnumerator Enhance()
     {
+        
+        Vector3 prevPos = transform.position;
         transform.localScale = new Vector3(1.45f, 1.45f);
         transform.position = new Vector3(0, 0, 0);
-        while (!Mouse.current.leftButton.wasPressedThisFrame || !Mouse.current.rightButton.wasPressedThisFrame || !Keyboard.current.escapeKey.wasPressedThisFrame)
+        bool enhanced = true;
+        yield return new WaitForSeconds(0.01f);
+        while (enhanced)
         {
+            if (Mouse.current.leftButton.wasPressedThisFrame || Mouse.current.rightButton.wasPressedThisFrame || Keyboard.current.escapeKey.wasPressedThisFrame)
+            {
+                enhanced = false;
+            }
             yield return null;
         }
+        Debug.Log("hi");
+        transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        if (attachedBoard != null)
+        {
+            transform.position = prevPos;
+        }
+        else
+        {
+            returnToDesk(prevPos);
+        }
+        GameplayScript.player.Unselect();
     }
 
     void returnToDesk(Vector3 prevPos)
     {
-        float top = -1f;
-        float bottom = -3f;
+        float top = -1.2f;
+        float bottom = -2.8f;
         float left = -2.25f;
         float right = 6.25f;
         if (prevPos.x < left)
