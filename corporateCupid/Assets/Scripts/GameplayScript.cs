@@ -1,10 +1,15 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 
 public class GameplayScript : MonoBehaviour
 {
+    [SerializeField] GameObject pause;
+    [SerializeField] GameObject profilePrefab;
+    [SerializeField] GameObject clockSprite;
+    [SerializeField] Sprite[] circleStages;
     public static GameplayScript instance;
     public static Player player;
     public static SubmitScript mailInstance;
@@ -15,11 +20,13 @@ public class GameplayScript : MonoBehaviour
     List<ProfileScript> People = new List<ProfileScript>();
     Queue<ProfileScript> availableProfiles = new Queue<ProfileScript>();
     public Action<int, int> objectInteracted;
+
     //Day and player information
+    public bool dayGoing = false;
     int day = 0;
-    int profilesMatched = 0;
+    public int profilesMatched = 0;
     int profilesShredded = 0;
-    float overallReputation = 0;
+    public float overallScore = 0;
     float time = 0;
     int batchSize = 5;
     int waves = 3;
@@ -40,6 +47,16 @@ public class GameplayScript : MonoBehaviour
         //Randomize choosing
 
         //Possibly generate a list of possible Profiles at the beginning of the day in queue format so that we can introduce "Scripted Profiles"
+    }
+    private void Update()
+    {
+        if (!dayGoing)
+        {
+            if (Keyboard.current.spaceKey.wasPressedThisFrame)
+            {
+                StartCoroutine(DayControl());
+            }
+        }
     }
     /// <summary>
     /// A global call to update rendering priority.
@@ -115,5 +132,43 @@ public class GameplayScript : MonoBehaviour
     {
         currentProfiles += 1;
         return availableProfiles.Dequeue();
+    }
+
+    /// <summary>
+    /// Coroutine that handles the day cycle, including batch drops, and displaying the score.
+    /// </summary>
+    System.Collections.IEnumerator DayControl()
+    {
+        pause.SetActive(false);
+        int stage = 0;
+        SpriteRenderer clockSprite = this.clockSprite.GetComponent<SpriteRenderer>();
+        dayGoing = true;
+        while (stage < 6)
+        {
+            if (stage == 0 || stage == 3)
+            {
+                Vector3 pos = new Vector3(-1, -2, 0);
+                for (int i = 0; i < batchSize; i++)
+                {
+                    Instantiate(profilePrefab, pos, Quaternion.identity);
+                    pos.x += 0.1f;
+                }
+            }
+            clockSprite.sprite = circleStages[stage];
+            stage += 1;
+            yield return new WaitForSeconds(60);
+            Debug.Log("Hour passes");
+        }
+        clockSprite.sprite = circleStages[stage];
+        dayGoing = false;
+        if (profilesMatched > 0)
+        {
+            Debug.Log(overallScore / profilesMatched);
+        }
+        else
+        {
+            Debug.Log("No matches");
+        }
+            pause.SetActive(true);
     }
 }

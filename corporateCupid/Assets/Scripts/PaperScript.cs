@@ -26,6 +26,7 @@ public class PaperScript : MonoBehaviour
         likedText = attachedObjects[4].GetComponent<TMP_Text>();
         likedText.text = identity.GetFormattedLikes();
         dislikeText.text = identity.GetFormattedDislikes();
+        ChangePriority(recency, instance.currentProfiles);
     }
     private void OnDestroy()
     {

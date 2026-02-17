@@ -79,6 +79,8 @@ public class SubmitScript : MonoBehaviour
         Destroy(selection);
         instance.CallInteraction(instance.currentProfiles);
         Debug.Log(totalScore);
+        instance.profilesMatched++;
+        instance.overallScore += totalScore;
         
     }
     public void CreateMatch()
