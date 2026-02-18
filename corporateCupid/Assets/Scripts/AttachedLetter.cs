@@ -69,6 +69,12 @@ public class AttachedLetter : MonoBehaviour
             }
             else if (hit.collider.CompareTag("Postage"))
             {
+                if (attachedBoard != null)
+                {
+                    attachedBoard.available = true;
+                    attachedBoard.isFull = false;
+                    attachedBoard = null;
+                }
                 GameplayScript.mailInstance.Submit(this);
             }
             else
