@@ -2,15 +2,32 @@ using UnityEngine;
 
 public class FolderUnit : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] Preview attachedPreview;
+    PaperScript savedProfile = null;
+    public bool SaveProfile(PaperScript newProf)
     {
-        
+        if (savedProfile == null)
+        {
+            savedProfile = newProf;
+            attachedPreview.CopyInformation(savedProfile.GetProfile().characterName, savedProfile.spriteRend.sprite);
+            attachedPreview.gameObject.SetActive(true);
+            newProf.gameObject.SetActive(false);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
-
-    // Update is called once per frame
-    void Update()
+    public PaperScript PickUp()
     {
-        
+        if (savedProfile != null)
+        {
+            attachedPreview.gameObject.SetActive(false);
+            savedProfile.gameObject.SetActive(true);
+            StartCoroutine(savedProfile.HoldObject());
+            savedProfile = null;
+        }
+        return savedProfile;
     }
 }

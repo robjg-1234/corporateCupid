@@ -12,6 +12,8 @@ public class PaperScript : MonoBehaviour
     [SerializeField] GameObject[] attachedObjects;
     TMP_Text dislikeText;
     TMP_Text likedText;
+    TMP_Text nameText;
+    public SpriteRenderer spriteRend;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -24,6 +26,10 @@ public class PaperScript : MonoBehaviour
         transform.localScale = new Vector3(0.5f, 0.5f);
         dislikeText = attachedObjects[5].GetComponent<TMP_Text>();
         likedText = attachedObjects[4].GetComponent<TMP_Text>();
+        nameText = attachedObjects[2].GetComponent<TMP_Text>();
+        spriteRend = attachedObjects[1].GetComponent<SpriteRenderer>();
+        //Whenever profile icons get added, pass the path to the icon
+        nameText.text = identity.characterName;
         likedText.text = identity.GetFormattedLikes();
         dislikeText.text = identity.GetFormattedDislikes();
         ChangePriority(recency, instance.currentProfiles);
@@ -44,7 +50,7 @@ public class PaperScript : MonoBehaviour
         }
         else
         {
-            
+
             if (recency > 0 && target < recency)
             {
                 if (recency - totalProfiles > 0)
@@ -53,7 +59,7 @@ public class PaperScript : MonoBehaviour
                 }
                 else
                 {
-                   recency--;
+                    recency--;
                 }
             }
         }
@@ -63,9 +69,9 @@ public class PaperScript : MonoBehaviour
         {
             if (i == 0)
             {
-                temp[i].GetComponent<SpriteRenderer>().sortingOrder= 3 * recency;
+                temp[i].GetComponent<SpriteRenderer>().sortingOrder = 3 * recency;
             }
-            else if (i ==1)
+            else if (i == 1)
             {
                 temp[i].GetComponent<SpriteRenderer>().sortingOrder = 1 + 3 * recency;
             }
@@ -90,7 +96,7 @@ public class PaperScript : MonoBehaviour
             attachedBoard.RemoveProfile(this);
             attachedBoard = null;
         }
-        Vector3 newPosition = new Vector3(0,0,0);
+        Vector3 newPosition = new Vector3(0, 0, 0);
         bool selected = true;
         //transform.localScale = new Vector3(1.45f, 1.45f);
         while (selected)
@@ -105,10 +111,19 @@ public class PaperScript : MonoBehaviour
             yield return null;
         }
         GameplayScript.player.Unselect();
-        RaycastHit2D hit = Physics2D.BoxCast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), new Vector2(0.1f, 0.1f), 0, new Vector2(0, 0), float.MaxValue,LayerMask.GetMask("Interactable"));
+        RaycastHit2D hit = Physics2D.BoxCast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), new Vector2(0.1f, 0.1f), 0, new Vector2(0, 0), float.MaxValue, LayerMask.GetMask("Interactable", "Cabinet"));
         if (hit.collider != null)
         {
-            if (hit.collider.CompareTag("Mailbox"))
+            if (hit.collider.CompareTag("Cabinet"))
+            {
+                Debug.Log("HI");
+                FolderUnit temp = hit.collider.GetComponent<FolderUnit>();
+                if (!temp.SaveProfile(this))
+                {
+                    returnToDesk(newPosition);
+                }
+            }
+            else if (hit.collider.CompareTag("Mailbox"))
             {
                 attachedBoard = hit.collider.GetComponent<SubmitScript>();
                 if (!attachedBoard.AddProfile(this))
@@ -117,7 +132,6 @@ public class PaperScript : MonoBehaviour
                     returnToDesk(newPosition);
                 }
                 //To-do
-                //Fix position of the paper
                 //Add a way to replace existing paper
             }
             else
@@ -132,18 +146,15 @@ public class PaperScript : MonoBehaviour
         }
         else
         {
-            if (attachedBoard != null)
-            {
-                attachedBoard.RemoveProfile(this);
-                attachedBoard = null;
-            }
             returnToDesk(newPosition);
         }
+
+
     }
-    
+
     public IEnumerator Enhance()
     {
-        
+
         Vector3 prevPos = transform.position;
         transform.localScale = new Vector3(1.45f, 1.45f);
         transform.position = new Vector3(0, 0, 0);
@@ -157,7 +168,6 @@ public class PaperScript : MonoBehaviour
             }
             yield return null;
         }
-        Debug.Log("hi");
         transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
         if (attachedBoard != null)
         {

@@ -40,7 +40,7 @@ public class GameplayScript : MonoBehaviour
         // --Temp--
         for (int i = 0; i < 21;i++)
         {
-            ProfileScript newProfile= new("Test", RandomizePreferences());
+            ProfileScript newProfile= new("Cupid Cupdison", RandomizePreferences());
             People.Add(newProfile);
             availableProfiles.Enqueue(newProfile);
         }

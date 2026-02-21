@@ -9,6 +9,8 @@ TagManager:
   - Desk
   - Match
   - Postage
+  - Cabinet
+  - arrow
   layers:
   - Default
   - TransparentFX

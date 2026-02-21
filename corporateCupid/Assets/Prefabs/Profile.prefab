@@ -277,6 +277,7 @@ MonoBehaviour:
   - {fileID: 4753908129675220644}
   - {fileID: 8492543553006558295}
   - {fileID: 4138443897190682389}
+  spriteRend: {fileID: 4533431663213691697}
 --- !u!1 &2470383489360602886
 GameObject:
   m_ObjectHideFlags: 0

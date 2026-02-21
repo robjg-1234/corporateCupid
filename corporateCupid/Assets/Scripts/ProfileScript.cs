@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ProfileScript
 {
-    string characterName;
+    public string characterName;
     int age;
     string profession;
     List<(string, int)> preferences;
