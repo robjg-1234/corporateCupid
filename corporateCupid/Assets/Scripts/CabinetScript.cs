@@ -6,14 +6,33 @@ public class CabinetScript : MonoBehaviour
 {
     [SerializeField] FolderUnit[] individualUnits;
     [SerializeField] GameObject drawer;
+    [SerializeField] SpriteRenderer triangle;
+    [SerializeField] SpriteRenderer cabinetFile;
     bool opening = false;
     bool isOpen = false;
     // Update is called once per frame
+    private void Start()
+    {
+        GameplayScript.instance.objectInteracted += ReorderLayer;
+    }
+    private void OnDestroy()
+    {
+        GameplayScript.instance.objectInteracted -= ReorderLayer;
+    }
     void Update()
     {
         if (Keyboard.current.tabKey.wasPressedThisFrame)
         {
             ToggleFile();
+        }
+    }
+    public void ReorderLayer(int temp, int totalProfiles)
+    {
+        triangle.sortingOrder = 4 + 3 * totalProfiles;
+        cabinetFile.sortingOrder = 4 + 3 * totalProfiles;
+        foreach (FolderUnit unit in individualUnits)
+        {
+            unit.SortLayer(totalProfiles);
         }
     }
     IEnumerator SlideOpen()

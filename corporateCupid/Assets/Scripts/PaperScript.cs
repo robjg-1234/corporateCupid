@@ -44,9 +44,11 @@ public class PaperScript : MonoBehaviour
     /// </summary>
     public void ChangePriority(int target, int totalProfiles)
     {
+        int frontVal = 0;
         if (target == recency)
         {
             recency = totalProfiles;
+            frontVal= 8;
         }
         else
         {
@@ -69,15 +71,15 @@ public class PaperScript : MonoBehaviour
         {
             if (i == 0)
             {
-                temp[i].GetComponent<SpriteRenderer>().sortingOrder = 3 * recency;
+                temp[i].GetComponent<SpriteRenderer>().sortingOrder = 3 * recency + frontVal;
             }
             else if (i == 1)
             {
-                temp[i].GetComponent<SpriteRenderer>().sortingOrder = 1 + 3 * recency;
+                temp[i].GetComponent<SpriteRenderer>().sortingOrder = 1 + 3 * recency + frontVal;
             }
             else
             {
-                temp[i].GetComponent<TextMeshPro>().sortingOrder = 1 + 3 * recency;
+                temp[i].GetComponent<TextMeshPro>().sortingOrder = 1 + 3 * recency + frontVal;
             }
         }
     }
@@ -109,6 +111,23 @@ public class PaperScript : MonoBehaviour
             newPosition.z = 0;
             transform.position = newPosition;
             yield return null;
+        }
+        GameObject[] momentary = new GameObject[attachedObjects.Length];
+        attachedObjects.CopyTo(momentary, 0);
+        for (int i = 0; i < attachedObjects.Length; i++)
+        {
+            if (i == 0)
+            {
+                momentary[i].GetComponent<SpriteRenderer>().sortingOrder = 3 * recency;
+            }
+            else if (i == 1)
+            {
+                momentary[i].GetComponent<SpriteRenderer>().sortingOrder = 1 + 3 * recency;
+            }
+            else
+            {
+                momentary[i].GetComponent<TextMeshPro>().sortingOrder = 1 + 3 * recency;
+            }
         }
         GameplayScript.player.Unselect();
         RaycastHit2D hit = Physics2D.BoxCast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), new Vector2(0.1f, 0.1f), 0, new Vector2(0, 0), float.MaxValue, LayerMask.GetMask("Interactable", "Cabinet"));
@@ -184,8 +203,8 @@ public class PaperScript : MonoBehaviour
     {
         float top = -1.2f;
         float bottom = -2.8f;
-        float left = -2.25f;
-        float right = 6.25f;
+        float left = -6f;
+        float right = 6f;
         if (prevPos.x < left)
         {
             prevPos.x = left;

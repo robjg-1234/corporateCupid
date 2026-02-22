@@ -105,8 +105,8 @@ public class AttachedLetter : MonoBehaviour
     {
         float top = -1.2f;
         float bottom = -2.8f;
-        float left = -2.25f;
-        float right = 6.25f;
+        float left = -6f;
+        float right = 6f;
         if (prevPos.x < left)
         {
             prevPos.x = left;

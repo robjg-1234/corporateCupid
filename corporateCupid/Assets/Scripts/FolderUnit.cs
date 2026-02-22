@@ -3,7 +3,13 @@ using UnityEngine;
 public class FolderUnit : MonoBehaviour
 {
     [SerializeField] Preview attachedPreview;
+    [SerializeField] SpriteRenderer squareRend;
     PaperScript savedProfile = null;
+    public void SortLayer(int curProfiles)
+    {
+        attachedPreview.UpdateSort(curProfiles);
+        squareRend.sortingOrder = 5 + 3 * curProfiles;
+    }
     public bool SaveProfile(PaperScript newProf)
     {
         if (savedProfile == null)
