@@ -135,7 +135,6 @@ public class PaperScript : MonoBehaviour
         {
             if (hit.collider.CompareTag("Cabinet"))
             {
-                Debug.Log("HI");
                 FolderUnit temp = hit.collider.GetComponent<FolderUnit>();
                 if (!temp.SaveProfile(this))
                 {
@@ -152,6 +151,12 @@ public class PaperScript : MonoBehaviour
                 }
                 //To-do
                 //Add a way to replace existing paper
+            }
+            else if (hit.collider.CompareTag("Shredder"))
+            {
+                Destroy(this.gameObject);
+                Debug.Log("BYE");
+                //Fully implement the shredder which is going to have two stages the place and the click to shred, I don't know how this affects the other part of the game
             }
             else
             {

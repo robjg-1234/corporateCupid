@@ -11,6 +11,7 @@ TagManager:
   - Postage
   - Cabinet
   - arrow
+  - Shredder
   layers:
   - Default
   - TransparentFX

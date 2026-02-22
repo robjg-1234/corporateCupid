@@ -38,12 +38,7 @@ public class GameplayScript : MonoBehaviour
     {
         instance = this;
         // --Temp--
-        for (int i = 0; i < 21;i++)
-        {
-            ProfileScript newProfile= new("Cupid Cupdison", RandomizePreferences());
-            People.Add(newProfile);
-            availableProfiles.Enqueue(newProfile);
-        }
+        
         //Randomize choosing
 
         //Possibly generate a list of possible Profiles at the beginning of the day in queue format so that we can introduce "Scripted Profiles"
@@ -139,6 +134,12 @@ public class GameplayScript : MonoBehaviour
     /// </summary>
     System.Collections.IEnumerator DayControl()
     {
+        for (int i = 0; i < 20; i++)
+        {
+            ProfileScript newProfile = new("Cupid Cupdison", RandomizePreferences());
+            People.Add(newProfile);
+            availableProfiles.Enqueue(newProfile);
+        }
         pause.SetActive(false);
         int stage = 0;
         SpriteRenderer clockSprite = this.clockSprite.GetComponent<SpriteRenderer>();
