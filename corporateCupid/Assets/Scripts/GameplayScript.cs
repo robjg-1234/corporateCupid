@@ -134,6 +134,7 @@ public class GameplayScript : MonoBehaviour
     /// </summary>
     System.Collections.IEnumerator DayControl()
     {
+        //Temp: creates profiles.
         for (int i = 0; i < 20; i++)
         {
             ProfileScript newProfile = new("Cupid Cupdison", RandomizePreferences());
@@ -144,6 +145,7 @@ public class GameplayScript : MonoBehaviour
         int stage = 0;
         SpriteRenderer clockSprite = this.clockSprite.GetComponent<SpriteRenderer>();
         dayGoing = true;
+        //Manages updates to the timer. Currently it lasts 6 minutes.
         while (stage < 6)
         {
             if (stage == 0 || stage == 3)
@@ -162,6 +164,7 @@ public class GameplayScript : MonoBehaviour
         }
         clockSprite.sprite = circleStages[stage];
         dayGoing = false;
+        //Part of the game that will handle end of day report.
         if (profilesMatched > 0)
         {
             Debug.Log(overallScore / profilesMatched);

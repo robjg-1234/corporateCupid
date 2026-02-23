@@ -28,6 +28,7 @@ public class SubmitScript : MonoBehaviour
         bool admitted = false;
         if (available)
         {
+            //Checks for empty spaces in the pinboard.
             if (submissionOne == null && submissionTwo != selection)
             {
                 if (submissionTwo != null)
@@ -83,6 +84,9 @@ public class SubmitScript : MonoBehaviour
         instance.overallScore += totalScore;
         
     }
+    /// <summary>
+    /// Handles the creation of Matches after clicking a button.
+    /// </summary>
     public void CreateMatch()
     {
         if (submissionOne != null && submissionTwo != null)
@@ -172,7 +176,9 @@ public class SubmitScript : MonoBehaviour
 
         return score;
     }
-
+    /// <summary>
+    /// Handles the removal of profiles from the Pinboard.
+    /// </summary>
     public void RemoveProfile(PaperScript profile)
     {
         if (submissionOne == profile)

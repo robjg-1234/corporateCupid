@@ -18,12 +18,13 @@ public class Player : MonoBehaviour
     {
         if (instance.dayGoing)
         {
+            //Checks for interactable objects and changes the selected object based on it.
             if (Mouse.current.leftButton.wasPressedThisFrame && selectedObject == null && selectedMatch == null)
             {
-
                 RaycastHit2D hit = Physics2D.BoxCast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), new Vector2(0.1f, 0.1f), 0, new Vector2(0, 0), LayerMask.GetMask("Default", "Cabinet"));
                 if (hit.collider != null)
                 {
+                    //Checks if the space clicked has a profile so that it gets picked up.
                     if (hit.collider.CompareTag("Cabinet"))
                     {
                         PaperScript temp = hit.collider.GetComponent<FolderUnit>().PickUp();
@@ -33,12 +34,14 @@ public class Player : MonoBehaviour
                             instance.CallInteraction(selectedObject.recency);
                         }
                     }
+                    //Checks if the object selected is a Profile.
                     else if (hit.collider.CompareTag("Interactable"))
                     {
                         selectedObject = hit.collider.GetComponent<PaperScript>();
                         instance.CallInteraction(selectedObject.recency);
                         StartCoroutine(selectedObject.HoldObject());
                     }
+                    //Checks if the object is a Match.
                     else if (hit.collider.CompareTag("Match"))
                     {
                         selectedMatch = hit.collider.GetComponent<AttachedLetter>();
@@ -47,6 +50,7 @@ public class Player : MonoBehaviour
                 }
 
             }
+            //Handles the zoom interactions.
             else if (Mouse.current.rightButton.wasPressedThisFrame && selectedObject == null && selectedMatch == null)
             {
                 RaycastHit2D hit = Physics2D.BoxCast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), new Vector2(0.1f, 0.1f), 0, new Vector2(0, 0), LayerMask.GetMask("Default"));
@@ -62,7 +66,9 @@ public class Player : MonoBehaviour
             }
         }
     }
-
+    /// <summary>
+    /// Dereferences the selected object.
+    /// </summary>
     public void Unselect()
     {
         if (selectedObject != null)

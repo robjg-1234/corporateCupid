@@ -10,7 +10,6 @@ public class CabinetScript : MonoBehaviour
     [SerializeField] SpriteRenderer cabinetFile;
     bool opening = false;
     bool isOpen = false;
-    // Update is called once per frame
     private void Start()
     {
         GameplayScript.instance.objectInteracted += ReorderLayer;
@@ -21,11 +20,15 @@ public class CabinetScript : MonoBehaviour
     }
     void Update()
     {
+        //As of right now the way to bring it out is with tab key, will probably get moved to the player so that it can autoamitcally get drawn out while hovering with a profile.
         if (Keyboard.current.tabKey.wasPressedThisFrame)
         {
             ToggleFile();
         }
     }
+    /// <summary>
+    /// Updates the sorting order of all its objects so that they can be on top of the objects in the table. It gets updated when any object gets interacted with.
+    /// </summary>
     public void ReorderLayer(int temp, int totalProfiles)
     {
         triangle.sortingOrder = 4 + 3 * totalProfiles;
@@ -42,6 +45,7 @@ public class CabinetScript : MonoBehaviour
         Vector3 finalPos = new(-6.131f, -4.495f, 0);
         Vector3 startingPos = drawer.transform.position;
         Vector3 currentPos = startingPos;
+        //Sliding animation of the cabinet opening, using linear interpolation.
         while (currentPos != finalPos)
         {
             t += 4 * Time.deltaTime;
@@ -53,6 +57,7 @@ public class CabinetScript : MonoBehaviour
             drawer.transform.position = currentPos;
             yield return null;
         }
+        //Activates the collider of the drawer spaces so that the player can interact with them.
         foreach (FolderUnit file in individualUnits)
         {
             file.gameObject.GetComponent<Collider2D>().enabled = true;
@@ -78,6 +83,7 @@ public class CabinetScript : MonoBehaviour
         Vector3 finalPos = new(-11.67f, -4.495f, 0);
         Vector3 startingPos = drawer.transform.position;
         Vector3 currentPos = startingPos;
+        //The opposite of the slide open coroutine.
         foreach (FolderUnit file in individualUnits)
         {
             file.gameObject.GetComponent<Collider2D>().enabled = false;

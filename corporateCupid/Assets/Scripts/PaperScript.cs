@@ -101,6 +101,7 @@ public class PaperScript : MonoBehaviour
         Vector3 newPosition = new Vector3(0, 0, 0);
         bool selected = true;
         //transform.localScale = new Vector3(1.45f, 1.45f);
+        //Keeps the object attached to the mouse position.
         while (selected)
         {
             if (Mouse.current.leftButton.wasReleasedThisFrame)
@@ -114,6 +115,7 @@ public class PaperScript : MonoBehaviour
         }
         GameObject[] momentary = new GameObject[attachedObjects.Length];
         attachedObjects.CopyTo(momentary, 0);
+        //Update the sorting order so that it can fall behind the cabinet.
         for (int i = 0; i < attachedObjects.Length; i++)
         {
             if (i == 0)
@@ -130,9 +132,11 @@ public class PaperScript : MonoBehaviour
             }
         }
         GameplayScript.player.Unselect();
+        //Handles any valid interaction.
         RaycastHit2D hit = Physics2D.BoxCast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), new Vector2(0.1f, 0.1f), 0, new Vector2(0, 0), float.MaxValue, LayerMask.GetMask("Interactable", "Cabinet"));
         if (hit.collider != null)
         {
+            //Checks if the object can get placed into the cabinet.
             if (hit.collider.CompareTag("Cabinet"))
             {
                 FolderUnit temp = hit.collider.GetComponent<FolderUnit>();
@@ -141,6 +145,7 @@ public class PaperScript : MonoBehaviour
                     returnToDesk(newPosition);
                 }
             }
+            //Checks for interactions with pinboard whether it can be attached or not.
             else if (hit.collider.CompareTag("Mailbox"))
             {
                 attachedBoard = hit.collider.GetComponent<SubmitScript>();
@@ -152,6 +157,7 @@ public class PaperScript : MonoBehaviour
                 //To-do
                 //Add a way to replace existing paper
             }
+            //Checks interactions with shredder.
             else if (hit.collider.CompareTag("Shredder"))
             {
                 Destroy(this.gameObject);
@@ -175,15 +181,19 @@ public class PaperScript : MonoBehaviour
 
 
     }
-
+    /// <summary>
+    /// Coroutine that zooms into the selected object.
+    /// </summary>
     public IEnumerator Enhance()
     {
 
         Vector3 prevPos = transform.position;
+        //Scales the object up to 1.45 to get a better view of the text.
         transform.localScale = new Vector3(1.45f, 1.45f);
         transform.position = new Vector3(0, 0, 0);
         bool enhanced = true;
         yield return new WaitForSeconds(0.01f);
+        //Waits for any of the valid keys to be pressed to exit the animation.
         while (enhanced)
         {
             if (Mouse.current.leftButton.wasPressedThisFrame || Mouse.current.rightButton.wasPressedThisFrame || Keyboard.current.escapeKey.wasPressedThisFrame)
@@ -192,6 +202,7 @@ public class PaperScript : MonoBehaviour
             }
             yield return null;
         }
+        //Returns it to the correct location, to the pinboard or the desk.
         transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
         if (attachedBoard != null)
         {
@@ -203,7 +214,9 @@ public class PaperScript : MonoBehaviour
         }
         GameplayScript.player.Unselect();
     }
-
+    /// <summary>
+    /// Ensures the object is within the boundaries of a valid place.
+    /// </summary>
     void returnToDesk(Vector3 prevPos)
     {
         float top = -1.2f;

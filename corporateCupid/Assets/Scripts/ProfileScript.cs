@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// Conatins all the information of the profile.
+/// </summary>
 public class ProfileScript
 {
     public string characterName;
@@ -19,10 +21,16 @@ public class ProfileScript
         //    Debug.Log(preferences[i].Item1 + " " + preferences[i].Item2);
         //}
     }
+    /// <summary>
+    /// Returns the preferences.
+    /// </summary>
     public List<(string, int)> GetPreferences()
     {
         return preferences;
     }
+    /// <summary>
+    /// Formats the likes into a readable string.
+    /// </summary>
     public string GetFormattedLikes()
     {
         string formattedString = "";
@@ -34,6 +42,9 @@ public class ProfileScript
         }
         return formattedString;
     }
+    /// <summary>
+    /// Formats the dislikes into a readable string.
+    /// </summary>
     public string GetFormattedDislikes()
     {
         string formattedString = "";
