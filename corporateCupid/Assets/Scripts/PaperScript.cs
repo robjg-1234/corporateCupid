@@ -219,10 +219,10 @@ public class PaperScript : MonoBehaviour
     /// </summary>
     void returnToDesk(Vector3 prevPos)
     {
-        float top = -1.2f;
-        float bottom = -2.8f;
-        float left = -6f;
-        float right = 6f;
+        float top = instance.deskCenter.y + instance.size.y / 2f;
+        float bottom = instance.deskCenter.y - instance.size.y / 2f;
+        float left = instance.deskCenter.x - instance.size.x / 2f;
+        float right = instance.deskCenter.x + instance.size.x / 2f;
         if (prevPos.x < left)
         {
             prevPos.x = left;
@@ -241,9 +241,4 @@ public class PaperScript : MonoBehaviour
         }
         transform.position = prevPos;
     }
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.greenYellow;
-    //    Gizmos.DrawWireCube(transform.position, attachedObjects[0].transform.localScale*transform.localScale.x);
-    //}
 }

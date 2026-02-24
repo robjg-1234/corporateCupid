@@ -123,10 +123,10 @@ public class AttachedLetter : MonoBehaviour
     /// </summary>
     void returnToDesk(Vector3 prevPos)
     {
-        float top = -1.2f;
-        float bottom = -2.8f;
-        float left = -6f;
-        float right = 6f;
+        float top = GameplayScript.instance.deskCenter.y + GameplayScript.instance.size.y / 2f;
+        float bottom = GameplayScript.instance.deskCenter.y - GameplayScript.instance.size.y / 2f;
+        float left = GameplayScript.instance.deskCenter.x - GameplayScript.instance.size.x / 2f;
+        float right = GameplayScript.instance.deskCenter.x + GameplayScript.instance.size.x / 2f;
         if (prevPos.x < left)
         {
             prevPos.x = left;

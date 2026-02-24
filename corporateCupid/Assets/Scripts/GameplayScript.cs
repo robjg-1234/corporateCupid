@@ -10,6 +10,8 @@ public class GameplayScript : MonoBehaviour
     [SerializeField] GameObject profilePrefab;
     [SerializeField] GameObject clockSprite;
     [SerializeField] Sprite[] circleStages;
+    [SerializeField] public Vector2 deskCenter;
+    [SerializeField] public Vector2 size;
     public static GameplayScript instance;
     public static Player player;
     public static SubmitScript mailInstance;
@@ -150,7 +152,7 @@ public class GameplayScript : MonoBehaviour
         {
             if (stage == 0 || stage == 3)
             {
-                Vector3 pos = new Vector3(-1, -2, 0);
+                Vector3 pos = deskCenter;
                 for (int i = 0; i < batchSize; i++)
                 {
                     Instantiate(profilePrefab, pos, Quaternion.identity);
@@ -174,5 +176,10 @@ public class GameplayScript : MonoBehaviour
             Debug.Log("No matches");
         }
             pause.SetActive(true);
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.lightGoldenRod;
+        Gizmos.DrawWireCube(deskCenter, size);
     }
 }
