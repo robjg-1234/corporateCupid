@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 public class CabinetScript : MonoBehaviour
 {
     [SerializeField] FolderUnit[] individualUnits;
+    [SerializeField] GameObject arrow;
     [SerializeField] GameObject drawer;
     [SerializeField] SpriteRenderer triangle;
     [SerializeField] SpriteRenderer cabinetFile;
@@ -40,6 +41,7 @@ public class CabinetScript : MonoBehaviour
     }
     IEnumerator SlideOpen()
     {
+        triangle.gameObject.GetComponent<Collider2D>().enabled = false;
         opening = true;
         float t = 0;
         Vector3 finalPos = new(-6.131f, -4.495f, 0);
@@ -99,6 +101,7 @@ public class CabinetScript : MonoBehaviour
             drawer.transform.position = currentPos;
             yield return null;
         }
+        triangle.gameObject.GetComponent<Collider2D>().enabled = true;
         opening = false;
         isOpen = false;
     }

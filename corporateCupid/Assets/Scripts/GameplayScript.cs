@@ -175,7 +175,7 @@ public class GameplayScript : MonoBehaviour
         {
             Debug.Log("No matches");
         }
-            pause.SetActive(true);
+        pause.SetActive(true);
     }
     private void OnDrawGizmos()
     {

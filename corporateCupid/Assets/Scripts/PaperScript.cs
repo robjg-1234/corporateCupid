@@ -93,6 +93,7 @@ public class PaperScript : MonoBehaviour
     /// </summary>
     public IEnumerator HoldObject()
     {
+        CabinetScript cab = null;
         if (attachedBoard != null)
         {
             attachedBoard.RemoveProfile(this);
@@ -107,6 +108,15 @@ public class PaperScript : MonoBehaviour
             if (Mouse.current.leftButton.wasReleasedThisFrame)
             {
                 selected = false;
+            }
+            RaycastHit2D shot = Physics2D.BoxCast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), new Vector2(0.1f, 0.1f), 0, new Vector2(0, 0), float.MaxValue, LayerMask.GetMask("Cabinet"));
+            if (shot.collider != null)
+            {
+                if (shot.collider.CompareTag("arrow"))
+                {
+                    cab = shot.collider.gameObject.GetComponentInParent<CabinetScript>();
+                    cab.ToggleFile();
+                }
             }
             newPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             newPosition.z = 0;
