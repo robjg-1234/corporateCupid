@@ -6,32 +6,37 @@ using Random = UnityEngine.Random;
 
 public class GameplayScript : MonoBehaviour
 {
-    [SerializeField] GameObject pause;
+    //[SerializeField] GameObject pause;
     [SerializeField] GameObject profilePrefab;
     [SerializeField] GameObject clockSprite;
     [SerializeField] Sprite[] circleStages;
     [SerializeField] public Vector2 deskCenter;
     [SerializeField] public Vector2 size;
+    [SerializeField] CabinetScript cabinetRef;
+    [SerializeField] IntermissionScript fades;
     public static GameplayScript instance;
     public static Player player;
     public static SubmitScript mailInstance;
     public int currentProfiles = 0;
-    string[] preferences = {"Food", "Fashion", "Alcohol", "Literature", "Philosophy", "Maths", "Music", "Astrology", "Movies", "Anime", "Bugs", "Games", "Partying", "Long Walk on the Beach" };
-    string[] names = {"Cupid"};
-    string[] lastNames = { "Cupidson" };
-    List<ProfileScript> People = new List<ProfileScript>();
+    string[] preferences = {"Movies","Astrology","Programming","Cars","Video Games","Trains","Winter","Travelling","Reading","Music","Social Events","Animals","Sports","Hiking","Cooking" };
+    string[] maleNames = { "Liam","Noah", "Oliver","Elijah","William","James","Benjamin","Lucas","Henry","Alexander","Mason","Michael","Ethan","Daniel","Jacob","Logan","Jackson","Levi","Sebastian","John","Jack","Owen","Theodore","Aiden","Samuel"};
+    string[] femaleNames = { "Olivia", "Emma", "Ava", "Charlotte", "Sophia", "Amelia", "Isabella", "Mia","Evelyn","Harper","Camila", "Abigail", "Gianna", "Luna", "Ella", "Elizabeth", "Sofia", "Emily", "Avery", "Mila", "Scarlett", "Eleanor", "Madison", "Layla", "Penelope" };
+    string[] surnames = { "Smith", "Johnson", "Williams", "Brown","Jones","Garcia","Miller","Davis","Rodriguez","Martinez","Hernandez","Lopez","Gonzales","Wilson","Anderson","Thomas","Taylor","Moore","Jackson","Martin","Lee","Perez","Thompson","White","Harris" };
+    //List<ProfileScript> People = new List<ProfileScript>();
     Queue<ProfileScript> availableProfiles = new Queue<ProfileScript>();
     public Action<int, int> objectInteracted;
+    public Action dayEnded;
 
     //Day and player information
+    public bool clockedIn = false;
     public bool dayGoing = false;
-    int day = 0;
+    public int day = 0;
     public int profilesMatched = 0;
-    int profilesShredded = 0;
+    public int profilesShredded = 0;
     public float overallScore = 0;
     float time = 0;
     int batchSize = 5;
-    int waves = 3;
+    int[] scheduledDrops = new int[] { -1,-1,-1,-1,-1,-1, -1};
 
     
 
@@ -42,28 +47,23 @@ public class GameplayScript : MonoBehaviour
         // --Temp--
         
         //Randomize choosing
-
-        //Possibly generate a list of possible Profiles at the beginning of the day in queue format so that we can introduce "Scripted Profiles"
     }
-    private void Update()
-    {
-        if (!dayGoing)
-        {
-            if (Keyboard.current.spaceKey.wasPressedThisFrame)
-            {
-                StartCoroutine(DayControl());
-            }
-        }
-    }
+    //private void Update()
+    //{
+    //    if (!dayGoing)
+    //    {
+    //        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+    //        {
+    //            StartCoroutine(DayControl());
+    //        }
+    //    }
+    //}
     /// <summary>
     /// A global call to update rendering priority.
     /// </summary>
     public void CallInteraction(int targetPrev)
     {
-        if (objectInteracted != null)
-        {
-            objectInteracted(targetPrev,currentProfiles);
-        }
+        objectInteracted?.Invoke(targetPrev, currentProfiles);
     }
 
     /// <summary>
@@ -134,24 +134,43 @@ public class GameplayScript : MonoBehaviour
     /// <summary>
     /// Coroutine that handles the day cycle, including batch drops, and displaying the score.
     /// </summary>
-    System.Collections.IEnumerator DayControl()
+    public System.Collections.IEnumerator DayControl()
     {
+        //Add a fade into desk space and wait for clock in card to be placed.
         //Temp: creates profiles.
-        for (int i = 0; i < 20; i++)
+        //Fetch day
+        
+        FetchDay();
+        dayGoing = true;
+        while (!clockedIn)
         {
-            ProfileScript newProfile = new("Cupid Cupdison", RandomizePreferences());
-            People.Add(newProfile);
-            availableProfiles.Enqueue(newProfile);
+            yield return null;
         }
-        pause.SetActive(false);
+        if (day == 0)
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                PaperScript pfRef = Instantiate(profilePrefab, deskCenter, Quaternion.identity).GetComponent<PaperScript>();
+                yield return new WaitForEndOfFrame();
+                cabinetRef.individualUnits[i].SaveProfile(pfRef);
+            }
+        }
+        Debug.Log("Clocked In");
         int stage = 0;
         SpriteRenderer clockSprite = this.clockSprite.GetComponent<SpriteRenderer>();
-        dayGoing = true;
-        //Manages updates to the timer. Currently it lasts 6 minutes.
         while (stage < 6)
         {
-            if (stage == 0 || stage == 3)
+            time += Time.deltaTime;
+            //Control time for when we add pauses which would stop the in-game timer.
+            //Current timer lasts 8 minutes.
+            if (time > 80f)
             {
+                time = 0;
+                stage++;
+            }
+            if (scheduledDrops[stage] == 1)
+            {
+                scheduledDrops[stage] = -1;
                 Vector3 pos = deskCenter;
                 for (int i = 0; i < batchSize; i++)
                 {
@@ -160,9 +179,7 @@ public class GameplayScript : MonoBehaviour
                 }
             }
             clockSprite.sprite = circleStages[stage];
-            stage += 1;
-            yield return new WaitForSeconds(60);
-            Debug.Log("Hour passes");
+            yield return null;
         }
         clockSprite.sprite = circleStages[stage];
         dayGoing = false;
@@ -175,7 +192,61 @@ public class GameplayScript : MonoBehaviour
         {
             Debug.Log("No matches");
         }
-        pause.SetActive(true);
+        //Add fade out to results
+        //pause.SetActive(true);
+        StartCoroutine(fades.FadeOut());
+    }
+    /// <summary>
+    /// Create profiles and setup day characteristics (waves and time)
+    /// </summary>
+    void FetchDay()
+    {
+        switch (day)
+        {
+            case 0:
+                batchSize = 5;
+                scheduledDrops[0] = 1;
+                scheduledDrops[3] = 1; 
+                availableProfiles.Enqueue(new ProfileScript("Cupid Cupidson", new() { ("Movies", 1), ("Anime", 1), ("Astrology", 1),("Cars", -1), ("Video Games", -1), ("Trains", -1) }));
+                availableProfiles.Enqueue(new ProfileScript("Cupid Cupidson", new() { ("Movies", 2), ("Anime", 1), ("Astrology", 1), ("Cars", -1), ("Video Games", -1), ("Trains", -1) }));
+                availableProfiles.Enqueue(new ProfileScript("Cupid Cupidson", new() { ("Movies", 2), ("Anime", 1), ("Astrology", 1), ("Cars", -1), ("Video Games", -1), ("Trains", -1) }));
+                availableProfiles.Enqueue(new ProfileScript("Cupid Cupidson", new() { ("Movies", 1), ("Anime", 3), ("Astrology", 2), ("Cars", -1), ("Video Games", -1), ("Trains", -1) }));
+                availableProfiles.Enqueue(new ProfileScript("Cupid Cupidson", new() { ("Movies", 3), ("Anime", 1), ("Astrology", 1), ("Cars", -2), ("Video Games", -1), ("Trains", -1) }));
+                availableProfiles.Enqueue(new ProfileScript("Cupid Cupidson", new() { ("Movies", 3), ("Anime", 1), ("Astrology", 2), ("Cars", -2), ("Video Games", -1), ("Trains", -1) }));
+                availableProfiles.Enqueue(new ProfileScript("Cupid Cupidson", new() { ("Movies", 1), ("Anime", 1), ("Astrology", 2), ("Cars", -1), ("Video Games", -1), ("Trains", -1) }));
+                availableProfiles.Enqueue(new ProfileScript("Cupid Cupidson", new() { ("Movies", 1), ("Anime", 1), ("Astrology", 1), ("Cars", -1), ("Video Games", -3), ("Trains", -1) }));
+                availableProfiles.Enqueue(new ProfileScript("Cupid Cupidson", new() { ("Movies", 3), ("Anime", 1), ("Astrology", 1), ("Cars", -1), ("Video Games", -1), ("Trains", -3) }));
+                availableProfiles.Enqueue(new ProfileScript("Cupid Cupidson", new() { ("Movies", 3), ("Anime", 2), ("Astrology", 3), ("Cars", -1), ("Video Games", -1), ("Trains", -1) }));
+                availableProfiles.Enqueue(new ProfileScript("Cupid Cupidson", new() { ("Movies", 1), ("Anime", 2), ("Astrology", 1), ("Cars", -1), ("Video Games", -3), ("Trains", -1) }));
+                availableProfiles.Enqueue(new ProfileScript("Cupid Cupidson", new() { ("Movies", 1), ("Anime", 2), ("Astrology", 3), ("Cars", -3), ("Video Games", -1), ("Trains", -1) }));
+                break;
+            default:
+                scheduledDrops[0] = 1;
+                scheduledDrops[2] = 1;
+                scheduledDrops[4] = 1;
+                batchSize = 5;
+                for (int i = 0; i < 15; i++)
+                {
+                    string makeshiftName = "";
+                    int rand = Random.Range(0, 2);
+                    if (rand == 0)
+                    {
+                        rand = Random.Range(0, maleNames.Length);
+                        makeshiftName += maleNames[rand] + " ";
+                    }
+                    else
+                    {
+                        rand = Random.Range(0, femaleNames.Length);
+                        makeshiftName += femaleNames[rand] + " ";
+                    }
+                    rand = Random.Range(0, surnames.Length);
+                    makeshiftName += surnames[rand];
+                    ProfileScript newProfile = new(makeshiftName, RandomizePreferences());
+                    
+                    availableProfiles.Enqueue(newProfile);
+                }
+                break;
+        }
     }
     private void OnDrawGizmos()
     {

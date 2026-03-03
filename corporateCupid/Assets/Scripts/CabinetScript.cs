@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class CabinetScript : MonoBehaviour
 {
-    [SerializeField] FolderUnit[] individualUnits;
+    [SerializeField] public FolderUnit[] individualUnits;
     [SerializeField] GameObject arrow;
     [SerializeField] GameObject drawer;
     [SerializeField] SpriteRenderer triangle;
@@ -14,10 +14,12 @@ public class CabinetScript : MonoBehaviour
     private void Start()
     {
         GameplayScript.instance.objectInteracted += ReorderLayer;
+        GameplayScript.instance.dayEnded += EmptyCabinet;
     }
     private void OnDestroy()
     {
         GameplayScript.instance.objectInteracted -= ReorderLayer;
+        GameplayScript.instance.dayEnded -= EmptyCabinet;
     }
     void Update()
     {
@@ -104,5 +106,16 @@ public class CabinetScript : MonoBehaviour
         triangle.gameObject.GetComponent<Collider2D>().enabled = true;
         opening = false;
         isOpen = false;
+    }
+
+    public void EmptyCabinet()
+    {
+        if (GameplayScript.instance.day == 0)
+        {
+            foreach (FolderUnit unit in individualUnits)
+            {
+                unit.ClearInventory();
+            }
+        }
     }
 }

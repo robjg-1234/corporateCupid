@@ -13,6 +13,7 @@ public class PaperScript : MonoBehaviour
     TMP_Text dislikeText;
     TMP_Text likedText;
     TMP_Text nameText;
+    public bool saved = false;
     public SpriteRenderer spriteRend;
 
 
@@ -23,6 +24,7 @@ public class PaperScript : MonoBehaviour
         identity = instance.PickProfile();
         recency = instance.currentProfiles;
         instance.objectInteracted += ChangePriority;
+        instance.dayEnded += EndOfDayCheck;
         transform.localScale = new Vector3(0.5f, 0.5f);
         dislikeText = attachedObjects[5].GetComponent<TMP_Text>();
         likedText = attachedObjects[4].GetComponent<TMP_Text>();
@@ -38,6 +40,8 @@ public class PaperScript : MonoBehaviour
     {
         instance.currentProfiles--;
         instance.objectInteracted -= ChangePriority;
+        instance.dayEnded -= EndOfDayCheck;
+
     }
     /// <summary>
     /// Compares the priority of thepaper that was interacted with, and updates its order inside the layer.
@@ -171,7 +175,7 @@ public class PaperScript : MonoBehaviour
             else if (hit.collider.CompareTag("Shredder"))
             {
                 Destroy(this.gameObject);
-                Debug.Log("BYE");
+                instance.profilesShredded++;
                 //Fully implement the shredder which is going to have two stages the place and the click to shred, I don't know how this affects the other part of the game
             }
             else
@@ -250,5 +254,13 @@ public class PaperScript : MonoBehaviour
             prevPos.y = top;
         }
         transform.position = prevPos;
+    }
+    public void EndOfDayCheck()
+    {
+        if (!saved)
+        {
+            instance.profilesShredded++;
+            Destroy(gameObject);
+        }
     }
 }

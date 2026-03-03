@@ -12,6 +12,8 @@ TagManager:
   - Cabinet
   - arrow
   - Shredder
+  - Clock
+  - punch
   layers:
   - Default
   - TransparentFX

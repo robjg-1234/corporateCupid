@@ -21,6 +21,7 @@ public class FolderUnit : MonoBehaviour
         if (savedProfile == null)
         {
             savedProfile = newProf;
+            savedProfile.saved = true;
             attachedPreview.CopyInformation(savedProfile.GetProfile().characterName, savedProfile.spriteRend.sprite);
             attachedPreview.gameObject.SetActive(true);
             newProf.gameObject.SetActive(false);
@@ -41,9 +42,22 @@ public class FolderUnit : MonoBehaviour
             //Deactivates the preview.
             attachedPreview.gameObject.SetActive(false);
             savedProfile.gameObject.SetActive(true);
+            savedProfile.saved = false;
             StartCoroutine(savedProfile.HoldObject());
             savedProfile = null;
         }
         return savedProfile;
+    }
+    /// <summary>
+    /// Empty file spot;
+    /// </summary>
+    public void ClearInventory()
+    {
+        if (savedProfile != null)
+        {
+            attachedPreview.gameObject.SetActive(false);
+            Destroy(savedProfile.gameObject);
+            savedProfile = null;
+        }
     }
 }

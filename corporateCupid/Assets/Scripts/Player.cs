@@ -5,6 +5,7 @@ public class Player : MonoBehaviour
 {
     PaperScript selectedObject = null;
     AttachedLetter selectedMatch = null;
+    PunchCardScript selectedPunch = null;
     GameplayScript instance;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -19,7 +20,7 @@ public class Player : MonoBehaviour
         if (instance.dayGoing)
         {
             //Checks for interactable objects and changes the selected object based on it.
-            if (Mouse.current.leftButton.wasPressedThisFrame && selectedObject == null && selectedMatch == null)
+            if (Mouse.current.leftButton.wasPressedThisFrame && selectedObject == null && selectedMatch == null && selectedPunch == null)
             {
                 RaycastHit2D hit = Physics2D.BoxCast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), new Vector2(0.1f, 0.1f), 0, new Vector2(0, 0), LayerMask.GetMask("Default", "Cabinet"));
                 if (hit.collider != null)
@@ -33,6 +34,13 @@ public class Player : MonoBehaviour
                             selectedObject = temp;
                             instance.CallInteraction(selectedObject.recency);
                         }
+                    }
+                    //Checks to see if it is a punch card
+                    else if (hit.collider.CompareTag("punch"))
+                    {
+                        selectedPunch = hit.collider.GetComponent<PunchCardScript>();
+                        instance.CallInteraction(selectedPunch.recency);
+                        StartCoroutine(selectedPunch.HoldObject());
                     }
                     //Checks if the object selected is a Profile.
                     else if (hit.collider.CompareTag("Interactable"))
@@ -78,6 +86,10 @@ public class Player : MonoBehaviour
         if (selectedMatch != null)
         {
             selectedMatch = null;
+        }
+        if (selectedPunch != null)
+        {
+            selectedPunch = null;
         }
     }
 }

@@ -89,7 +89,7 @@ public class SubmitScript : MonoBehaviour
     /// </summary>
     public void CreateMatch()
     {
-        if (submissionOne != null && submissionTwo != null)
+        if (submissionOne != null && submissionTwo != null && instance.clockedIn)
         {
             AttachedLetter newMatch = Instantiate(matchObject, transform.position, Quaternion.identity).GetComponent<AttachedLetter>();
             newMatch.JoinPapers(submissionOne, submissionTwo);
