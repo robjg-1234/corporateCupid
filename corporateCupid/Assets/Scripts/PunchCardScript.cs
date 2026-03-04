@@ -79,44 +79,17 @@ public class PunchCardScript : MonoBehaviour
             }
             else
             {
-                returnToDesk(newPosition);
+                transform.position = instance.ReturnToDesk(newPosition);
             }
         }
         else
         {
-            returnToDesk(newPosition);
+            transform.position = instance.ReturnToDesk(newPosition);
         }
 
 
     }
 
-    /// <summary>
-    /// Ensures the object is within the boundaries of a valid place.
-    /// </summary>
-    void returnToDesk(Vector3 prevPos)
-    {
-        float top = instance.deskCenter.y + instance.size.y / 2f;
-        float bottom = instance.deskCenter.y - instance.size.y / 2f;
-        float left = instance.deskCenter.x - instance.size.x / 2f;
-        float right = instance.deskCenter.x + instance.size.x / 2f;
-        if (prevPos.x < left)
-        {
-            prevPos.x = left;
-        }
-        if (prevPos.x > right)
-        {
-            prevPos.x = right;
-        }
-        if (prevPos.y < bottom)
-        {
-            prevPos.y = bottom;
-        }
-        if (prevPos.y > top)
-        {
-            prevPos.y = top;
-        }
-        transform.position = prevPos;
-    }
     public void EndOfDayUpdate()
     {
         gameObject.transform.position = initialPos;

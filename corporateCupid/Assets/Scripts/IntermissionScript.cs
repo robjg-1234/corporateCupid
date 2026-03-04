@@ -82,6 +82,7 @@ public class IntermissionScript : MonoBehaviour
     }
     public IEnumerator FadeOut()
     {
+        fadeScreen.gameObject.SetActive(true);
         float t = 0;
         float alpha = 0;
         while (alpha < 1)
@@ -96,6 +97,7 @@ public class IntermissionScript : MonoBehaviour
             yield return null;
         }
         yield return null;
+        instance.clockedIn = false;
         instance.dayEnded?.Invoke();
         UpdateText();
         alpha = 0;
@@ -148,7 +150,7 @@ public class IntermissionScript : MonoBehaviour
         t = 0;
         while (waiting)
         {
-            if (Keyboard.current.anyKey.wasPressedThisFrame)
+            if (Keyboard.current.spaceKey.wasPressedThisFrame)
             {
                 waiting = false;
             }

@@ -21,7 +21,7 @@ public class FolderUnit : MonoBehaviour
         if (savedProfile == null)
         {
             savedProfile = newProf;
-            savedProfile.saved = true;
+            newProf.saved = true;
             attachedPreview.CopyInformation(savedProfile.GetProfile().characterName, savedProfile.spriteRend.sprite);
             attachedPreview.gameObject.SetActive(true);
             newProf.gameObject.SetActive(false);

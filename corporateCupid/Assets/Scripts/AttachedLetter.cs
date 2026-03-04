@@ -102,7 +102,7 @@ public class AttachedLetter : MonoBehaviour
                     attachedBoard.isFull = false;
                     attachedBoard = null;
                 }
-                returnToDesk(newPosition);
+                transform.position = GameplayScript.instance.ReturnToDesk(newPosition);
             }
         }
         else
@@ -113,36 +113,9 @@ public class AttachedLetter : MonoBehaviour
                 attachedBoard.isFull = false;
                 attachedBoard = null;
             }
-            returnToDesk(newPosition);
+            transform.position = GameplayScript.instance.ReturnToDesk(newPosition);
         }
 
         yield return null;
-    }
-    /// <summary>
-    ///  Ensures that the object stays within the table when dropped.
-    /// </summary>
-    void returnToDesk(Vector3 prevPos)
-    {
-        float top = GameplayScript.instance.deskCenter.y + GameplayScript.instance.size.y / 2f;
-        float bottom = GameplayScript.instance.deskCenter.y - GameplayScript.instance.size.y / 2f;
-        float left = GameplayScript.instance.deskCenter.x - GameplayScript.instance.size.x / 2f;
-        float right = GameplayScript.instance.deskCenter.x + GameplayScript.instance.size.x / 2f;
-        if (prevPos.x < left)
-        {
-            prevPos.x = left;
-        }
-        if (prevPos.x > right)
-        {
-            prevPos.x = right;
-        }
-        if (prevPos.y < bottom)
-        {
-            prevPos.y = bottom;
-        }
-        if (prevPos.y > top)
-        {
-            prevPos.y = top;
-        }
-        transform.position = prevPos;
     }
 }

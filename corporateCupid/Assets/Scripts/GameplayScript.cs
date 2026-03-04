@@ -158,6 +158,7 @@ public class GameplayScript : MonoBehaviour
         Debug.Log("Clocked In");
         int stage = 0;
         SpriteRenderer clockSprite = this.clockSprite.GetComponent<SpriteRenderer>();
+        clockSprite.sprite = circleStages[stage];
         while (stage < 6)
         {
             time += Time.deltaTime;
@@ -166,6 +167,7 @@ public class GameplayScript : MonoBehaviour
             if (time > 80f)
             {
                 time = 0;
+                Debug.Log("time passes");
                 stage++;
             }
             if (scheduledDrops[stage] == 1)
@@ -247,6 +249,31 @@ public class GameplayScript : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    public Vector2 ReturnToDesk(Vector3 originalPos)
+    {
+        float top = deskCenter.y + size.y / 2f;
+        float bottom = deskCenter.y - size.y / 2f;
+        float left = instance.deskCenter.x - size.x / 2f;
+        float right = deskCenter.x + size.x / 2f;
+        if (originalPos.x < left)
+        {
+            originalPos.x = left;
+        }
+        if (originalPos.x > right)
+        {
+            originalPos.x = right;
+        }
+        if (originalPos.y < bottom)
+        {
+            originalPos.y = bottom;
+        }
+        if (originalPos.y > top)
+        {
+            originalPos.y = top;
+        }
+        return originalPos;
     }
     private void OnDrawGizmos()
     {

@@ -156,7 +156,7 @@ public class PaperScript : MonoBehaviour
                 FolderUnit temp = hit.collider.GetComponent<FolderUnit>();
                 if (!temp.SaveProfile(this))
                 {
-                    returnToDesk(newPosition);
+                    transform.position = instance.ReturnToDesk(newPosition);
                 }
             }
             //Checks for interactions with pinboard whether it can be attached or not.
@@ -166,7 +166,7 @@ public class PaperScript : MonoBehaviour
                 if (!attachedBoard.AddProfile(this))
                 {
                     attachedBoard = null;
-                    returnToDesk(newPosition);
+                    transform.position = instance.ReturnToDesk(newPosition);
                 }
                 //To-do
                 //Add a way to replace existing paper
@@ -185,12 +185,12 @@ public class PaperScript : MonoBehaviour
                     attachedBoard.RemoveProfile(this);
                     attachedBoard = null;
                 }
-                returnToDesk(newPosition);
+                transform.position = instance.ReturnToDesk(newPosition);
             }
         }
         else
         {
-            returnToDesk(newPosition);
+            transform.position = instance.ReturnToDesk(newPosition);
         }
 
 
@@ -224,37 +224,37 @@ public class PaperScript : MonoBehaviour
         }
         else
         {
-            returnToDesk(prevPos);
+            transform.position = instance.ReturnToDesk(prevPos);
         }
         GameplayScript.player.Unselect();
     }
     /// <summary>
     /// Ensures the object is within the boundaries of a valid place.
     /// </summary>
-    void returnToDesk(Vector3 prevPos)
-    {
-        float top = instance.deskCenter.y + instance.size.y / 2f;
-        float bottom = instance.deskCenter.y - instance.size.y / 2f;
-        float left = instance.deskCenter.x - instance.size.x / 2f;
-        float right = instance.deskCenter.x + instance.size.x / 2f;
-        if (prevPos.x < left)
-        {
-            prevPos.x = left;
-        }
-        if (prevPos.x > right)
-        {
-            prevPos.x = right;
-        }
-        if (prevPos.y < bottom)
-        {
-            prevPos.y = bottom;
-        }
-        if (prevPos.y > top)
-        {
-            prevPos.y = top;
-        }
-        transform.position = prevPos;
-    }
+    //void returnToDesk(Vector3 prevPos)
+    //{
+    //    float top = instance.deskCenter.y + instance.size.y / 2f;
+    //    float bottom = instance.deskCenter.y - instance.size.y / 2f;
+    //    float left = instance.deskCenter.x - instance.size.x / 2f;
+    //    float right = instance.deskCenter.x + instance.size.x / 2f;
+    //    if (prevPos.x < left)
+    //    {
+    //        prevPos.x = left;
+    //    }
+    //    if (prevPos.x > right)
+    //    {
+    //        prevPos.x = right;
+    //    }
+    //    if (prevPos.y < bottom)
+    //    {
+    //        prevPos.y = bottom;
+    //    }
+    //    if (prevPos.y > top)
+    //    {
+    //        prevPos.y = top;
+    //    }
+    //    transform.position = prevPos;
+    //}
     public void EndOfDayCheck()
     {
         if (!saved)
