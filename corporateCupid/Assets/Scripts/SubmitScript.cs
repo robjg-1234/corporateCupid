@@ -144,7 +144,7 @@ public class SubmitScript : MonoBehaviour
             if (found)
             {
                 int result = 0;
-                if ((profileOne[i].Item2 > 0 && profileTwo[i].Item2 > 0) || (profileOne[i].Item2 < 0 && profileTwo[i].Item2 < 0))
+                if ((profileOne[i].Item2 > 0 && profileTwo[value].Item2 > 0) || (profileOne[i].Item2 < 0 && profileTwo[value].Item2 < 0))
                 {
                     result = Mathf.Min(Mathf.Abs(profileTwo[value].Item2), Mathf.Abs(profileOne[i].Item2));
                     if (result == 3)
@@ -161,11 +161,13 @@ public class SubmitScript : MonoBehaviour
                     result = Mathf.Min(profileTwo[value].Item2, profileOne[i].Item2);
                     score -= potentialValues[(result * -1) - 1];
                 }
+                Debug.Log(result);
             }
             else
             {
                 score += 1;
             }
+            
         }
         if (score < 0)
         {
