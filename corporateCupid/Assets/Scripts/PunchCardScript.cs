@@ -15,6 +15,7 @@ public class PunchCardScript : MonoBehaviour
         instance = GameplayScript.instance;
         initialPos = transform.position;
         ChangePriority(recency, instance.currentProfiles);
+        instance.currentProfiles++;
         instance.objectInteracted += ChangePriority;
         instance.dayEnded += EndOfDayUpdate;
     }

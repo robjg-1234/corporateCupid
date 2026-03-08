@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,10 +11,21 @@ public class AttachedLetter : MonoBehaviour
     public PaperScript prof1;
     public PaperScript prof2;
     public SubmitScript attachedBoard;
+    private void Start()
+    {
+        GameplayScript.instance.dayEnded += EndOfDayCheck;
+    }
     private void OnDestroy()
     {
-        Destroy(prof1.gameObject);
-        Destroy(prof2.gameObject);
+        GameplayScript.instance.dayEnded -= EndOfDayCheck;
+        if (prof1 != null)
+        {
+            Destroy(prof1.gameObject);
+        }
+        if (prof1 != null)
+        {
+            Destroy(prof2.gameObject);
+        }
         GameplayScript.player.Unselect();
     }
     /// <summary>
@@ -82,6 +94,11 @@ public class AttachedLetter : MonoBehaviour
                     attachedBoard.isFull = true;
                     transform.position = attachedBoard.transform.position;
                 }
+                else
+                {
+                    attachedBoard = null;
+                    transform.position = GameplayScript.instance.ReturnToDesk(newPosition);
+                }
             }
             //Handles the submission of the match.
             else if (hit.collider.CompareTag("Postage"))
@@ -117,5 +134,10 @@ public class AttachedLetter : MonoBehaviour
         }
 
         yield return null;
+    }
+    public void EndOfDayCheck()
+    {
+        GameplayScript.instance.profilesShredded -= 2;
+        Destroy(gameObject);
     }
 }

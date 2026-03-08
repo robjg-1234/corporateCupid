@@ -43,6 +43,7 @@ public class FolderUnit : MonoBehaviour
             attachedPreview.gameObject.SetActive(false);
             savedProfile.gameObject.SetActive(true);
             savedProfile.saved = false;
+            GameplayScript.instance.CallInteraction(savedProfile.recency);
             StartCoroutine(savedProfile.HoldObject());
             savedProfile = null;
         }

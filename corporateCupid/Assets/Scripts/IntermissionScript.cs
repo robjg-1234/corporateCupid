@@ -30,9 +30,18 @@ public class IntermissionScript : MonoBehaviour
     }
     void UpdateText()
     {
+        //TO-DO: Separate information for day by day and total
         matchesText.text = "Profiles Matched: " + instance.profilesMatched + "\r\n";
         shredsText.text = "Profiles Shredded: " + instance.profilesShredded + "\r\n";
-        qualityText.text = "Matches Quality: " + (instance.overallScore/instance.profilesMatched) + "%\r\n";
+        if (instance.profilesMatched > 0)
+        {
+            qualityText.text = "Matches Quality: " + (instance.overallScore / instance.profilesMatched) + "%\r\n";
+        }
+        else
+        {
+            qualityText.text = "Matches Quality: 0%\r\n";
+        }
+        
     }
     IEnumerator FadeIn()
     {

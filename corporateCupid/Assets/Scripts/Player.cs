@@ -42,6 +42,12 @@ public class Player : MonoBehaviour
                         instance.CallInteraction(selectedPunch.recency);
                         StartCoroutine(selectedPunch.HoldObject());
                     }
+                    //Checks if the object is a Match.
+                    else if (hit.collider.CompareTag("Match"))
+                    {
+                        selectedMatch = hit.collider.GetComponent<AttachedLetter>();
+                        StartCoroutine(selectedMatch.HoldObject());
+                    }
                     //Checks if the object selected is a Profile.
                     else if (hit.collider.CompareTag("Interactable"))
                     {
@@ -49,12 +55,7 @@ public class Player : MonoBehaviour
                         instance.CallInteraction(selectedObject.recency);
                         StartCoroutine(selectedObject.HoldObject());
                     }
-                    //Checks if the object is a Match.
-                    else if (hit.collider.CompareTag("Match"))
-                    {
-                        selectedMatch = hit.collider.GetComponent<AttachedLetter>();
-                        StartCoroutine(selectedMatch.HoldObject());
-                    }
+                    
                 }
 
             }
