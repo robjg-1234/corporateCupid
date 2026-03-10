@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
@@ -8,8 +9,7 @@ public class GameplayScript : MonoBehaviour
 {
     //[SerializeField] GameObject pause;
     [SerializeField] GameObject profilePrefab;
-    [SerializeField] GameObject clockSprite;
-    [SerializeField] Sprite[] circleStages;
+    [SerializeField] TMP_Text clockTime;
     [SerializeField] public Vector2 deskCenter;
     [SerializeField] public Vector2 size;
     [SerializeField] CabinetScript cabinetRef;
@@ -34,9 +34,15 @@ public class GameplayScript : MonoBehaviour
     public int profilesMatched = 0;
     public int profilesShredded = 0;
     public float overallScore = 0;
+    public float dailyScore = 0;
+    public int dailyMatch = 0;
+    public int dailyShred = 0;
+    //Allows for dynamic time manipulation higher equals faster
+    public float timeMultiplier;
     float time = 0;
     int batchSize = 5;
-    int[] scheduledDrops = new int[] { -1,-1,-1,-1,-1,-1, -1};
+    //Contains the moments for the batch drops of the day: IGT seconds
+    List<int> profileDrop = new(0);
 
     
 
@@ -130,7 +136,27 @@ public class GameplayScript : MonoBehaviour
         currentProfiles += 1;
         return availableProfiles.Dequeue();
     }
-
+    public void SetTime(int hour, int minute)
+    {
+        string tempText = "";
+        if (hour > 9)
+        {
+            tempText = hour + ":";
+        }
+        else
+        {
+            tempText = "0" + hour + ":";
+        }
+        if (minute > 9)
+        {
+            tempText += minute.ToString();
+        }
+        else
+        {
+            tempText += "0" + minute;
+        }
+        clockTime.text = tempText;
+    }
     /// <summary>
     /// Coroutine that handles the day cycle, including batch drops, and displaying the score.
     /// </summary>
@@ -156,23 +182,29 @@ public class GameplayScript : MonoBehaviour
             }
         }
         Debug.Log("Clocked In");
-        int stage = 0;
-        SpriteRenderer clockSprite = this.clockSprite.GetComponent<SpriteRenderer>();
-        clockSprite.sprite = circleStages[stage];
-        while (stage < 6)
+        int hour = 9;
+        int minute = 0;
+        int totalTime = 0;
+        //Control time for when we add pauses which would stop the in-game timer.
+        //Current timer lasts 8 minutes.
+        while (totalTime < 480)
         {
-            time += Time.deltaTime;
-            //Control time for when we add pauses which would stop the in-game timer.
-            //Current timer lasts 8 minutes.
-            if (time > 80f)
+            time += timeMultiplier*Time.deltaTime;
+            if (time > 1)
             {
+                totalTime += 1;
+                minute += 1;
+                if (minute > 59)
+                {
+                    hour += 1;
+                    minute = 0;
+                }
+                SetTime(hour, minute);
                 time = 0;
-                Debug.Log("time passes");
-                stage++;
             }
-            if (scheduledDrops[stage] == 1)
+            if (profileDrop.Contains(totalTime))
             {
-                scheduledDrops[stage] = -1;
+                profileDrop.Remove(totalTime);
                 Vector3 pos = deskCenter;
                 for (int i = 0; i < batchSize; i++)
                 {
@@ -180,10 +212,9 @@ public class GameplayScript : MonoBehaviour
                     pos.x += 0.1f;
                 }
             }
-            clockSprite.sprite = circleStages[stage];
             yield return null;
         }
-        clockSprite.sprite = circleStages[stage];
+        profileDrop.Clear();
         dayGoing = false;
         //Part of the game that will handle end of day report.
         if (profilesMatched > 0)
@@ -207,8 +238,8 @@ public class GameplayScript : MonoBehaviour
         {
             case 0:
                 batchSize = 5;
-                scheduledDrops[0] = 1;
-                scheduledDrops[3] = 1; 
+                profileDrop.Add(0);
+                profileDrop.Add(240);
                 availableProfiles.Enqueue(new ProfileScript("Cupid Cupidson", new() { ("Movies", 1), ("Anime", 1), ("Astrology", 1),("Cars", -1), ("Video Games", -1), ("Trains", -1) }));
                 availableProfiles.Enqueue(new ProfileScript("Cupid Cupidson", new() { ("Movies", 2), ("Anime", 1), ("Astrology", 1), ("Cars", -1), ("Video Games", -1), ("Trains", -1) }));
                 availableProfiles.Enqueue(new ProfileScript("Cupid Cupidson", new() { ("Movies", 2), ("Anime", 1), ("Astrology", 1), ("Cars", -1), ("Video Games", -1), ("Trains", -1) }));
@@ -223,9 +254,9 @@ public class GameplayScript : MonoBehaviour
                 availableProfiles.Enqueue(new ProfileScript("Cupid Cupidson", new() { ("Movies", 1), ("Anime", 2), ("Astrology", 3), ("Cars", -3), ("Video Games", -1), ("Trains", -1) }));
                 break;
             default:
-                scheduledDrops[0] = 1;
-                scheduledDrops[2] = 1;
-                scheduledDrops[4] = 1;
+                profileDrop.Add(0);
+                profileDrop.Add(160);
+                profileDrop.Add(320);
                 batchSize = 5;
                 for (int i = 0; i < 15; i++)
                 {

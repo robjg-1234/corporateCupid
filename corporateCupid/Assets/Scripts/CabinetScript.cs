@@ -10,7 +10,7 @@ public class CabinetScript : MonoBehaviour
     [SerializeField] SpriteRenderer triangle;
     [SerializeField] SpriteRenderer cabinetFile;
     bool opening = false;
-    bool isOpen = false;
+    public bool isOpen = false;
     private void Start()
     {
         GameplayScript.instance.objectInteracted += ReorderLayer;
@@ -43,6 +43,7 @@ public class CabinetScript : MonoBehaviour
     }
     IEnumerator SlideOpen()
     {
+        ReorderLayer(0, GameplayScript.instance.currentProfiles);
         triangle.gameObject.GetComponent<Collider2D>().enabled = false;
         opening = true;
         float t = 0;
@@ -68,6 +69,7 @@ public class CabinetScript : MonoBehaviour
         }
         opening = false;
         isOpen = true;
+        triangle.gameObject.GetComponent<Collider2D>().enabled = true;
     }
     public void ToggleFile()
     {
@@ -82,6 +84,7 @@ public class CabinetScript : MonoBehaviour
     }
     IEnumerator SlideClose()
     {
+        triangle.gameObject.GetComponent<Collider2D>().enabled = false;
         opening = true;
         float t = 0;
         Vector3 finalPos = new(-11.67f, -4.495f, 0);

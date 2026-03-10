@@ -69,11 +69,13 @@ public class PunchCardScript : MonoBehaviour
         sr.sortingOrder = 3 * recency;
         GameplayScript.player.Unselect();
         //Handles any valid interaction.
+        //Might modify the range of the box cast if not then it will become a raycast
         RaycastHit2D hit = Physics2D.BoxCast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), new Vector2(0.1f, 0.1f), 0, new Vector2(0, 0), float.MaxValue, LayerMask.GetMask("Interactable"));
         if (hit.collider != null)
         {
             if (hit.collider.CompareTag("Clock"))
             {
+                objectCollider.enabled = false;
                 instance.clockedIn = true;
                 //when the clock becomes its own object, I'll send the punch card behind it. For now it just gets disabled.
                 gameObject.SetActive(false);
@@ -95,6 +97,7 @@ public class PunchCardScript : MonoBehaviour
     {
         gameObject.transform.position = initialPos;
         ChangePriority(recency, instance.currentProfiles);
+        objectCollider.enabled = true;
         gameObject.SetActive(true);
     }
 }

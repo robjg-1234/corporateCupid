@@ -16,7 +16,9 @@ public class IntermissionScript : MonoBehaviour
     [SerializeField] TMP_Text matchesText;
     [SerializeField] TMP_Text shredsText;
     [SerializeField] TMP_Text qualityText;
-
+    [SerializeField] TMP_Text buttonText;
+    [SerializeField] Image buttonBack;
+    bool waiting = false;
     private void Start()
     {
         instance = GameplayScript.instance;
@@ -26,6 +28,8 @@ public class IntermissionScript : MonoBehaviour
         matchesText.color = new(matchesText.color.r, matchesText.color.g, matchesText.color.b, 0);
         shredsText.color = new(shredsText.color.r, shredsText.color.g, shredsText.color.b, 0);
         qualityText.color = new(qualityText.color.r, qualityText.color.g, qualityText.color.b, 0);
+        buttonText.color = new(buttonText.color.r, buttonText.color.g, buttonText.color.b, 0);
+        buttonBack.color = new(buttonBack.color.r, buttonBack.color.g, buttonBack.color.b, 0);
         StartCoroutine(FadeIn());
     }
     void UpdateText()
@@ -35,7 +39,8 @@ public class IntermissionScript : MonoBehaviour
         shredsText.text = "Profiles Shredded: " + instance.profilesShredded + "\r\n";
         if (instance.profilesMatched > 0)
         {
-            qualityText.text = "Matches Quality: " + (instance.overallScore / instance.profilesMatched) + "%\r\n";
+            float val = (instance.overallScore / instance.profilesMatched)*100;
+            qualityText.text = "Matches Quality: " + val.ToString("0.00") + "%\r\n";
         }
         else
         {
@@ -43,8 +48,16 @@ public class IntermissionScript : MonoBehaviour
         }
         
     }
+    public void Proceed()
+    {
+        if (waiting)
+        {
+            waiting = false;
+        }
+    }
     IEnumerator FadeIn()
     {
+        instance.SetTime(9, 0);
         fadeScreen.gameObject.SetActive(true);
         float t = 0;
         float alpha = 0;
@@ -139,6 +152,7 @@ public class IntermissionScript : MonoBehaviour
         t = 0;
         alpha = 0;
         yield return new WaitForSeconds(0.25f);
+        waiting = false;
         while (alpha < 1)
         {
             t += Time.deltaTime;
@@ -152,17 +166,15 @@ public class IntermissionScript : MonoBehaviour
             matchesText.color = new(matchesText.color.r, matchesText.color.g, matchesText.color.b, alpha);
             shredsText.color = new(shredsText.color.r, shredsText.color.g, shredsText.color.b, alpha);
             qualityText.color = new(qualityText.color.r, qualityText.color.g, qualityText.color.b, alpha);
+            buttonText.color = new(buttonText.color.r, buttonText.color.g, buttonText.color.b, alpha);
+            buttonBack.color = new(buttonBack.color.r, buttonBack.color.g, buttonBack.color.b, alpha);
             yield return null;
         }
+        waiting = true;
         yield return new WaitForSeconds(0.1f);
-        bool waiting = true;
         t = 0;
         while (waiting)
         {
-            if (Keyboard.current.spaceKey.wasPressedThisFrame)
-            {
-                waiting = false;
-            }
             yield return null;
         }
         while (alpha > 0)
@@ -178,6 +190,8 @@ public class IntermissionScript : MonoBehaviour
             matchesText.color = new(matchesText.color.r, matchesText.color.g, matchesText.color.b, alpha);
             shredsText.color = new(shredsText.color.r, shredsText.color.g, shredsText.color.b, alpha);
             qualityText.color = new(qualityText.color.r, qualityText.color.g, qualityText.color.b, alpha);
+            buttonText.color = new(buttonText.color.r, buttonText.color.g, buttonText.color.b, alpha);
+            buttonBack.color = new(buttonBack.color.r, buttonBack.color.g, buttonBack.color.b, alpha);
             yield return null;
         }
         dayText.text = "Day " + instance.day;

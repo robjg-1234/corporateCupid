@@ -77,7 +77,7 @@ public class SubmitScript : MonoBehaviour
         totalScore = CalculateScores(selection.prof1.GetProfile().GetPreferences(), selection.prof2.GetProfile().GetPreferences());
         relationshipMatches.Add(id, totalScore);
         id++;
-        Destroy(selection);
+        Destroy(selection.gameObject);
         instance.CallInteraction(instance.currentProfiles);
         Debug.Log(totalScore);
         instance.profilesMatched++;
@@ -146,6 +146,15 @@ public class SubmitScript : MonoBehaviour
                 int result = 0;
                 if ((profileOne[i].Item2 > 0 && profileTwo[value].Item2 > 0) || (profileOne[i].Item2 < 0 && profileTwo[value].Item2 < 0))
                 {
+                    int tempVal = potentialValues[Mathf.Abs(profileTwo[value].Item2) - 1] - potentialValues[Mathf.Abs(profileOne[i].Item2) - 1];
+                    if (tempVal > 0)
+                    {
+                        bestScore += tempVal;
+                    }
+                    else if (tempVal == 0)
+                    {
+                        score++;
+                    }
                     result = Mathf.Min(Mathf.Abs(profileTwo[value].Item2), Mathf.Abs(profileOne[i].Item2));
                     if (result == 3)
                     {
@@ -172,6 +181,10 @@ public class SubmitScript : MonoBehaviour
         if (score < 0)
         {
             score = 0;
+        }
+        else if (score > bestScore)
+        {
+            score = bestScore;
         }
         score /= bestScore;
         Debug.Log(bestScore);

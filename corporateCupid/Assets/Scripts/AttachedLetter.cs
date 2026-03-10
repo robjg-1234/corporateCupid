@@ -81,6 +81,7 @@ public class AttachedLetter : MonoBehaviour
         }
         GameplayScript.player.Unselect();
         //Checks for interactions.
+        //Might modify the range of the box cast if not then it will become a raycast
         RaycastHit2D hit = Physics2D.BoxCast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), new Vector2(0.1f, 0.1f), 0, new Vector2(0, 0), float.MaxValue, LayerMask.GetMask("Interactable"));
         if (hit.collider != null)
         {

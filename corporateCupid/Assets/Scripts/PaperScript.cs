@@ -113,13 +113,16 @@ public class PaperScript : MonoBehaviour
             {
                 selected = false;
             }
-            RaycastHit2D shot = Physics2D.BoxCast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), new Vector2(0.1f, 0.1f), 0, new Vector2(0, 0), float.MaxValue, LayerMask.GetMask("Cabinet"));
+            RaycastHit2D shot = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), Vector2.zero, float.MaxValue, LayerMask.GetMask("Cabinet"));
             if (shot.collider != null)
             {
                 if (shot.collider.CompareTag("arrow"))
                 {
                     cab = shot.collider.gameObject.GetComponentInParent<CabinetScript>();
-                    cab.ToggleFile();
+                    if (!cab.isOpen)
+                    {
+                        cab.ToggleFile();
+                    }
                 }
             }
             newPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
@@ -147,6 +150,7 @@ public class PaperScript : MonoBehaviour
         }
         GameplayScript.player.Unselect();
         //Handles any valid interaction.
+        //Might modify the range of the box cast if not then it will become a raycast
         RaycastHit2D hit = Physics2D.BoxCast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), new Vector2(0.1f, 0.1f), 0, new Vector2(0, 0), float.MaxValue, LayerMask.GetMask("Interactable", "Cabinet"));
         if (hit.collider != null)
         {
@@ -190,6 +194,11 @@ public class PaperScript : MonoBehaviour
         }
         else
         {
+            if (attachedBoard != null)
+            {
+                attachedBoard.RemoveProfile(this);
+                attachedBoard = null;
+            }
             transform.position = instance.ReturnToDesk(newPosition);
         }
 

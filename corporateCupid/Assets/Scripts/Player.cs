@@ -1,8 +1,10 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] LayerMask _layers;
     PaperScript selectedObject = null;
     AttachedLetter selectedMatch = null;
     PunchCardScript selectedPunch = null;
@@ -22,7 +24,7 @@ public class Player : MonoBehaviour
             //Checks for interactable objects and changes the selected object based on it.
             if (Mouse.current.leftButton.wasPressedThisFrame && selectedObject == null && selectedMatch == null && selectedPunch == null)
             {
-                RaycastHit2D hit = Physics2D.BoxCast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), new Vector2(0.1f, 0.1f), 0, new Vector2(0, 0), LayerMask.GetMask("Default", "Cabinet"));
+                RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), Vector2.zero, float.MaxValue, _layers);
                 if (hit.collider != null)
                 {
                     //Checks if the space clicked has a profile so that it gets picked up.
@@ -34,6 +36,12 @@ public class Player : MonoBehaviour
                             selectedObject = temp;
                             instance.CallInteraction(selectedObject.recency);
                         }
+                    }
+                    //Checks to see if it is the arrow to open/close cabinet
+                    else if (hit.collider.CompareTag("arrow"))
+                    {
+                        CabinetScript cab = hit.collider.gameObject.GetComponentInParent<CabinetScript>();
+                        cab.ToggleFile();
                     }
                     //Checks to see if it is a punch card
                     else if (hit.collider.CompareTag("punch"))
@@ -55,7 +63,6 @@ public class Player : MonoBehaviour
                         instance.CallInteraction(selectedObject.recency);
                         StartCoroutine(selectedObject.HoldObject());
                     }
-                    
                 }
 
             }

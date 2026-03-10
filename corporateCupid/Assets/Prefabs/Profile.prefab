@@ -227,7 +227,7 @@ BoxCollider2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_LayerOverridePriority: 0
+  m_LayerOverridePriority: 1
   m_ForceSendLayers:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -277,6 +277,7 @@ MonoBehaviour:
   - {fileID: 4753908129675220644}
   - {fileID: 8492543553006558295}
   - {fileID: 4138443897190682389}
+  saved: 0
   spriteRend: {fileID: 4533431663213691697}
 --- !u!1 &2470383489360602886
 GameObject:
