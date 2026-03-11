@@ -138,7 +138,7 @@ public class AttachedLetter : MonoBehaviour
     }
     public void EndOfDayCheck()
     {
-        GameplayScript.instance.profilesShredded -= 2;
+        GameplayScript.instance.profilesShredded += 2;
         Destroy(gameObject);
     }
 }

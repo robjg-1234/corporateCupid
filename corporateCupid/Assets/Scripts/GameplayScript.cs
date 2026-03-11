@@ -30,7 +30,7 @@ public class GameplayScript : MonoBehaviour
     //Day and player information
     public bool clockedIn = false;
     public bool dayGoing = false;
-    public int day = 0;
+    public int day;
     public int profilesMatched = 0;
     public int profilesShredded = 0;
     public float overallScore = 0;
@@ -75,13 +75,18 @@ public class GameplayScript : MonoBehaviour
     /// <summary>
     /// Randomly selects Preferences and assigns a value, three positives and three negatives.
     /// </summary>
-    List<(string, int)> RandomizePreferences()
+    List<(string, int)> RandomizePreferences(int forceLike = -1)
     {
         List<(string, int)> newList = new List<(string, int)>();
         int[] selection = new int[] { -1,-1,-1,-1,-1,-1};
         for (int i = 0; i<3;i++)
         {
             int newSelection = Random.Range(0, preferences.Length);
+            if (forceLike > -1)
+            {
+                newSelection = forceLike;
+                forceLike = -1;
+            }
             while (ContainsNumber(selection, newSelection))
             {
                 newSelection++;
@@ -182,9 +187,11 @@ public class GameplayScript : MonoBehaviour
             }
         }
         Debug.Log("Clocked In");
+        //Oh no!!!!!!!, the table! It's broken!
         int hour = 9;
         int minute = 0;
         int totalTime = 0;
+        int minuteSecond = 0;
         //Control time for when we add pauses which would stop the in-game timer.
         //Current timer lasts 8 minutes.
         while (totalTime < 480)
@@ -192,8 +199,14 @@ public class GameplayScript : MonoBehaviour
             time += timeMultiplier*Time.deltaTime;
             if (time > 1)
             {
+                minuteSecond += 1;
+                if (minuteSecond > 9)
+                {
+                    minute += 10;
+                    minuteSecond = 0;
+                }
                 totalTime += 1;
-                minute += 1;
+                
                 if (minute > 59)
                 {
                     hour += 1;
@@ -216,6 +229,8 @@ public class GameplayScript : MonoBehaviour
         }
         profileDrop.Clear();
         dayGoing = false;
+        overallScore += dailyScore;
+        profilesMatched += dailyMatch;
         //Part of the game that will handle end of day report.
         if (profilesMatched > 0)
         {
@@ -255,10 +270,11 @@ public class GameplayScript : MonoBehaviour
                 break;
             default:
                 profileDrop.Add(0);
-                profileDrop.Add(160);
-                profileDrop.Add(320);
-                batchSize = 5;
-                for (int i = 0; i < 15; i++)
+                profileDrop.Add(120);
+                profileDrop.Add(280);
+                batchSize = 7;
+                int previousLink = -1;
+                for (int i = 0; i < 21; i++)
                 {
                     string makeshiftName = "";
                     int rand = Random.Range(0, 2);
@@ -274,7 +290,27 @@ public class GameplayScript : MonoBehaviour
                     }
                     rand = Random.Range(0, surnames.Length);
                     makeshiftName += surnames[rand];
-                    ProfileScript newProfile = new(makeshiftName, RandomizePreferences());
+                    List<(string, int)> chosenPreferences = RandomizePreferences(previousLink);
+                    int j = 0;
+                    int randomChoice = Random.Range(0, 3);
+                    if (Random.Range(0, 1f) <= 0.4f)
+                    {
+                        for (j = 0; j < preferences.Length; j++)
+                        {
+                            if (preferences[j].Equals(chosenPreferences[randomChoice].Item1))
+                            {
+                                previousLink = j;
+                                break;
+                            }
+                        }
+                        Debug.Log("" + chosenPreferences[randomChoice].Item1 + " : " + makeshiftName);
+                    }
+                    else
+                    {
+                        previousLink = -1;
+                    }
+                    ProfileScript newProfile = new(makeshiftName,chosenPreferences);
+                    
                     
                     availableProfiles.Enqueue(newProfile);
                 }

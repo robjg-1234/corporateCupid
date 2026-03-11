@@ -179,7 +179,7 @@ public class PaperScript : MonoBehaviour
             else if (hit.collider.CompareTag("Shredder"))
             {
                 Destroy(this.gameObject);
-                instance.profilesShredded++;
+                instance.dailyShred++;
                 //Fully implement the shredder which is going to have two stages the place and the click to shred, I don't know how this affects the other part of the game
             }
             else
@@ -242,7 +242,7 @@ public class PaperScript : MonoBehaviour
     {
         if (!saved)
         {
-            instance.profilesShredded++;
+            instance.dailyShred++;
             Destroy(gameObject);
         }
     }

@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 48684737}
   - component: {fileID: 48684738}
   m_Layer: 2
-  m_Name: Layer 2_0
+  m_Name: deskSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1646,7 +1646,7 @@ GameObject:
   - component: {fileID: 736785788}
   - component: {fileID: 736785789}
   m_Layer: 2
-  m_Name: Layer 9_0
+  m_Name: clockSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1661,7 +1661,7 @@ Transform:
   m_GameObject: {fileID: 736785787}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.5547, y: 2.1798, z: 0}
+  m_LocalPosition: {x: -5.5547, y: 2.068, z: 0}
   m_LocalScale: {x: 0.9283, y: 0.9653, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2403,7 +2403,7 @@ GameObject:
   - component: {fileID: 889992935}
   - component: {fileID: 889992936}
   m_Layer: 2
-  m_Name: Layer 6_0
+  m_Name: submitSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3355,7 +3355,7 @@ GameObject:
   - component: {fileID: 1282406283}
   - component: {fileID: 1282406284}
   m_Layer: 2
-  m_Name: Layer 8_0
+  m_Name: button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3442,7 +3442,7 @@ GameObject:
   - component: {fileID: 1295375506}
   - component: {fileID: 1295375507}
   m_Layer: 2
-  m_Name: Layer 5_0
+  m_Name: pinboardSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4379,7 +4379,7 @@ Transform:
   m_GameObject: {fileID: 1383468421}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.7735, y: 2.16, z: 0}
+  m_LocalPosition: {x: -5.7735, y: 2.063, z: 0}
   m_LocalScale: {x: 2.433, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4484,7 +4484,7 @@ GameObject:
   - component: {fileID: 1443461602}
   - component: {fileID: 1443461603}
   m_Layer: 2
-  m_Name: Layer 3_0
+  m_Name: thingSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5669,7 +5669,7 @@ GameObject:
   - component: {fileID: 1641302874}
   - component: {fileID: 1641302875}
   m_Layer: 2
-  m_Name: Layer 1_0
+  m_Name: backgroundSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6195,7 +6195,7 @@ GameObject:
   - component: {fileID: 1835574147}
   - component: {fileID: 1835574148}
   m_Layer: 2
-  m_Name: Layer 7_0
+  m_Name: shredderSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6397,7 +6397,7 @@ MonoBehaviour:
   currentProfiles: 0
   clockedIn: 0
   dayGoing: 0
-  day: 0
+  day: 1
   profilesMatched: 0
   profilesShredded: 0
   overallScore: 0
@@ -6580,7 +6580,7 @@ GameObject:
   - component: {fileID: 2119541019}
   - component: {fileID: 2119541020}
   m_Layer: 2
-  m_Name: Layer 4_0
+  m_Name: cubicleSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -35,17 +35,18 @@ public class IntermissionScript : MonoBehaviour
     void UpdateText()
     {
         //TO-DO: Separate information for day by day and total
-        matchesText.text = "Profiles Matched: " + instance.profilesMatched + "\r\n";
-        shredsText.text = "Profiles Shredded: " + instance.profilesShredded + "\r\n";
+        matchesText.text = "Profiles Matched: " + instance.dailyMatch + "\r\n";
+        shredsText.text = "Profiles Shredded: " + instance.dailyShred + "\r\n";
         if (instance.profilesMatched > 0)
         {
-            float val = (instance.overallScore / instance.profilesMatched)*100;
+            float val = (instance.dailyScore / instance.dailyMatch)*100;
             qualityText.text = "Matches Quality: " + val.ToString("0.00") + "%\r\n";
         }
         else
         {
             qualityText.text = "Matches Quality: 0%\r\n";
         }
+        //TO-DO: Add the total overall score
         
     }
     public void Proceed()
@@ -121,7 +122,18 @@ public class IntermissionScript : MonoBehaviour
         yield return null;
         instance.clockedIn = false;
         instance.dayEnded?.Invoke();
+        instance.profilesShredded += instance.dailyShred;
         UpdateText();
+        
+        if (instance.day == 0)
+        {
+            instance.profilesShredded -= instance.dailyShred;
+            instance.profilesMatched -= instance.dailyMatch;
+            instance.overallScore -= instance.dailyScore;
+        }
+        instance.dailyMatch = 0;
+        instance.dailyScore = 0;
+        instance.dailyShred = 0;
         alpha = 0;
         t = 0;
         instance.day++;
