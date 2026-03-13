@@ -37,10 +37,13 @@ public class GameplayScript : MonoBehaviour
     public float dailyScore = 0;
     public int dailyMatch = 0;
     public int dailyShred = 0;
+    public float validScore = 0;
+    int money = 0;
     //Allows for dynamic time manipulation higher equals faster
     public float timeMultiplier;
     float time = 0;
     int batchSize = 5;
+    bool paused = false;
     //Contains the moments for the batch drops of the day: IGT seconds
     List<int> profileDrop = new(0);
 
@@ -54,16 +57,21 @@ public class GameplayScript : MonoBehaviour
         
         //Randomize choosing
     }
-    //private void Update()
-    //{
-    //    if (!dayGoing)
-    //    {
-    //        if (Keyboard.current.spaceKey.wasPressedThisFrame)
-    //        {
-    //            StartCoroutine(DayControl());
-    //        }
-    //    }
-    //}
+    private void Update()
+    {
+        if (dayGoing)
+        {
+            if (Keyboard.current.pKey.wasPressedThisFrame)
+            {
+                paused = !paused;
+                Debug.Log("Time paused: " + paused);
+            }
+            else if (Keyboard.current.oKey.wasPressedThisFrame)
+            {
+                SummonProfiles();
+            }
+        }
+    }
     /// <summary>
     /// A global call to update rendering priority.
     /// </summary>
@@ -196,7 +204,11 @@ public class GameplayScript : MonoBehaviour
         //Current timer lasts 8 minutes.
         while (totalTime < 480)
         {
-            time += timeMultiplier*Time.deltaTime;
+            //Debug function
+            if (!paused)
+            {
+                time += timeMultiplier * Time.deltaTime;
+            }
             if (time > 1)
             {
                 minuteSecond += 1;
@@ -229,17 +241,26 @@ public class GameplayScript : MonoBehaviour
         }
         profileDrop.Clear();
         dayGoing = false;
+        //Money calculation
+        if (validScore > 0)
+        {
+            int amountGained = Mathf.RoundToInt(validScore*1.5f);
+            Debug.Log("Money Gained: " + amountGained);
+            money += amountGained;
+            Debug.Log("Total money: " + money);
+        }
+        validScore = 0;
         overallScore += dailyScore;
         profilesMatched += dailyMatch;
-        //Part of the game that will handle end of day report.
-        if (profilesMatched > 0)
-        {
-            Debug.Log(overallScore / profilesMatched);
-        }
-        else
-        {
-            Debug.Log("No matches");
-        }
+        ////Part of the game that will handle end of day report.
+        //if (profilesMatched > 0)
+        //{
+        //    Debug.Log(overallScore / profilesMatched);
+        //}
+        //else
+        //{
+        //    Debug.Log("No matches");
+        //}
         //Add fade out to results
         //pause.SetActive(true);
         StartCoroutine(fades.FadeOut());
@@ -346,5 +367,56 @@ public class GameplayScript : MonoBehaviour
     {
         Gizmos.color = Color.lightGoldenRod;
         Gizmos.DrawWireCube(deskCenter, size);
+    }
+    /// <summary>
+    /// Debug tool to force spawn 5 profiles
+    /// </summary>
+    void SummonProfiles()
+    {
+        int previousLink = -1;
+        for (int i = 0; i < 5; i++)
+        {
+            string makeshiftName = "";
+            int rand = Random.Range(0, 2);
+            if (rand == 0)
+            {
+                rand = Random.Range(0, maleNames.Length);
+                makeshiftName += maleNames[rand] + " ";
+            }
+            else
+            {
+                rand = Random.Range(0, femaleNames.Length);
+                makeshiftName += femaleNames[rand] + " ";
+            }
+            rand = Random.Range(0, surnames.Length);
+            makeshiftName += surnames[rand];
+            List<(string, int)> chosenPreferences = RandomizePreferences(previousLink);
+            int j = 0;
+            int randomChoice = Random.Range(0, 3);
+            if (Random.Range(0, 1f) <= 0.4f)
+            {
+                for (j = 0; j < preferences.Length; j++)
+                {
+                    if (preferences[j].Equals(chosenPreferences[randomChoice].Item1))
+                    {
+                        previousLink = j;
+                        break;
+                    }
+                }
+                Debug.Log("" + chosenPreferences[randomChoice].Item1 + " : " + makeshiftName);
+            }
+            else
+            {
+                previousLink = -1;
+            }
+            ProfileScript newProfile = new(makeshiftName, chosenPreferences);
+            availableProfiles.Enqueue(newProfile);
+        }
+        Vector3 pos = deskCenter;
+        for (int i = 0; i < batchSize; i++)
+        {
+            Instantiate(profilePrefab, pos, Quaternion.identity);
+            pos.x += 0.1f;
+        }
     }
 }

@@ -79,7 +79,10 @@ public class SubmitScript : MonoBehaviour
         id++;
         Destroy(selection.gameObject);
         instance.CallInteraction(instance.currentProfiles);
-        Debug.Log(totalScore);
+        if (totalScore >= 0.45)
+        {
+            instance.validScore += totalScore;
+        }
         instance.dailyMatch++;
         instance.dailyScore += totalScore;
         
@@ -167,7 +170,6 @@ public class SubmitScript : MonoBehaviour
                     result = Mathf.Min(Mathf.Abs(profileTwo[value].Item2), Mathf.Abs(profileOne[i].Item2));
                     score -= potentialValues[result - 1];
                 }
-                Debug.Log(result);
             }
             else
             {
@@ -184,7 +186,7 @@ public class SubmitScript : MonoBehaviour
             score = bestScore;
         }
         score /= bestScore;
-        Debug.Log(bestScore);
+        Debug.Log(score);
 
         return score;
     }

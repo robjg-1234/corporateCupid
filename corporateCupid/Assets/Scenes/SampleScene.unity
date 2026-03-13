@@ -6404,6 +6404,7 @@ MonoBehaviour:
   dailyScore: 0
   dailyMatch: 0
   dailyShred: 0
+  validScore: 0
   timeMultiplier: 1
 --- !u!4 &2031740466
 Transform:
