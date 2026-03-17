@@ -579,9 +579,9 @@ GameObject:
   - component: {fileID: 126272381}
   - component: {fileID: 126272380}
   - component: {fileID: 126272379}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: filing_cabinet_file_1_0 2
-  m_TagString: Untagged
+  m_TagString: Cabinet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -662,6 +662,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attachedPreview: {fileID: 189451767}
   squareRend: {fileID: 126272381}
+  fullSprite: {fileID: 8944884677139825141, guid: 878cda95d1f476b418d8460bfa37133b, type: 3}
+  emptySprite: {fileID: 1623113825224188619, guid: 9d630f25664f0114187aa86e58819903, type: 3}
 --- !u!212 &126272381
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -729,9 +731,9 @@ GameObject:
   - component: {fileID: 164604753}
   - component: {fileID: 164604752}
   - component: {fileID: 164604751}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: filing_cabinet_file_1_0 0
-  m_TagString: Untagged
+  m_TagString: Cabinet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -812,6 +814,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attachedPreview: {fileID: 548259751}
   squareRend: {fileID: 164604753}
+  fullSprite: {fileID: 8944884677139825141, guid: 878cda95d1f476b418d8460bfa37133b, type: 3}
+  emptySprite: {fileID: 1623113825224188619, guid: 9d630f25664f0114187aa86e58819903, type: 3}
 --- !u!212 &164604753
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1120,7 +1124,7 @@ GameObject:
   m_Component:
   - component: {fileID: 296908137}
   - component: {fileID: 296908138}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: sep
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1241,9 +1245,9 @@ GameObject:
   - component: {fileID: 380556648}
   - component: {fileID: 380556647}
   - component: {fileID: 380556646}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: filing_cabinet_file_1_0 1
-  m_TagString: Untagged
+  m_TagString: Cabinet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1324,6 +1328,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attachedPreview: {fileID: 1854174271}
   squareRend: {fileID: 380556648}
+  fullSprite: {fileID: 8944884677139825141, guid: 878cda95d1f476b418d8460bfa37133b, type: 3}
+  emptySprite: {fileID: 1623113825224188619, guid: 9d630f25664f0114187aa86e58819903, type: 3}
 --- !u!212 &380556648
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2248,7 +2254,7 @@ GameObject:
   m_Component:
   - component: {fileID: 656670763}
   - component: {fileID: 656670764}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: sep
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2680,9 +2686,9 @@ GameObject:
   - component: {fileID: 756012129}
   - component: {fileID: 756012128}
   - component: {fileID: 756012127}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: filing_cabinet_file_1_0 4
-  m_TagString: Untagged
+  m_TagString: Cabinet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2763,6 +2769,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attachedPreview: {fileID: 100752657}
   squareRend: {fileID: 756012129}
+  fullSprite: {fileID: 8944884677139825141, guid: 878cda95d1f476b418d8460bfa37133b, type: 3}
+  emptySprite: {fileID: 1623113825224188619, guid: 9d630f25664f0114187aa86e58819903, type: 3}
 --- !u!212 &756012129
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3593,9 +3601,9 @@ GameObject:
   - component: {fileID: 1026434503}
   - component: {fileID: 1026434502}
   - component: {fileID: 1026434501}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: filing_cabinet_file_1_0 3
-  m_TagString: Untagged
+  m_TagString: Cabinet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3676,6 +3684,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attachedPreview: {fileID: 982271978}
   squareRend: {fileID: 1026434503}
+  fullSprite: {fileID: 8944884677139825141, guid: 878cda95d1f476b418d8460bfa37133b, type: 3}
+  emptySprite: {fileID: 1623113825224188619, guid: 9d630f25664f0114187aa86e58819903, type: 3}
 --- !u!212 &1026434503
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3975,7 +3985,7 @@ GameObject:
   - component: {fileID: 1151800278}
   - component: {fileID: 1151800280}
   - component: {fileID: 1151800279}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: filing_cabinet_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4029,11 +4039,11 @@ MonoBehaviour:
   drawer: {fileID: 315263785}
   shredder: {fileID: 2110067594}
   attachedSprites:
-  - {fileID: 1151800280}
   - {fileID: 296908138}
   - {fileID: 1918977657}
   - {fileID: 1614647228}
   - {fileID: 656670764}
+  cabinetRenderer: {fileID: 1151800280}
   isOpen: 0
 --- !u!212 &1151800280
 SpriteRenderer:
@@ -5785,7 +5795,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1614647227}
   - component: {fileID: 1614647228}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: sep
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6495,7 +6505,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1918977656}
   - component: {fileID: 1918977657}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: sep
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6693,12 +6703,12 @@ MonoBehaviour:
   clockTime: {fileID: 853175049}
   deskCenter: {x: 0, y: -3.1}
   size: {x: 15.5, y: 1.6}
-  cabinetRef: {fileID: 0}
+  cabinetRef: {fileID: 1151800279}
   fades: {fileID: 1567113627}
   currentProfiles: 0
   clockedIn: 0
   dayGoing: 0
-  day: 1
+  day: 0
   profilesMatched: 0
   profilesShredded: 0
   overallScore: 0
