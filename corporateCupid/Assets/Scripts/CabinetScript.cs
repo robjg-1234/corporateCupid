@@ -7,8 +7,9 @@ public class CabinetScript : MonoBehaviour
     [SerializeField] public FolderUnit[] individualUnits;
     [SerializeField] GameObject arrow;
     [SerializeField] GameObject drawer;
-    [SerializeField] SpriteRenderer triangle;
-    [SerializeField] SpriteRenderer cabinetFile;
+    [SerializeField] GameObject shredder;
+    [SerializeField] SpriteRenderer[] attachedSprites;
+    [SerializeField] SpriteRenderer cabinetRenderer;
     bool opening = false;
     public bool isOpen = false;
     private void Start()
@@ -34,8 +35,11 @@ public class CabinetScript : MonoBehaviour
     /// </summary>
     public void ReorderLayer(int temp, int totalProfiles)
     {
-        triangle.sortingOrder = 4 + 3 * totalProfiles;
-        cabinetFile.sortingOrder = 4 + 3 * totalProfiles;
+        cabinetRenderer.sortingOrder = 4 + 3 * totalProfiles;
+        foreach(SpriteRenderer sr in attachedSprites)
+        {
+            sr.sortingOrder = 5 + 3 * totalProfiles;
+        }
         foreach (FolderUnit unit in individualUnits)
         {
             unit.SortLayer(totalProfiles);
@@ -44,10 +48,11 @@ public class CabinetScript : MonoBehaviour
     IEnumerator SlideOpen()
     {
         ReorderLayer(0, GameplayScript.instance.currentProfiles);
-        triangle.gameObject.GetComponent<Collider2D>().enabled = false;
+        arrow.gameObject.GetComponent<Collider2D>().enabled = false;
+        shredder.GetComponent<Collider2D>().enabled = false;
         opening = true;
         float t = 0;
-        Vector3 finalPos = new(-6.131f, -4.495f, 0);
+        Vector3 finalPos = new(-5.92000008f, -4.49499989f, 0);
         Vector3 startingPos = drawer.transform.position;
         Vector3 currentPos = startingPos;
         //Sliding animation of the cabinet opening, using linear interpolation.
@@ -69,7 +74,7 @@ public class CabinetScript : MonoBehaviour
         }
         opening = false;
         isOpen = true;
-        triangle.gameObject.GetComponent<Collider2D>().enabled = true;
+        arrow.gameObject.GetComponent<Collider2D>().enabled = true;
     }
     public void ToggleFile()
     {
@@ -84,10 +89,10 @@ public class CabinetScript : MonoBehaviour
     }
     IEnumerator SlideClose()
     {
-        triangle.gameObject.GetComponent<Collider2D>().enabled = false;
+        arrow.gameObject.GetComponent<Collider2D>().enabled = false;
         opening = true;
         float t = 0;
-        Vector3 finalPos = new(-11.67f, -4.495f, 0);
+        Vector3 finalPos = new Vector3(-11.6700001f, -4.49499989f, 0);
         Vector3 startingPos = drawer.transform.position;
         Vector3 currentPos = startingPos;
         //The opposite of the slide open coroutine.
@@ -106,7 +111,8 @@ public class CabinetScript : MonoBehaviour
             drawer.transform.position = currentPos;
             yield return null;
         }
-        triangle.gameObject.GetComponent<Collider2D>().enabled = true;
+        arrow.gameObject.GetComponent<Collider2D>().enabled = true;
+        shredder.GetComponent<Collider2D>().enabled = true;
         opening = false;
         isOpen = false;
     }

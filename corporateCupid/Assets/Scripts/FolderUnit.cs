@@ -5,12 +5,14 @@ public class FolderUnit : MonoBehaviour
     [SerializeField] Preview attachedPreview;
     [SerializeField] SpriteRenderer squareRend;
     PaperScript savedProfile = null;
+    [SerializeField] Sprite fullSprite;
+    [SerializeField] Sprite emptySprite;
     /// <summary>
     /// Updates its sorting order and calls a similar function in its children.
     /// </summary>
     public void SortLayer(int curProfiles)
     {
-        attachedPreview.UpdateSort(curProfiles);
+        //attachedPreview.UpdateSort(curProfiles);
         squareRend.sortingOrder = 5 + 3 * curProfiles;
     }
     /// <summary>
@@ -22,8 +24,9 @@ public class FolderUnit : MonoBehaviour
         {
             savedProfile = newProf;
             newProf.saved = true;
-            attachedPreview.CopyInformation(savedProfile.GetProfile().characterName, savedProfile.spriteRend.sprite);
-            attachedPreview.gameObject.SetActive(true);
+            squareRend.sprite = fullSprite;
+            //attachedPreview.CopyInformation(savedProfile.GetProfile().characterName, savedProfile.spriteRend.sprite);
+            //attachedPreview.gameObject.SetActive(true);
             newProf.gameObject.SetActive(false);
             return true;
         }
@@ -39,8 +42,8 @@ public class FolderUnit : MonoBehaviour
     {
         if (savedProfile != null)
         {
-            //Deactivates the preview.
-            attachedPreview.gameObject.SetActive(false);
+            //attachedPreview.gameObject.SetActive(false);
+            squareRend.sprite = emptySprite;
             savedProfile.gameObject.SetActive(true);
             savedProfile.saved = false;
             GameplayScript.instance.CallInteraction(savedProfile.recency);
@@ -56,7 +59,8 @@ public class FolderUnit : MonoBehaviour
     {
         if (savedProfile != null)
         {
-            attachedPreview.gameObject.SetActive(false);
+            //attachedPreview.gameObject.SetActive(false);
+            squareRend.sprite = emptySprite;
             Destroy(savedProfile.gameObject);
             savedProfile = null;
         }
