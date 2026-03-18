@@ -6664,7 +6664,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 4, z: 1}
+  m_LocalScale: {x: 2.8799999, y: 3.464, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1131447944}
@@ -6702,7 +6702,7 @@ MonoBehaviour:
   profilePrefab: {fileID: 2090434416288138883, guid: 7334bc264bf40d34eb2c03b5fada54f6, type: 3}
   clockTime: {fileID: 853175049}
   deskCenter: {x: 0, y: -3.1}
-  size: {x: 15.5, y: 1.6}
+  size: {x: 13, y: 1.6}
   cabinetRef: {fileID: 1151800279}
   fades: {fileID: 1567113627}
   currentProfiles: 0
@@ -6716,7 +6716,7 @@ MonoBehaviour:
   dailyMatch: 0
   dailyShred: 0
   validScore: 0
-  timeMultiplier: 1
+  timeMultiplier: 0.5
 --- !u!4 &2031740466
 Transform:
   m_ObjectHideFlags: 0
@@ -6925,7 +6925,7 @@ SceneRoots:
   - {fileID: 430223115}
   - {fileID: 315263786}
   - {fileID: 2110067597}
-  - {fileID: 403790652}
   - {fileID: 1383468424}
+  - {fileID: 403790652}
   - {fileID: 1131447944}
   - {fileID: 643812462}
