@@ -103,12 +103,12 @@ TextureImporter:
       name: mainmenu layer32_0
       rect:
         serializedVersion: 2
-        x: 627
+        x: 628
         y: 0
-        width: 1117
-        height: 222
+        width: 700
+        height: 221
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 35db2c1b446f34345bd89c1d955d4df8
     internalID: 0
     vertices: []
     indices: 
