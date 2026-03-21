@@ -1,4 +1,4 @@
-using System;
+
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
@@ -9,17 +9,30 @@ public class ProfileScript
     public string characterName;
     int age;
     string profession;
+    string bio;
     List<(string, int)> preferences;
+    string[] loveStrings = { "I’m a big lover of X","X is life","If you don’t like X we won’t get along","Can’t live without X"};
+    string[] likesStrings = { "Big fan of X","I really like X","I quite enjoy X","First date? X"};
+    string[] slightLikeStrings = { "I’m fairly fond of X","Can’t go wrong with X","Will never say no to a day full of X","X isn’t as bad as people make it out to be" };
+    string[] hatesStrings = { "Can’t stand X", "The world  would be a better place without X", "Absolutely despise X", "Professional X hater" };
+    string[] dislikesStrings = { "X is overrated","Won’t understand if you genuinely like X","Not a fan of X","I don’t enjoy X"};
+    string[] slightDisikeStrings = {"Would prefer if you don’t like X","I never fully enjoyed X","Can’t get a taste for X","X is kind of ‘meh’ in my books"};
+    string[] bios = {"Looking for a Pam to my Jim.","My mum thinks I’m handsome.","6’3 if that matters.","Just a Ross looking for his Rachel.","Fun fact about me: I’ve never been to IKEA.","Looking for someone who’s the same kind of weird.",
+        "Just looking for a good time.","Looking for a mum for my dog.","Fluent in sarcasm.","NO DRAMA!!","Don’t take yourself too seriously.","Unpopular opinion: Pineapple belongs on pizza. Fight me.",
+        "Will judge your coffee order.","Will destroy you at Mario Kart.","Star Wars > Star Trek.","Let’s lie and say we met at the grocery store.","Professional overthinker.","Looking for a partner in crime.",
+        "Here for a good time, not a long time","I sleep with my socks on. Deal with it.","My therapist thinks I’m a catch.","Toxic in a way you love.","Looking for a small spoon.",
+        "Work hard, play hard.","Chivalry is dead.","The quickest way to my heart is through my stomach.","Will always laugh at your jokes.","Looking for my Prince Charming.","Daddy’s girl.","Treat me like a queen and I’ll treat you like a king.",
+        "Fries > Guys.","Hufflepuff girl looking for her Gryffindor man."};
     public ProfileScript(string newName, List<(string, int)> newPreferences)
     {
         characterName = newName;
-        age = 22;
+        age = Random.Range(18,35);
+        //Pharloom Reference :O
+
         profession = "Bell Ringer";
         preferences = newPreferences;
-        //for (int i = 0; i < preferences.Count; i++)
-        //{
-        //    Debug.Log(preferences[i].Item1 + " " + preferences[i].Item2);
-        //}
+        int randVal = Random.Range(0, bios.Length);
+        bio = bios[randVal];
     }
     /// <summary>
     /// Returns the preferences.
@@ -33,13 +46,35 @@ public class ProfileScript
     /// </summary>
     public string GetFormattedLikes()
     {
+        //<font="CcEmotionSDF"><color="red><size=200%>/</size></color></font>
+        /*
+            love =  [
+            like =  ]
+            slightly like = \
+            hate =  {
+            dislike =  }
+            slightly dislike =  |
+            neutral = /
+         */
         string formattedString = "";
         for (int i =0; i < 3; i++)
         {
-            //To-do
-            //Create dynamic padding
-            formattedString += "* " + preferences[i].Item1 + "    " + preferences[i].Item2 + "\n";
+            int randomVal = Random.Range(0, 4);
+            if (preferences[i].Item2 == 1)
+            {
+                formattedString += slightLikeStrings[randomVal] + ". <font=\"CcEmotionSDF\"><color=#DAF284><size=200%>\\</size></color></font> ";
+            }
+            else if (preferences[i].Item2 == 2)
+            {
+                formattedString += likesStrings[randomVal] + ". <font=\"CcEmotionSDF\"><color=#7DC640><size=200%>]</size></color></font> ";
+            }
+            else if (preferences[i].Item2 == 3)
+            {
+                formattedString += loveStrings[randomVal] + ". <font=\"CcEmotionSDF\"><color=#5D962E><size=200%>[</size></color></font> ";
+            }
+            formattedString = formattedString.Replace("X", preferences[i].Item1);
         }
+        
         return formattedString;
     }
     /// <summary>
@@ -50,8 +85,30 @@ public class ProfileScript
         string formattedString = "";
         for (int i = 3; i < 6; i++)
         {
-            formattedString += "* " + preferences[i].Item1 + "    " + preferences[i].Item2 + "\n";
+            int randomVal = Random.Range(0, 4);
+            if (preferences[i].Item2 == -1)
+            {
+                formattedString += slightDisikeStrings[randomVal] + ". <font=\"CcEmotionSDF\"><color=#FAB525><size=200%>|</size></color></font> ";
+            }
+            else if (preferences[i].Item2 == -2)
+            {
+                formattedString += dislikesStrings[randomVal] + ". <font=\"CcEmotionSDF\"><color=#FA9125><size=200%>}</size></color></font> ";
+            }
+            else if (preferences[i].Item2 == -3)
+            {
+                formattedString += hatesStrings[randomVal] + ". <font=\"CcEmotionSDF\"><color=#D52915><size=200%>{</size></color></font> ";
+            }
+            formattedString = formattedString.Replace("X", preferences[i].Item1);
         }
+        return formattedString;
+    }
+    public string GetBio()
+    {
+        return bio;
+    }
+    public string GetInfo()
+    {
+        string formattedString = "Age: " + age + "\n" + profession;
         return formattedString;
     }
 }

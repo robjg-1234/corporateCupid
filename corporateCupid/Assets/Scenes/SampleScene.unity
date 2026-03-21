@@ -6708,7 +6708,7 @@ MonoBehaviour:
   currentProfiles: 0
   clockedIn: 0
   dayGoing: 0
-  day: 0
+  day: 1
   profilesMatched: 0
   profilesShredded: 0
   overallScore: 0

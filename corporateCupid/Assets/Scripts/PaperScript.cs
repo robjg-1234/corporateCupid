@@ -10,9 +10,6 @@ public class PaperScript : MonoBehaviour
     public int recency = 0;
     SubmitScript attachedBoard;
     [SerializeField] GameObject[] attachedObjects;
-    TMP_Text dislikeText;
-    TMP_Text likedText;
-    TMP_Text nameText;
     public bool saved = false;
     public SpriteRenderer spriteRend;
 
@@ -26,14 +23,18 @@ public class PaperScript : MonoBehaviour
         instance.objectInteracted += ChangePriority;
         instance.dayEnded += EndOfDayCheck;
         transform.localScale = new Vector3(0.5f, 0.5f);
-        dislikeText = attachedObjects[5].GetComponent<TMP_Text>();
-        likedText = attachedObjects[4].GetComponent<TMP_Text>();
-        nameText = attachedObjects[2].GetComponent<TMP_Text>();
+        TMP_Text dislikeText = attachedObjects[5].GetComponent<TMP_Text>();
+        TMP_Text likedText = attachedObjects[4].GetComponent<TMP_Text>();
+        TMP_Text bioText = attachedObjects[3].GetComponent<TMP_Text>();
+        TMP_Text nameText = attachedObjects[2].GetComponent<TMP_Text>();
+        TMP_Text infoText = attachedObjects[6].GetComponent<TMP_Text>();
         spriteRend = attachedObjects[1].GetComponent<SpriteRenderer>();
         //Whenever profile icons get added, pass the path to the icon
         nameText.text = identity.characterName;
         likedText.text = identity.GetFormattedLikes();
         dislikeText.text = identity.GetFormattedDislikes();
+        bioText.text = identity.GetBio();
+        infoText.text = identity.GetInfo();
         ChangePriority(recency, instance.currentProfiles);
     }
     private void OnDestroy()

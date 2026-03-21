@@ -24,8 +24,8 @@ public class CabinetScript : MonoBehaviour
     }
     void Update()
     {
-        //As of right now the way to bring it out is with tab key, will probably get moved to the player so that it can autoamitcally get drawn out while hovering with a profile.
-        if (Keyboard.current.tabKey.wasPressedThisFrame)
+        //As of right now the way to bring it out is with tab key, will probably get moved to the player so that it can automatically get drawn out while hovering with a profile.
+        if (Keyboard.current.tabKey.wasPressedThisFrame && GameplayScript.instance.dayGoing)
         {
             ToggleFile();
         }

@@ -324,7 +324,7 @@ public class GameplayScript : MonoBehaviour
                                 break;
                             }
                         }
-                        Debug.Log("" + chosenPreferences[randomChoice].Item1 + " : " + makeshiftName);
+                        //Debug.Log("" + chosenPreferences[randomChoice].Item1 + " : " + makeshiftName);
                     }
                     else
                     {

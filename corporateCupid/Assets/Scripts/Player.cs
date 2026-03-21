@@ -30,17 +30,18 @@ public class Player : MonoBehaviour
                     //Checks if the space clicked has a profile so that it gets picked up.
                     if (hit.collider.CompareTag("Cabinet"))
                     {
-                        PaperScript temp = hit.collider.GetComponent<FolderUnit>().PickUp();
-                        if (temp != null)
+                        selectedObject = hit.collider.GetComponent<FolderUnit>().PickUp();
+                        if (selectedObject != null)
                         {
-                            selectedObject = temp;
                             instance.CallInteraction(selectedObject.recency);
+                            StartCoroutine(selectedObject.HoldObject());
                         }
                     }
                     //Checks to see if it is the arrow to open/close cabinet
                     else if (hit.collider.CompareTag("arrow"))
                     {
                         CabinetScript cab = hit.collider.gameObject.GetComponentInParent<CabinetScript>();
+                        instance.CallInteraction(instance.currentProfiles);
                         cab.ToggleFile();
                     }
                     //Checks to see if it is a punch card
@@ -67,7 +68,7 @@ public class Player : MonoBehaviour
 
             }
             //Handles the zoom interactions.
-            else if (Mouse.current.rightButton.wasPressedThisFrame && selectedObject == null && selectedMatch == null)
+            else if (Mouse.current.rightButton.wasPressedThisFrame && selectedObject == null && selectedMatch == null && selectedPunch ==null)
             {
                 RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), Vector2.zero, float.MaxValue, LayerMask.GetMask("Default"));
                 if (hit.collider != null)

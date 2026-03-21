@@ -40,17 +40,17 @@ public class FolderUnit : MonoBehaviour
     /// </summary>
     public PaperScript PickUp()
     {
+        PaperScript sending = null;
         if (savedProfile != null)
         {
             //attachedPreview.gameObject.SetActive(false);
             squareRend.sprite = emptySprite;
             savedProfile.gameObject.SetActive(true);
             savedProfile.saved = false;
-            GameplayScript.instance.CallInteraction(savedProfile.recency);
-            StartCoroutine(savedProfile.HoldObject());
+            sending = savedProfile;
             savedProfile = null;
         }
-        return savedProfile;
+        return sending;
     }
     /// <summary>
     /// Empty file spot;
