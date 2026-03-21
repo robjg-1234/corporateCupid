@@ -557,7 +557,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: I hate stuff
+  m_text: <font></font>
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 24137fc10254aaf43ae7a797ee27d628, type: 2}
   m_sharedMaterial: {fileID: -8506923448228658366, guid: 24137fc10254aaf43ae7a797ee27d628, type: 2}
@@ -733,7 +733,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: I like kpizza, I love dinosautrs, and I enjoy hamburgers.
+  m_text: I like kpizza, I love dinosautrs, and I enjoy hamburgers. <font="LiberationSans
+    SDF"><color="red>OMG PIE</color></font>Bang
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 24137fc10254aaf43ae7a797ee27d628, type: 2}
   m_sharedMaterial: {fileID: -8506923448228658366, guid: 24137fc10254aaf43ae7a797ee27d628, type: 2}
