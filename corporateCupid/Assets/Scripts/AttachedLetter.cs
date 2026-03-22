@@ -60,6 +60,7 @@ public class AttachedLetter : MonoBehaviour
     /// </summary>
     public IEnumerator HoldObject()
     {
+        //Fix for envelopes
         ClickMatch();
         if (attachedBoard != null)
         {

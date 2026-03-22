@@ -10,9 +10,12 @@ public class PaperScript : MonoBehaviour
     public int recency = 0;
     SubmitScript attachedBoard;
     [SerializeField] GameObject[] attachedObjects;
+    GameObject groundObject;
+    GameObject verticalObject;
     public bool saved = false;
     public SpriteRenderer spriteRend;
-
+    [SerializeField] Sprite liftedPaper;
+    Sprite groundSprite;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -30,11 +33,14 @@ public class PaperScript : MonoBehaviour
         TMP_Text infoText = attachedObjects[6].GetComponent<TMP_Text>();
         spriteRend = attachedObjects[1].GetComponent<SpriteRenderer>();
         //Whenever profile icons get added, pass the path to the icon
+        groundObject = attachedObjects[7];
+        verticalObject = attachedObjects[0];
         nameText.text = identity.characterName;
         likedText.text = identity.GetFormattedLikes();
         dislikeText.text = identity.GetFormattedDislikes();
         bioText.text = identity.GetBio();
         infoText.text = identity.GetInfo();
+        groundSprite = groundObject.GetComponent<SpriteRenderer>().sprite;
         ChangePriority(recency, instance.currentProfiles);
     }
     private void OnDestroy()
@@ -74,11 +80,11 @@ public class PaperScript : MonoBehaviour
         attachedObjects.CopyTo(temp, 0);
         for (int i = 0; i < attachedObjects.Length; i++)
         {
-            if (i == 0)
+            if (i == 0 ||i ==8)
             {
                 temp[i].GetComponent<SpriteRenderer>().sortingOrder = 3 * recency + frontVal;
             }
-            else if (i == 1)
+            else if (i == 1 || i==7)
             {
                 temp[i].GetComponent<SpriteRenderer>().sortingOrder = 1 + 3 * recency + frontVal;
             }
@@ -98,6 +104,11 @@ public class PaperScript : MonoBehaviour
     /// </summary>
     public IEnumerator HoldObject()
     {
+        SpriteRenderer paperType = groundObject.GetComponent<SpriteRenderer>();
+        paperType.sprite = liftedPaper;
+        attachedObjects[8].transform.localPosition += new Vector3(0,0.271f,0);
+        groundObject.SetActive(true);
+        verticalObject.SetActive(false);
         CabinetScript cab = null;
         if (attachedBoard != null)
         {
@@ -136,11 +147,11 @@ public class PaperScript : MonoBehaviour
         //Update the sorting order so that it can fall behind the cabinet.
         for (int i = 0; i < attachedObjects.Length; i++)
         {
-            if (i == 0)
+            if (i == 0 || i == 8)
             {
                 momentary[i].GetComponent<SpriteRenderer>().sortingOrder = 3 * recency;
             }
-            else if (i == 1)
+            else if (i == 1 || i == 7)
             {
                 momentary[i].GetComponent<SpriteRenderer>().sortingOrder = 1 + 3 * recency;
             }
@@ -173,6 +184,11 @@ public class PaperScript : MonoBehaviour
                     attachedBoard = null;
                     transform.position = instance.ReturnToDesk(newPosition);
                 }
+                else
+                {
+                    groundObject.SetActive(false);
+                    verticalObject.SetActive(true);
+                }
                 //To-do
                 //Add a way to replace existing paper
             }
@@ -202,7 +218,8 @@ public class PaperScript : MonoBehaviour
             }
             transform.position = instance.ReturnToDesk(newPosition);
         }
-
+        paperType.sprite = groundSprite;
+        attachedObjects[8].transform.localPosition -= new Vector3(0, 0.271f, 0);
 
     }
     /// <summary>
@@ -210,10 +227,11 @@ public class PaperScript : MonoBehaviour
     /// </summary>
     public IEnumerator Enhance()
     {
-
+        groundObject.SetActive(false);
+        verticalObject.SetActive(true);
         Vector3 prevPos = transform.position;
         //Scales the object up to 1.45 to get a better view of the text.
-        transform.localScale = new Vector3(1.45f, 1.45f);
+        transform.localScale = new Vector3(1.5f, 1.5f);
         transform.position = new Vector3(0, 0, 0);
         bool enhanced = true;
         yield return new WaitForSeconds(0.01f);
@@ -237,6 +255,8 @@ public class PaperScript : MonoBehaviour
             transform.position = instance.ReturnToDesk(prevPos);
         }
         GameplayScript.player.Unselect();
+        groundObject.SetActive(true);
+        verticalObject.SetActive(false);
     }
 
     public void EndOfDayCheck()
