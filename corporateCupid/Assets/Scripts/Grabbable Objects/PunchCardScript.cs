@@ -57,7 +57,7 @@ public class PunchCardScript : MonoBehaviour
         //Keeps the object attached to the mouse position.
         while (selected)
         {
-            if (Mouse.current.leftButton.wasReleasedThisFrame)
+            if (Mouse.current.leftButton.wasReleasedThisFrame || Keyboard.current.escapeKey.wasPressedThisFrame)
             {
                 selected = false;
             }
@@ -66,11 +66,15 @@ public class PunchCardScript : MonoBehaviour
             transform.position = newPosition;
             yield return null;
         }
+        while (instance.paused)
+        {
+            yield return null;
+        }
         sr.sortingOrder = 3 * recency;
         GameplayScript.player.Unselect();
         //Handles any valid interaction.
         //Might modify the range of the box cast if not then it will become a raycast
-        RaycastHit2D hit = Physics2D.BoxCast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), new Vector2(0.1f, 0.1f), 0, new Vector2(0, 0), float.MaxValue, LayerMask.GetMask("Interactable"));
+        RaycastHit2D hit = Physics2D.BoxCast(newPosition, new Vector2(0.1f, 0.1f), 0, new Vector2(0, 0), float.MaxValue, LayerMask.GetMask("Interactable"));
         if (hit.collider != null)
         {
             if (hit.collider.CompareTag("Clock"))

@@ -71,7 +71,7 @@ public class AttachedLetter : MonoBehaviour
         //Makes the object move with the mouse.
         while (selected)
         {
-            if (Mouse.current.leftButton.wasReleasedThisFrame)
+            if (Mouse.current.leftButton.wasReleasedThisFrame || Keyboard.current.escapeKey.wasPressedThisFrame)
             {
                 selected = false;
             }
@@ -80,10 +80,14 @@ public class AttachedLetter : MonoBehaviour
             transform.position = newPosition;
             yield return null;
         }
+        while (GameplayScript.instance.paused)
+        {
+            yield return null;
+        }
         GameplayScript.player.Unselect();
         //Checks for interactions.
         //Might modify the range of the box cast if not then it will become a raycast
-        RaycastHit2D hit = Physics2D.BoxCast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), new Vector2(0.1f, 0.1f), 0, new Vector2(0, 0), float.MaxValue, LayerMask.GetMask("Interactable"));
+        RaycastHit2D hit = Physics2D.BoxCast(newPosition, new Vector2(0.1f, 0.1f), 0, new Vector2(0, 0), float.MaxValue, LayerMask.GetMask("Interactable"));
         if (hit.collider != null)
         {
             //Handles interaction with the pinboard.

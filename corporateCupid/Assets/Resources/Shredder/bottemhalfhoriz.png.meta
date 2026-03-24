@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: bd57eaeeab35b3e419d311fb85b51b48
+guid: 735c2f5580c178e4c922a1d3564e5a41
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4512633070264445626
-    second: Profile_0
+      213: 7431604296482558984
+    second: bottemhalfhoriz_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,23 +100,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Profile_0
+      name: bottemhalfhoriz_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1536
-        height: 2039
+        x: 104
+        y: 270
+        width: 422
+        height: 114
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: abaeac25ed710ae30800000000000000
-      internalID: 4512633070264445626
+      spriteID: 8041c1bbbbc522760800000000000000
+      internalID: 7431604296482558984
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: b603937cd2c192545a3f2ac8987d4fb6
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Profile_0: 4512633070264445626
+      bottemhalfhoriz_0: 7431604296482558984
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

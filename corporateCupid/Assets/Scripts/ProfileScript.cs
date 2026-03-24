@@ -83,9 +83,22 @@ public class ProfileScript
     public string GetFormattedDislikes()
     {
         string formattedString = "";
+        int[] previousVal = new int[]{ -1, -1, -1 };
         for (int i = 3; i < 6; i++)
         {
             int randomVal = Random.Range(0, 4);
+            foreach (int j in previousVal)
+            {
+                if (randomVal == j)
+                {
+                    randomVal++;
+                    if (randomVal > 3)
+                    {
+                        randomVal = 0;
+                    }
+                }
+            }
+            previousVal[i - 3] = randomVal;
             if (preferences[i].Item2 == -1)
             {
                 formattedString += slightDisikeStrings[randomVal] + ". <font=\"CcEmotionSDF\"><color=#FAB525><size=200%>|</size></color></font> ";

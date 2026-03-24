@@ -121,7 +121,7 @@ public class PaperScript : MonoBehaviour
         //Keeps the object attached to the mouse position.
         while (selected)
         {
-            if (Mouse.current.leftButton.wasReleasedThisFrame)
+            if (Mouse.current.leftButton.wasReleasedThisFrame || Keyboard.current.escapeKey.wasPressedThisFrame)
             {
                 selected = false;
             }
@@ -140,6 +140,10 @@ public class PaperScript : MonoBehaviour
             newPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             newPosition.z = 0;
             transform.position = newPosition;
+            yield return null;
+        }
+        while (GameplayScript.instance.paused)
+        {
             yield return null;
         }
         GameObject[] momentary = new GameObject[attachedObjects.Length];
@@ -163,7 +167,7 @@ public class PaperScript : MonoBehaviour
         GameplayScript.player.Unselect();
         //Handles any valid interaction.
         //Might modify the range of the box cast if not then it will become a raycast
-        RaycastHit2D hit = Physics2D.BoxCast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), new Vector2(0.1f, 0.1f), 0, new Vector2(0, 0), float.MaxValue, LayerMask.GetMask("Interactable", "Cabinet"));
+        RaycastHit2D hit = Physics2D.BoxCast(newPosition, new Vector2(0.1f, 0.1f), 0, new Vector2(0, 0), float.MaxValue, LayerMask.GetMask("Interactable", "Cabinet"));
         if (hit.collider != null)
         {
             //Checks if the object can get placed into the cabinet.
@@ -195,9 +199,11 @@ public class PaperScript : MonoBehaviour
             //Checks interactions with shredder.
             else if (hit.collider.CompareTag("Shredder"))
             {
-                Destroy(this.gameObject);
-                instance.dailyShred++;
-                //Fully implement the shredder which is going to have two stages the place and the click to shred, I don't know how this affects the other part of the game
+                ShredderScript shred = hit.collider.GetComponent<ShredderScript>();
+                if (!shred.AddPaper(this))
+                {
+                    transform.position = instance.ReturnToDesk(newPosition);
+                }
             }
             else
             {
@@ -252,11 +258,12 @@ public class PaperScript : MonoBehaviour
         }
         else
         {
+            groundObject.SetActive(true);
+            verticalObject.SetActive(false);
             transform.position = instance.ReturnToDesk(prevPos);
         }
         GameplayScript.player.Unselect();
-        groundObject.SetActive(true);
-        verticalObject.SetActive(false);
+        
     }
 
     public void EndOfDayCheck()

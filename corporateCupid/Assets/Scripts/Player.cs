@@ -21,64 +21,91 @@ public class Player : MonoBehaviour
     {
         if (instance.dayGoing)
         {
-            //Checks for interactable objects and changes the selected object based on it.
-            if (Mouse.current.leftButton.wasPressedThisFrame && selectedObject == null && selectedMatch == null && selectedPunch == null)
+            if (!instance.paused)
             {
-                RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), Vector2.zero, float.MaxValue, _layers);
-                if (hit.collider != null)
+                //Checks for interactable objects and changes the selected object based on it.
+                if (Mouse.current.leftButton.wasPressedThisFrame && selectedObject == null && selectedMatch == null && selectedPunch == null)
                 {
-                    //Checks if the space clicked has a profile so that it gets picked up.
-                    if (hit.collider.CompareTag("Cabinet"))
+                    RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), Vector2.zero, float.MaxValue, _layers);
+                    if (hit.collider != null)
                     {
-                        selectedObject = hit.collider.GetComponent<FolderUnit>().PickUp();
-                        if (selectedObject != null)
+                        //Checks if the space clicked has a profile so that it gets picked up.
+                        if (hit.collider.CompareTag("Cabinet"))
                         {
+                            selectedObject = hit.collider.GetComponent<FolderUnit>().PickUp();
+                            if (selectedObject != null)
+                            {
+                                instance.CallInteraction(selectedObject.recency);
+                                StartCoroutine(selectedObject.HoldObject());
+                            }
+                        }
+                        else if (hit.collider.CompareTag("Shredder"))
+                        {
+                            selectedObject = hit.collider.GetComponent<ShredderScript>().GrabPaper();
+                            if (selectedObject != null)
+                            {
+                                instance.CallInteraction(selectedObject.recency);
+                                StartCoroutine(selectedObject.HoldObject());
+                            }
+                        }
+                        else if (hit.collider.CompareTag("button"))
+                        {
+                            GameplayScript.shredInstance.ActivateShredder();
+                        }
+                        //Checks to see if it is the arrow to open/close cabinet
+                        else if (hit.collider.CompareTag("arrow"))
+                        {
+                            CabinetScript cab = hit.collider.gameObject.GetComponentInParent<CabinetScript>();
+                            instance.CallInteraction(instance.currentProfiles);
+                            cab.ToggleFile();
+                        }
+                        //Checks to see if it is a punch card
+                        else if (hit.collider.CompareTag("punch"))
+                        {
+                            selectedPunch = hit.collider.GetComponent<PunchCardScript>();
+                            instance.CallInteraction(selectedPunch.recency);
+                            StartCoroutine(selectedPunch.HoldObject());
+                        }
+                        //Checks if the object is a Match.
+                        else if (hit.collider.CompareTag("Match"))
+                        {
+                            selectedMatch = hit.collider.GetComponent<AttachedLetter>();
+                            StartCoroutine(selectedMatch.HoldObject());
+                        }
+                        //Checks if the object selected is a Profile.
+                        else if (hit.collider.CompareTag("Interactable"))
+                        {
+                            selectedObject = hit.collider.GetComponent<PaperScript>();
                             instance.CallInteraction(selectedObject.recency);
                             StartCoroutine(selectedObject.HoldObject());
                         }
                     }
-                    //Checks to see if it is the arrow to open/close cabinet
-                    else if (hit.collider.CompareTag("arrow"))
+
+                }
+                //Handles the zoom interactions.
+                else if (Mouse.current.rightButton.wasPressedThisFrame && selectedObject == null && selectedMatch == null && selectedPunch == null)
+                {
+                    RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), Vector2.zero, float.MaxValue, LayerMask.GetMask("Default"));
+                    if (hit.collider != null)
                     {
-                        CabinetScript cab = hit.collider.gameObject.GetComponentInParent<CabinetScript>();
-                        instance.CallInteraction(instance.currentProfiles);
-                        cab.ToggleFile();
-                    }
-                    //Checks to see if it is a punch card
-                    else if (hit.collider.CompareTag("punch"))
-                    {
-                        selectedPunch = hit.collider.GetComponent<PunchCardScript>();
-                        instance.CallInteraction(selectedPunch.recency);
-                        StartCoroutine(selectedPunch.HoldObject());
-                    }
-                    //Checks if the object is a Match.
-                    else if (hit.collider.CompareTag("Match"))
-                    {
-                        selectedMatch = hit.collider.GetComponent<AttachedLetter>();
-                        StartCoroutine(selectedMatch.HoldObject());
-                    }
-                    //Checks if the object selected is a Profile.
-                    else if (hit.collider.CompareTag("Interactable"))
-                    {
-                        selectedObject = hit.collider.GetComponent<PaperScript>();
-                        instance.CallInteraction(selectedObject.recency);
-                        StartCoroutine(selectedObject.HoldObject());
+                        if (hit.collider.CompareTag("Interactable"))
+                        {
+                            selectedObject = hit.collider.GetComponent<PaperScript>();
+                            instance.CallInteraction(selectedObject.recency);
+                            StartCoroutine(selectedObject.Enhance());
+                        }
                     }
                 }
-
-            }
-            //Handles the zoom interactions.
-            else if (Mouse.current.rightButton.wasPressedThisFrame && selectedObject == null && selectedMatch == null && selectedPunch ==null)
-            {
-                RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), Vector2.zero, float.MaxValue, LayerMask.GetMask("Default"));
-                if (hit.collider != null)
+                else if (Keyboard.current.escapeKey.wasPressedThisFrame)
                 {
-                    if (hit.collider.CompareTag("Interactable"))
-                    {
-                        selectedObject = hit.collider.GetComponent<PaperScript>();
-                        instance.CallInteraction(selectedObject.recency);
-                        StartCoroutine(selectedObject.Enhance());
-                    }
+                    instance.PauseGame();
+                }
+            }
+            else
+            {
+                if (Keyboard.current.escapeKey.wasPressedThisFrame)
+                {
+                    instance.PauseGame();
                 }
             }
         }

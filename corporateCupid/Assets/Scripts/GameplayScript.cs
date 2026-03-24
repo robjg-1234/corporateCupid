@@ -14,9 +14,11 @@ public class GameplayScript : MonoBehaviour
     [SerializeField] public Vector2 size;
     [SerializeField] CabinetScript cabinetRef;
     [SerializeField] IntermissionScript fades;
-    public static GameplayScript instance;
-    public static Player player;
-    public static SubmitScript mailInstance;
+    [SerializeField] GameObject pauseMenu;
+    [NonSerialized] public static GameplayScript instance;
+    [NonSerialized] public static Player player;
+    [NonSerialized] public static SubmitScript mailInstance;
+    [NonSerialized] public static ShredderScript shredInstance;
     public int currentProfiles = 0;
     string[] preferences = {"Movies","Astrology","Programming","Cars","Video Games","Trains","Winter","Travelling","Reading","Music","Social Events","Animals","Sports","Hiking","Cooking" };
     string[] maleNames = { "Liam","Noah", "Oliver","Elijah","William","James","Benjamin","Lucas","Henry","Alexander","Mason","Michael","Ethan","Daniel","Jacob","Logan","Jackson","Levi","Sebastian","John","Jack","Owen","Theodore","Aiden","Samuel"};
@@ -43,7 +45,8 @@ public class GameplayScript : MonoBehaviour
     public float timeMultiplier;
     float time = 0;
     int batchSize = 5;
-    bool paused = false;
+    [NonSerialized] public bool paused = false;
+    bool debugPaused = false;
     //Contains the moments for the batch drops of the day: IGT seconds
     List<int> profileDrop = new(0);
 
@@ -63,8 +66,8 @@ public class GameplayScript : MonoBehaviour
         {
             if (Keyboard.current.pKey.wasPressedThisFrame)
             {
-                paused = !paused;
-                Debug.Log("Time paused: " + paused);
+                debugPaused = !debugPaused;
+                Debug.Log("Time paused: " + debugPaused);
             }
             else if (Keyboard.current.oKey.wasPressedThisFrame)
             {
@@ -176,7 +179,6 @@ public class GameplayScript : MonoBehaviour
     public System.Collections.IEnumerator DayControl()
     {
         //Add a fade into desk space and wait for clock in card to be placed.
-        //Temp: creates profiles.
         //Fetch day
         
         FetchDay();
@@ -205,7 +207,7 @@ public class GameplayScript : MonoBehaviour
         while (totalTime < 480)
         {
             //Debug function
-            if (!paused)
+            if (!paused && !debugPaused)
             {
                 time += timeMultiplier * Time.deltaTime;
             }
@@ -417,6 +419,29 @@ public class GameplayScript : MonoBehaviour
         {
             Instantiate(profilePrefab, pos, Quaternion.identity);
             pos.x += 0.1f;
+        }
+    }
+
+    public void PauseGame()
+    {
+        if (dayGoing)
+        {
+            if (pauseMenu.activeSelf)
+            {
+                pauseMenu.SetActive(false);
+                if (paused == true)
+                {
+                    paused = false;
+                }
+            }
+            else
+            {
+                pauseMenu.SetActive(true);
+                if (paused == false)
+                {
+                    paused = true;
+                }
+            }
         }
     }
 }

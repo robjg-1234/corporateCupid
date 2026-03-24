@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class FolderUnit : MonoBehaviour
 {
-    [SerializeField] Preview attachedPreview;
     [SerializeField] SpriteRenderer squareRend;
     PaperScript savedProfile = null;
     [SerializeField] Sprite fullSprite;
@@ -25,8 +24,6 @@ public class FolderUnit : MonoBehaviour
             savedProfile = newProf;
             newProf.saved = true;
             squareRend.sprite = fullSprite;
-            //attachedPreview.CopyInformation(savedProfile.GetProfile().characterName, savedProfile.spriteRend.sprite);
-            //attachedPreview.gameObject.SetActive(true);
             newProf.gameObject.SetActive(false);
             return true;
         }
@@ -43,7 +40,6 @@ public class FolderUnit : MonoBehaviour
         PaperScript sending = null;
         if (savedProfile != null)
         {
-            //attachedPreview.gameObject.SetActive(false);
             squareRend.sprite = emptySprite;
             savedProfile.gameObject.SetActive(true);
             savedProfile.saved = false;
@@ -59,7 +55,6 @@ public class FolderUnit : MonoBehaviour
     {
         if (savedProfile != null)
         {
-            //attachedPreview.gameObject.SetActive(false);
             squareRend.sprite = emptySprite;
             Destroy(savedProfile.gameObject);
             savedProfile = null;
