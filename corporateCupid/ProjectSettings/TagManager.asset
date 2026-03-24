@@ -15,6 +15,7 @@ TagManager:
   - Clock
   - punch
   - button
+  - Envelope
   layers:
   - Default
   - TransparentFX

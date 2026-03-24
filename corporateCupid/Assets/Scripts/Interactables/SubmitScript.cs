@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -90,18 +91,22 @@ public class SubmitScript : MonoBehaviour
     /// <summary>
     /// Handles the creation of Matches after clicking a button.
     /// </summary>
-    public void CreateMatch()
+    public bool CreateMatch(EnvelopeScript envelope)
     {
         if (submissionOne != null && submissionTwo != null && instance.clockedIn)
         {
             AttachedLetter newMatch = Instantiate(matchObject, transform.position, Quaternion.identity).GetComponent<AttachedLetter>();
-            newMatch.JoinPapers(submissionOne, submissionTwo);
+            newMatch.JoinPapers(submissionOne, submissionTwo, envelope);
             submissionTwo = null;
             submissionOne = null;
             newMatch.attachedBoard = this;
             isFull = true;
             available = false;
+            Debug.Log("true");
+            return true;
         }
+        Debug.Log("false");
+        return false;
     }
 
     /// <summary>

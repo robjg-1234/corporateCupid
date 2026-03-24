@@ -59,6 +59,7 @@ public class IntermissionScript : MonoBehaviour
     IEnumerator FadeIn()
     {
         instance.SetTime(9, 0);
+        dayText.text = "Day " + instance.day;
         fadeScreen.gameObject.SetActive(true);
         float t = 0;
         float alpha = 0;

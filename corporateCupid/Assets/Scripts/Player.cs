@@ -5,9 +5,11 @@ using UnityEngine.UIElements;
 public class Player : MonoBehaviour
 {
     [SerializeField] LayerMask _layers;
+    [SerializeField] GameObject envelopePrefab;
     PaperScript selectedObject = null;
     AttachedLetter selectedMatch = null;
     PunchCardScript selectedPunch = null;
+    EnvelopeScript selectedEnvelope = null;
     GameplayScript instance;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -24,7 +26,7 @@ public class Player : MonoBehaviour
             if (!instance.paused)
             {
                 //Checks for interactable objects and changes the selected object based on it.
-                if (Mouse.current.leftButton.wasPressedThisFrame && selectedObject == null && selectedMatch == null && selectedPunch == null)
+                if (Mouse.current.leftButton.wasPressedThisFrame && selectedObject == null && selectedMatch == null && selectedPunch == null && selectedEnvelope == null)
                 {
                     RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), Vector2.zero, float.MaxValue, _layers);
                     if (hit.collider != null)
@@ -38,6 +40,12 @@ public class Player : MonoBehaviour
                                 instance.CallInteraction(selectedObject.recency);
                                 StartCoroutine(selectedObject.HoldObject());
                             }
+                        }
+                        else if (hit.collider.CompareTag("Envelope"))
+                        {
+                            selectedEnvelope = Instantiate(envelopePrefab, Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), Quaternion.identity).GetComponent<EnvelopeScript>();
+                            instance.CallInteraction(selectedEnvelope.recency);
+                            StartCoroutine(selectedEnvelope.HoldObject());
                         }
                         else if (hit.collider.CompareTag("Shredder"))
                         {
@@ -83,7 +91,7 @@ public class Player : MonoBehaviour
 
                 }
                 //Handles the zoom interactions.
-                else if (Mouse.current.rightButton.wasPressedThisFrame && selectedObject == null && selectedMatch == null && selectedPunch == null)
+                else if (Mouse.current.rightButton.wasPressedThisFrame && selectedObject == null && selectedMatch == null && selectedPunch == null && selectedEnvelope == null)
                 {
                     RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), Vector2.zero, float.MaxValue, LayerMask.GetMask("Default"));
                     if (hit.collider != null)
@@ -126,6 +134,10 @@ public class Player : MonoBehaviour
         if (selectedPunch != null)
         {
             selectedPunch = null;
+        }
+        if (selectedEnvelope != null)
+        {
+            selectedEnvelope = null;
         }
     }
 }
