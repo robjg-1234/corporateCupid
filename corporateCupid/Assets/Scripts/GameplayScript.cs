@@ -295,9 +295,9 @@ public class GameplayScript : MonoBehaviour
                 profileDrop.Add(0);
                 profileDrop.Add(120);
                 profileDrop.Add(280);
-                batchSize = 7;
+                batchSize = 5;
                 int previousLink = -1;
-                for (int i = 0; i < 21; i++)
+                for (int i = 0; i < 15; i++)
                 {
                     string makeshiftName = "";
                     int rand = Random.Range(0, 2);

@@ -57,20 +57,32 @@ public class ProfileScript
             neutral = /
          */
         string formattedString = "";
+        int[] previousVal = new int[] { -1, -1, -1 };
         for (int i =0; i < 3; i++)
         {
             int randomVal = Random.Range(0, 4);
+            foreach (int j in previousVal)
+            {
+                if (randomVal == j)
+                {
+                    randomVal++;
+                    if (randomVal > 3)
+                    {
+                        randomVal = 0;
+                    }
+                }
+            }
             if (preferences[i].Item2 == 1)
             {
-                formattedString += slightLikeStrings[randomVal] + ". <font=\"CcEmotionSDF\"><color=#DAF284><size=200%>\\</size></color></font> ";
+                formattedString += slightLikeStrings[randomVal] + ". <font=\"CcEmotionSDF\"><color=#a1cc14><size=200%>\\</size></color></font> ";
             }
             else if (preferences[i].Item2 == 2)
             {
-                formattedString += likesStrings[randomVal] + ". <font=\"CcEmotionSDF\"><color=#7DC640><size=200%>]</size></color></font> ";
+                formattedString += likesStrings[randomVal] + ". <font=\"CcEmotionSDF\"><color=#47910a><size=200%>]</size></color></font> ";
             }
             else if (preferences[i].Item2 == 3)
             {
-                formattedString += loveStrings[randomVal] + ". <font=\"CcEmotionSDF\"><color=#5D962E><size=200%>[</size></color></font> ";
+                formattedString += loveStrings[randomVal] + ". <font=\"CcEmotionSDF\"><color=#3e6320><size=200%>[</size></color></font> ";
             }
             formattedString = formattedString.Replace("X", preferences[i].Item1);
         }

@@ -16,6 +16,11 @@ public class ShredderScript : MonoBehaviour
         originalPos = fakeProfile.transform.localPosition;
         instance = GameplayScript.instance;
         GameplayScript.shredInstance = this;
+        instance.dayEnded += EndOfDay;
+    }
+    private void OnDestroy()
+    {
+        instance.dayEnded -= EndOfDay;
     }
 
     public void ActivateShredder()
@@ -77,5 +82,13 @@ public class ShredderScript : MonoBehaviour
         shredding = false;
         fakeProfile.SetActive(false);
         fakeProfile.transform.localPosition = originalPos;
+    }
+    public void EndOfDay()
+    {
+        if (currentPaper != null)
+        {
+            Destroy(currentPaper.gameObject);
+            fakeProfile.SetActive(false);
+        }
     }
 }
