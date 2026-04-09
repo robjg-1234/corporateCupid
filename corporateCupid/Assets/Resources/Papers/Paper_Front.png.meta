@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 5eff0568b36187d439d95a8557f2e3f1
+guid: 6d04b2aee7a837e4a99ee68729a742e4
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3763660354875556998
-    second: Profile perspective no faces_0
+      213: -7643550465598485065
+    second: Paper_Front_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Profile perspective no faces_0
+      name: Paper_Front_0
       rect:
         serializedVersion: 2
-        x: 451
-        y: 76
-        width: 1063
-        height: 927
+        x: 0
+        y: 0
+        width: 1536
+        height: 2352
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 684049be6253b3430800000000000000
-      internalID: 3763660354875556998
+      spriteID: 7bd0b3b4957ace590800000000000000
+      internalID: -7643550465598485065
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Profile perspective no faces_0: 3763660354875556998
+      Paper_Front_0: -7643550465598485065
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

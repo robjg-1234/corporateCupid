@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 6e0121e2ae85d0b44a2e6f9c69df0bec
+guid: fbe009207d83fce4ea33ec12e49dc477
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4728093223693431822
-    second: Profile perspective lifted no faces_0
+      213: -219211942087349963
+    second: perspective_paper_up_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,23 +100,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Profile perspective lifted no faces_0
+      name: perspective_paper_up_0
       rect:
         serializedVersion: 2
-        x: 400
-        y: 8
-        width: 1159
-        height: 995
+        x: 743
+        y: 10
+        width: 446
+        height: 384
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e04bd278cbf8d9140800000000000000
-      internalID: 4728093223693431822
+      spriteID: 5392c5d66e335fcf0800000000000000
+      internalID: -219211942087349963
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 29b02907df3c0184a825634a3a523c6e
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Profile perspective lifted no faces_0: 4728093223693431822
+      perspective_paper_up_0: -219211942087349963
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

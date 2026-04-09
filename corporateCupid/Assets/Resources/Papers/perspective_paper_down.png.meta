@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: bd57eaeeab35b3e419d311fb85b51b48
+guid: 4f9b4abd34ba6314bae37b1b35e0bcfe
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4512633070264445626
-    second: Profile_0
+      213: 6361217955571963761
+    second: perspective_paper_down_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Profile_0
+      name: perspective_paper_down_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1536
-        height: 2039
+        x: 756
+        y: 33
+        width: 413
+        height: 361
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: abaeac25ed710ae30800000000000000
-      internalID: 4512633070264445626
+      spriteID: 17714b40706974850800000000000000
+      internalID: 6361217955571963761
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: b603937cd2c192545a3f2ac8987d4fb6
+    spriteID: 9317606773f0284498190db775041c3a
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Profile_0: 4512633070264445626
+      perspective_paper_down_0: 6361217955571963761
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

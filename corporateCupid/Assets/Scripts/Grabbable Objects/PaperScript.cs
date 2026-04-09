@@ -80,11 +80,11 @@ public class PaperScript : MonoBehaviour
         attachedObjects.CopyTo(temp, 0);
         for (int i = 0; i < attachedObjects.Length; i++)
         {
-            if (i == 0 ||i ==8)
+            if (i == 0 ||i ==7)
             {
                 temp[i].GetComponent<SpriteRenderer>().sortingOrder = 3 * recency + frontVal;
             }
-            else if (i == 1 || i==7)
+            else if (i == 1 || i==8)
             {
                 temp[i].GetComponent<SpriteRenderer>().sortingOrder = 1 + 3 * recency + frontVal;
             }
@@ -106,7 +106,7 @@ public class PaperScript : MonoBehaviour
     {
         SpriteRenderer paperType = groundObject.GetComponent<SpriteRenderer>();
         paperType.sprite = liftedPaper;
-        attachedObjects[8].transform.localPosition += new Vector3(0,0.271f,0);
+        attachedObjects[8].transform.localPosition += new Vector3(0,0.1061f,0);
         groundObject.SetActive(true);
         verticalObject.SetActive(false);
         CabinetScript cab = null;
@@ -225,7 +225,7 @@ public class PaperScript : MonoBehaviour
             transform.position = instance.ReturnToDesk(newPosition);
         }
         paperType.sprite = groundSprite;
-        attachedObjects[8].transform.localPosition -= new Vector3(0, 0.271f, 0);
+        attachedObjects[8].transform.localPosition -= new Vector3(0, 0.1061f, 0);
 
     }
     /// <summary>
