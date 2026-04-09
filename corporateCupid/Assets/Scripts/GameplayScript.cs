@@ -40,7 +40,7 @@ public class GameplayScript : MonoBehaviour
     public int dailyMatch = 0;
     public int dailyShred = 0;
     public float validScore = 0;
-    int money = 0;
+    public int money = 15;
     //Allows for dynamic time manipulation higher equals faster
     public float timeMultiplier;
     float time = 0;

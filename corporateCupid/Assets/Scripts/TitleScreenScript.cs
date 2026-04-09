@@ -8,11 +8,12 @@ public class TitleScreenScript : MonoBehaviour
     [SerializeField] Image fadeScreen;
     bool fadingOut = false;
 
-    void LoadLevel()
+    public void LoadLevel()
     {
         if (!fadingOut)
         {
             fadingOut = true;
+            fadeScreen.gameObject.SetActive(true);
             StartCoroutine(FadeOut());
         }
     }
@@ -21,8 +22,8 @@ public class TitleScreenScript : MonoBehaviour
         float val = 0;
         while (val < 1)
         {
-            val += 4 * Time.deltaTime;
-            fadeScreen.color = new Color(1, 1, 1, val);
+            val += 2 * Time.deltaTime;
+            fadeScreen.color = new Color(0, 0, 0, val);
             yield return null;
         }
         SceneManager.LoadScene(1);

@@ -11,13 +11,13 @@ public class ProfileScript
     string profession;
     string bio;
     List<(string, int)> preferences;
-    string[] loveStrings = { "I’m a big lover of X","X is life","If you don’t like X we won’t get along","Can’t live without X"};
-    string[] likesStrings = { "Big fan of X","I really like X","I quite enjoy X","First date? X"};
-    string[] slightLikeStrings = { "I’m fairly fond of X","Can’t go wrong with X","Will never say no to a day full of X","X isn’t as bad as people make it out to be" };
-    string[] hatesStrings = { "Can’t stand X", "The world  would be a better place without X", "Absolutely despise X", "Professional X hater" };
-    string[] dislikesStrings = { "X is overrated","Won’t understand if you genuinely like X","Not a fan of X","I don’t enjoy X"};
-    string[] slightDisikeStrings = {"Would prefer if you don’t like X","I never fully enjoyed X","Can’t get a taste for X","X is kind of ‘meh’ in my books"};
-    string[] bios = {"Looking for a Pam to my Jim.","My mum thinks I’m handsome.","6’3 if that matters.","Just a Ross looking for his Rachel.","Fun fact about me: I’ve never been to IKEA.","Looking for someone who’s the same kind of weird.",
+    readonly string[] loveStrings = { "I’m a big lover of X","X is life","If you don’t like X we won’t get along","Can’t live without X"};
+    readonly string[] likesStrings = { "Big fan of X","I really like X","I quite enjoy X","First date? X"};
+    readonly string[] slightLikeStrings = { "I’m fairly fond of X","Can’t go wrong with X","Will never say no to a day full of X","X isn’t as bad as people make it out to be" };
+    readonly string[] hatesStrings = { "Can’t stand X", "The world  would be a better place without X", "Absolutely despise X", "Professional X hater" };
+    readonly string[] dislikesStrings = { "X is overrated","Won’t understand if you genuinely like X","Not a fan of X","I don’t enjoy X"};
+    readonly string[] slightDisikeStrings = {"Would prefer if you don’t like X","I never fully enjoyed X","Can’t get a taste for X","X is kind of ‘meh’ in my books"};
+    readonly string[] bios = {"Looking for a Pam to my Jim.","My mum thinks I’m handsome.","6’3 if that matters.","Just a Ross looking for his Rachel.","Fun fact about me: I’ve never been to IKEA.","Looking for someone who’s the same kind of weird.",
         "Just looking for a good time.","Looking for a mum for my dog.","Fluent in sarcasm.","NO DRAMA!!","Don’t take yourself too seriously.","Unpopular opinion: Pineapple belongs on pizza. Fight me.",
         "Will judge your coffee order.","Will destroy you at Mario Kart.","Star Wars > Star Trek.","Let’s lie and say we met at the grocery store.","Professional overthinker.","Looking for a partner in crime.",
         "Here for a good time, not a long time","I sleep with my socks on. Deal with it.","My therapist thinks I’m a catch.","Toxic in a way you love.","Looking for a small spoon.",

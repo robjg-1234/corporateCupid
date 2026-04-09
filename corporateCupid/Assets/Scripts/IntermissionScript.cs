@@ -18,6 +18,17 @@ public class IntermissionScript : MonoBehaviour
     [SerializeField] TMP_Text qualityText;
     [SerializeField] TMP_Text buttonText;
     [SerializeField] Image buttonBack;
+    //
+    [SerializeField] TMP_Text savingText;
+    [SerializeField] TMP_Text rentText;
+    [SerializeField] TMP_Text foodText;
+    [SerializeField] Image foodToggle;
+    [SerializeField] Image rentToggle;
+    [SerializeField] Image foodCheck;
+    [SerializeField] Image rentCheck;
+    [SerializeField] TMP_Text resultsText;
+    [SerializeField] Toggle foodTog;
+    [SerializeField] Toggle rentTog;
     bool waiting = false;
     private void Start()
     {
@@ -30,6 +41,15 @@ public class IntermissionScript : MonoBehaviour
         qualityText.color = new(qualityText.color.r, qualityText.color.g, qualityText.color.b, 0);
         buttonText.color = new(buttonText.color.r, buttonText.color.g, buttonText.color.b, 0);
         buttonBack.color = new(buttonBack.color.r, buttonBack.color.g, buttonBack.color.b, 0);
+
+        savingText.color = new(savingText.color.r, savingText.color.g, savingText.color.b, 0);
+        rentText.color = new(rentText.color.r, rentText.color.g, rentText.color.b, 0);
+        foodText.color = new(foodText.color.r, foodText.color.g, foodText.color.b, 0);
+        foodToggle.color = new(foodToggle.color.r, foodToggle.color.g, foodToggle.color.b, 0);
+        rentToggle.color = new(rentToggle.color.r, rentToggle.color.g, rentToggle.color.b, 0);
+        foodCheck.color = new(foodCheck.color.r, foodCheck.color.g, foodCheck.color.b, 0);
+        rentCheck.color = new(rentCheck.color.r, rentCheck.color.g, rentCheck.color.b, 0);
+        resultsText.color = new(resultsText.color.r, resultsText.color.g, resultsText.color.b, 0);
         StartCoroutine(FadeIn());
     }
     void UpdateText()
@@ -46,6 +66,8 @@ public class IntermissionScript : MonoBehaviour
         {
             qualityText.text = "Matches Quality: 0%\r\n";
         }
+        savingText.text = "Savings: " + instance.money +"$";
+        resultsText.text = "Remaining: " + instance.money + "$";
         //TO-DO: Add the total overall score
         
     }
@@ -55,6 +77,75 @@ public class IntermissionScript : MonoBehaviour
         {
             waiting = false;
         }
+    }
+
+    public void UpdateCost()
+    {
+        int fakeFinal = instance.money;
+        if (foodTog.isOn)
+        {
+            if (fakeFinal - 3 >= 0)
+            {
+                fakeFinal -= 3;
+            }
+            else
+            {
+                foodTog.isOn = false;
+            }
+        }
+        if (rentTog.isOn)
+        {
+            if (fakeFinal - 12 >= 0)
+            {
+                fakeFinal -= 12;
+            }
+            else
+            {
+                rentTog.isOn = false;
+            }
+        }
+        resultsText.text = "Remaining: " + fakeFinal + "$";
+    }
+
+    void UpdateMoneyAndFatigue()
+    {
+        int fakeFinal = instance.money;
+        if (foodTog.isOn)
+        {
+            if (fakeFinal - 3 >= 0)
+            {
+                fakeFinal -= 3;
+                instance.money -= 3;
+                instance.timeMultiplier -= 0.1f;
+                if (instance.timeMultiplier < 1)
+                {
+                    instance.timeMultiplier = 1;
+                }
+            }
+        }
+        else
+        {
+            instance.timeMultiplier += 0.1f;
+        }
+        if (rentTog.isOn)
+        {
+            if (fakeFinal - 12 >= 0)
+            {
+                fakeFinal -= 12;
+                instance.money -= 12;
+                instance.timeMultiplier -= 0.4f;
+                if (instance.timeMultiplier < 1)
+                {
+                    instance.timeMultiplier = 1;
+                }
+            }
+        }
+        else
+        {
+            instance.timeMultiplier += 0.4f;
+        }
+        foodTog.isOn = false;
+        rentTog.isOn = false;
     }
     IEnumerator FadeIn()
     {
@@ -198,16 +289,62 @@ public class IntermissionScript : MonoBehaviour
                 t = 1;
             }
             alpha = Mathf.Lerp(1, 0, t);
-            resultObject.color = new(resultObject.color.r, resultObject.color.g, resultObject.color.b, alpha);
-            reportText.color = new(reportText.color.r, reportText.color.g, reportText.color.b, alpha);
             matchesText.color = new(matchesText.color.r, matchesText.color.g, matchesText.color.b, alpha);
             shredsText.color = new(shredsText.color.r, shredsText.color.g, shredsText.color.b, alpha);
             qualityText.color = new(qualityText.color.r, qualityText.color.g, qualityText.color.b, alpha);
+            yield return null;
+        }
+        alpha = 0;
+        t = 0;
+        while (alpha < 1)
+        {
+            t += Time.deltaTime;
+            if (t > 1)
+            {
+                t = 1;
+            }
+            alpha = Mathf.Lerp(0, 1, t);
+            savingText.color = new(savingText.color.r, savingText.color.g, savingText.color.b, alpha);
+            rentText.color = new(rentText.color.r, rentText.color.g, rentText.color.b, alpha);
+            foodText.color = new(foodText.color.r, foodText.color.g, foodText.color.b, alpha);
+            foodToggle.color = new(foodToggle.color.r, foodToggle.color.g, foodToggle.color.b, alpha);
+            rentToggle.color = new(rentToggle.color.r, rentToggle.color.g, rentToggle.color.b, alpha);
+            foodCheck.color = new(foodCheck.color.r, foodCheck.color.g, foodCheck.color.b, alpha);
+            rentCheck.color = new(rentCheck.color.r, rentCheck.color.g, rentCheck.color.b, alpha);
+            resultsText.color = new(resultsText.color.r, resultsText.color.g, resultsText.color.b, alpha);
+            yield return null;
+        }
+        waiting = true;
+        while (waiting)
+        {
+            yield return null;
+        }
+        t = 0;
+        while (alpha > 0)
+        {
+            t += Time.deltaTime;
+            if (t > 1)
+            {
+                t = 1;
+            }
+            alpha = Mathf.Lerp(1, 0, t);
+            resultObject.color = new(resultObject.color.r, resultObject.color.g, resultObject.color.b, alpha);
+            reportText.color = new(reportText.color.r, reportText.color.g, reportText.color.b, alpha);
+            savingText.color = new(savingText.color.r, savingText.color.g, savingText.color.b, alpha);
+            rentText.color = new(rentText.color.r, rentText.color.g, rentText.color.b, alpha);
+            foodText.color = new(foodText.color.r, foodText.color.g, foodText.color.b, alpha);
+            foodToggle.color = new(foodToggle.color.r, foodToggle.color.g, foodToggle.color.b, alpha);
+            rentToggle.color = new(rentToggle.color.r, rentToggle.color.g, rentToggle.color.b, alpha);
+            foodCheck.color = new(foodCheck.color.r, foodCheck.color.g, foodCheck.color.b, alpha);
+            rentCheck.color = new(rentCheck.color.r, rentCheck.color.g, rentCheck.color.b, alpha);
+            resultsText.color = new(resultsText.color.r, resultsText.color.g, resultsText.color.b, alpha);
             buttonText.color = new(buttonText.color.r, buttonText.color.g, buttonText.color.b, alpha);
             buttonBack.color = new(buttonBack.color.r, buttonBack.color.g, buttonBack.color.b, alpha);
             yield return null;
         }
+        t = 0;
         dayText.text = "Day " + instance.day;
+        UpdateMoneyAndFatigue();
         yield return new WaitForSeconds(0.1f);
         StartCoroutine(FadeIn());
     }
