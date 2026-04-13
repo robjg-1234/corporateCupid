@@ -271,6 +271,18 @@ public class PaperScript : MonoBehaviour
         if (!saved)
         {
             instance.dailyShred++;
+            if (identity.profileType > 0)
+            {
+                instance.dailyScore += 0.25f;
+            }
+            else
+            {
+                instance.dailyScore -= 0.25f;
+            }
+            if (instance.dailyScore < 0)
+            {
+                instance.dailyScore = 0;
+            }
             Destroy(gameObject);
         }
     }

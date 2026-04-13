@@ -47,7 +47,7 @@ public class CabinetScript : MonoBehaviour
     }
     IEnumerator SlideOpen()
     {
-        ReorderLayer(0, GameplayScript.instance.currentProfiles+3);
+        ReorderLayer(0, GameplayScript.instance.currentProfiles);
         arrow.gameObject.GetComponent<Collider2D>().enabled = false;
         shredder.GetComponent<Collider2D>().enabled = false;
         opening = true;
@@ -89,6 +89,7 @@ public class CabinetScript : MonoBehaviour
     }
     IEnumerator SlideClose()
     {
+        ReorderLayer(0, GameplayScript.instance.currentProfiles + 3);
         arrow.gameObject.GetComponent<Collider2D>().enabled = false;
         opening = true;
         float t = 0;

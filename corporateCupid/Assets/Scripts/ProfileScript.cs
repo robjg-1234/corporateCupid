@@ -1,11 +1,14 @@
 
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 /// <summary>
 /// Conatins all the information of the profile.
 /// </summary>
 public class ProfileScript
 {
+    public int profileType = 0;
+    bool visibleRobot = false;
     public string characterName;
     int age;
     string profession;
@@ -23,16 +26,71 @@ public class ProfileScript
         "Here for a good time, not a long time","I sleep with my socks on. Deal with it.","My therapist thinks I’m a catch.","Toxic in a way you love.","Looking for a small spoon.",
         "Work hard, play hard.","Chivalry is dead.","The quickest way to my heart is through my stomach.","Will always laugh at your jokes.","Looking for my Prince Charming.","Daddy’s girl.","Treat me like a queen and I’ll treat you like a king.",
         "Fries > Guys.","Hufflepuff girl looking for her Gryffindor man."};
-    public ProfileScript(string newName, List<(string, int)> newPreferences)
+    readonly string[] dislikeEmotes = { ". <font=\"CcEmotionSDF\"><color=#FAB525><size=200%>|</size></color></font> " , ". <font=\"CcEmotionSDF\"><color=#FA9125><size=200%>}</size></color></font> ", ". <font=\"CcEmotionSDF\"><color=#D52915><size=200%>{</size></color></font> " };
+    readonly string[] likeEmotes = { ". <font=\"CcEmotionSDF\"><color=#a1cc14><size=200%>\\</size></color></font> ", ". <font=\"CcEmotionSDF\"><color=#47910a><size=200%>]</size></color></font> ", ". <font=\"CcEmotionSDF\"><color=#3e6320><size=200%>[</size></color></font> " };
+    public ProfileScript(string newName, List<(string, int)> newPreferences, int type =0)
     {
         characterName = newName;
         age = Random.Range(18,35);
         //Pharloom Reference :O
-
+        profileType = type;
         profession = "Bell Ringer";
         preferences = newPreferences;
+        profiling(profileType);
+        
+
+    }
+    void profiling(int type)
+    {
         int randVal = Random.Range(0, bios.Length);
-        bio = bios[randVal];
+        switch (type)
+        {
+            //Lamia
+            case 1:
+                bio = "Hi, I am a Lamia.";
+                break;
+            //Mormo
+            case 2:
+                bio = "Hi, I am a Mormo.";
+                break;
+            //Nymph
+            case 3:
+                age = Random.Range(18, 20);
+                bio = "Hi, I am a Nymph.";
+                break;
+            //Satyr
+            case 4:
+                bio = "Hi, I am a Satyr.";
+                break;
+            //Cyclops
+            case 5:
+                bio = "Hi, I am a Cyclops.";
+                break;
+            //Regular Bot
+            case 6:
+                //Choose 1 of 3 implicit errors (Image, bio, age)
+                int choice = Random.Range(0, 3);
+                bio = bios[randVal];
+                if (choice == 0)
+                {
+                    visibleRobot = true;
+                }
+                else if (choice == 1)
+                {
+                    //Create list of robot bios
+                    bio = "I am robot";
+                }
+                else if (choice == 2)
+                {
+                    age = Random.Range(18, 100);
+                }
+                break;
+            //normal
+            default:
+                bio = bios[randVal];
+                break;
+
+        }
     }
     /// <summary>
     /// Returns the preferences.
@@ -56,7 +114,7 @@ public class ProfileScript
             slightly dislike =  |
             neutral = /
          */
-        string formattedString = "";
+        string[] formattedString = { "", "", "" };
         int[] previousVal = new int[] { -1, -1, -1 };
         for (int i =0; i < 3; i++)
         {
@@ -74,27 +132,49 @@ public class ProfileScript
             }
             if (preferences[i].Item2 == 1)
             {
-                formattedString += slightLikeStrings[randomVal] + ". <font=\"CcEmotionSDF\"><color=#a1cc14><size=200%>\\</size></color></font> ";
+                if (profileType == 6 && Random.Range(0,1f)>0.5f)
+                {
+                    formattedString[i] += slightLikeStrings[randomVal] + likeEmotes[Random.Range(0,3)];
+                }
+                else
+                {
+                    formattedString[i] += slightLikeStrings[randomVal] + likeEmotes[0];
+                }
+                    
             }
             else if (preferences[i].Item2 == 2)
             {
-                formattedString += likesStrings[randomVal] + ". <font=\"CcEmotionSDF\"><color=#47910a><size=200%>]</size></color></font> ";
+                if (profileType == 6 && Random.Range(0, 1f) > 0.5f)
+                {
+                    formattedString[i] += likesStrings[randomVal] + likeEmotes[Random.Range(0, 3)];
+                }
+                else
+                {
+                    formattedString[i] += likesStrings[randomVal] + likeEmotes[1];
+                }
             }
             else if (preferences[i].Item2 == 3)
             {
-                formattedString += loveStrings[randomVal] + ". <font=\"CcEmotionSDF\"><color=#3e6320><size=200%>[</size></color></font> ";
+                if (profileType == 6 && Random.Range(0, 1f) > 0.5f)
+                {
+                    formattedString[i] += loveStrings[randomVal] + likeEmotes[Random.Range(0, 3)];
+                }
+                else
+                {
+                    formattedString[i] += loveStrings[randomVal] + likeEmotes[2];
+                }
             }
-            formattedString = formattedString.Replace("X", preferences[i].Item1);
+            formattedString[i] = formattedString[i].Replace("X", preferences[i].Item1);
+            formattedString[i] = normalizeSentence(formattedString[i]);
         }
-        
-        return formattedString;
+        return formattedString[0] + formattedString[1] + formattedString[2];
     }
     /// <summary>
     /// Formats the dislikes into a readable string.
     /// </summary>
     public string GetFormattedDislikes()
     {
-        string formattedString = "";
+        string[] formattedString = {"","",""};
         int[] previousVal = new int[]{ -1, -1, -1 };
         for (int i = 3; i < 6; i++)
         {
@@ -113,19 +193,46 @@ public class ProfileScript
             previousVal[i - 3] = randomVal;
             if (preferences[i].Item2 == -1)
             {
-                formattedString += slightDisikeStrings[randomVal] + ". <font=\"CcEmotionSDF\"><color=#FAB525><size=200%>|</size></color></font> ";
+                if (profileType == 6 && Random.Range(0, 1f) > 0.5f)
+                {
+                    formattedString[i-3] += slightDisikeStrings[randomVal] + dislikeEmotes[Random.Range(0, 3)];
+                }
+                else
+                {
+                    formattedString[i-3] += slightDisikeStrings[randomVal] + dislikeEmotes[0];
+                }
             }
             else if (preferences[i].Item2 == -2)
             {
-                formattedString += dislikesStrings[randomVal] + ". <font=\"CcEmotionSDF\"><color=#FA9125><size=200%>}</size></color></font> ";
+                if (profileType == 6 && Random.Range(0, 1f) > 0.5f)
+                {
+                    formattedString[i - 3] += dislikesStrings[randomVal] + dislikeEmotes[Random.Range(0, 3)];
+                }
+                else
+                {
+                    formattedString[i - 3] += dislikesStrings[randomVal] + dislikeEmotes[0];
+                }
             }
             else if (preferences[i].Item2 == -3)
             {
-                formattedString += hatesStrings[randomVal] + ". <font=\"CcEmotionSDF\"><color=#D52915><size=200%>{</size></color></font> ";
+                if (profileType == 6 && Random.Range(0, 1f) > 0.5f)
+                {
+                    formattedString[i - 3] += hatesStrings[randomVal] + dislikeEmotes[Random.Range(0, 3)];
+                }
+                else
+                {
+                    formattedString[i - 3] += hatesStrings[randomVal] + dislikeEmotes[0];
+                }
             }
-            formattedString = formattedString.Replace("X", preferences[i].Item1);
+            formattedString[i - 3] = formattedString[i - 3].Replace("X", preferences[i].Item1);
+            formattedString[i - 3] = normalizeSentence(formattedString[i - 3]);
         }
-        return formattedString;
+        return formattedString[0]+formattedString[1]+formattedString[2];
+    }
+    string normalizeSentence(string oldSentence)
+    {
+        oldSentence = oldSentence.ToLower();
+        return oldSentence.First().ToString().ToUpper() + oldSentence.Substring(1);
     }
     public string GetBio()
     {

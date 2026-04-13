@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Security.Principal;
 using UnityEngine;
 
 public class ShredderScript : MonoBehaviour
@@ -60,6 +61,18 @@ public class ShredderScript : MonoBehaviour
         buttonCollider.enabled = false;
         shredderCollider.enabled = false;
         instance.dailyShred++;
+        if (currentPaper.GetProfile().profileType > 0)
+        {
+            instance.dailyScore += 0.25f;
+        }
+        else
+        {
+            instance.dailyScore -= 0.25f;
+        }
+        if (instance.dailyScore < 0)
+        {
+            instance.dailyScore = 0;
+        }
         Destroy(currentPaper.gameObject);
         currentPaper = null;
         Vector3 finalPos = new Vector3(0.0410000011f, -0.899999976f, 0);
@@ -87,7 +100,21 @@ public class ShredderScript : MonoBehaviour
     {
         if (currentPaper != null)
         {
+            instance.dailyShred++;
+            if (currentPaper.GetProfile().profileType > 0)
+            {
+                instance.dailyScore += 0.25f;
+            }
+            else
+            {
+                instance.dailyScore -= 0.25f;
+            }
+            if (instance.dailyScore < 0)
+            {
+                instance.dailyScore = 0;
+            }
             Destroy(currentPaper.gameObject);
+            currentPaper = null;
             fakeProfile.SetActive(false);
         }
     }

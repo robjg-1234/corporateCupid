@@ -25,7 +25,8 @@ public class GameplayScript : MonoBehaviour
     string[] femaleNames = { "Olivia", "Emma", "Ava", "Charlotte", "Sophia", "Amelia", "Isabella", "Mia","Evelyn","Harper","Camila", "Abigail", "Gianna", "Luna", "Ella", "Elizabeth", "Sofia", "Emily", "Avery", "Mila", "Scarlett", "Eleanor", "Madison", "Layla", "Penelope" };
     string[] surnames = { "Smith", "Johnson", "Williams", "Brown","Jones","Garcia","Miller","Davis","Rodriguez","Martinez","Hernandez","Lopez","Gonzales","Wilson","Anderson","Thomas","Taylor","Moore","Jackson","Martin","Lee","Perez","Thompson","White","Harris" };
     //List<ProfileScript> People = new List<ProfileScript>();
-    Queue<ProfileScript> availableProfiles = new Queue<ProfileScript>();
+    //Queue<ProfileScript> availableProfiles = new Queue<ProfileScript>();
+    List<ProfileScript> availableProfiles = new List<ProfileScript>();
     public Action<int, int> objectInteracted;
     public Action dayEnded;
 
@@ -150,7 +151,9 @@ public class GameplayScript : MonoBehaviour
     public ProfileScript PickProfile()
     {
         currentProfiles += 1;
-        return availableProfiles.Dequeue();
+        ProfileScript temp = availableProfiles[0];
+        availableProfiles.Remove(temp);
+        return temp;
     }
     public void SetTime(int hour, int minute)
     {
@@ -254,17 +257,6 @@ public class GameplayScript : MonoBehaviour
         validScore = 0;
         overallScore += dailyScore;
         profilesMatched += dailyMatch;
-        ////Part of the game that will handle end of day report.
-        //if (profilesMatched > 0)
-        //{
-        //    Debug.Log(overallScore / profilesMatched);
-        //}
-        //else
-        //{
-        //    Debug.Log("No matches");
-        //}
-        //Add fade out to results
-        //pause.SetActive(true);
         StartCoroutine(fades.FadeOut());
     }
     /// <summary>
@@ -272,31 +264,33 @@ public class GameplayScript : MonoBehaviour
     /// </summary>
     void FetchDay()
     {
+        int previousLink = -1;
+        int totalFakeProfiles = 0;
         switch (day)
         {
             case 0:
                 batchSize = 5;
                 profileDrop.Add(0);
                 profileDrop.Add(240);
-                availableProfiles.Enqueue(new ProfileScript("Cupid Cupidson", new() { ("Movies", 1), ("Anime", 1), ("Astrology", 1),("Cars", -1), ("Video Games", -1), ("Trains", -1) }));
-                availableProfiles.Enqueue(new ProfileScript("Cupid Cupidson", new() { ("Movies", 2), ("Anime", 1), ("Astrology", 1), ("Cars", -1), ("Video Games", -1), ("Trains", -1) }));
-                availableProfiles.Enqueue(new ProfileScript("Cupid Cupidson", new() { ("Movies", 2), ("Anime", 1), ("Astrology", 1), ("Cars", -1), ("Video Games", -1), ("Trains", -1) }));
-                availableProfiles.Enqueue(new ProfileScript("Cupid Cupidson", new() { ("Movies", 1), ("Anime", 3), ("Astrology", 2), ("Cars", -1), ("Video Games", -1), ("Trains", -1) }));
-                availableProfiles.Enqueue(new ProfileScript("Cupid Cupidson", new() { ("Movies", 3), ("Anime", 1), ("Astrology", 1), ("Cars", -2), ("Video Games", -1), ("Trains", -1) }));
-                availableProfiles.Enqueue(new ProfileScript("Cupid Cupidson", new() { ("Movies", 3), ("Anime", 1), ("Astrology", 2), ("Cars", -2), ("Video Games", -1), ("Trains", -1) }));
-                availableProfiles.Enqueue(new ProfileScript("Cupid Cupidson", new() { ("Movies", 1), ("Anime", 1), ("Astrology", 2), ("Cars", -1), ("Video Games", -1), ("Trains", -1) }));
-                availableProfiles.Enqueue(new ProfileScript("Cupid Cupidson", new() { ("Movies", 1), ("Anime", 1), ("Astrology", 1), ("Cars", -1), ("Video Games", -3), ("Trains", -1) }));
-                availableProfiles.Enqueue(new ProfileScript("Cupid Cupidson", new() { ("Movies", 3), ("Anime", 1), ("Astrology", 1), ("Cars", -1), ("Video Games", -1), ("Trains", -3) }));
-                availableProfiles.Enqueue(new ProfileScript("Cupid Cupidson", new() { ("Movies", 3), ("Anime", 2), ("Astrology", 3), ("Cars", -1), ("Video Games", -1), ("Trains", -1) }));
-                availableProfiles.Enqueue(new ProfileScript("Cupid Cupidson", new() { ("Movies", 1), ("Anime", 2), ("Astrology", 1), ("Cars", -1), ("Video Games", -3), ("Trains", -1) }));
-                availableProfiles.Enqueue(new ProfileScript("Cupid Cupidson", new() { ("Movies", 1), ("Anime", 2), ("Astrology", 3), ("Cars", -3), ("Video Games", -1), ("Trains", -1) }));
+                availableProfiles.Add(new ProfileScript("Cupid Cupidson", new() { ("Movies", 1), ("Anime", 1), ("Astrology", 1),("Cars", -1), ("Video Games", -1), ("Trains", -1) }));
+                availableProfiles.Add(new ProfileScript("Cupid Cupidson", new() { ("Movies", 2), ("Anime", 1), ("Astrology", 1), ("Cars", -1), ("Video Games", -1), ("Trains", -1) }));
+                availableProfiles.Add(new ProfileScript("Cupid Cupidson", new() { ("Movies", 2), ("Anime", 1), ("Astrology", 1), ("Cars", -1), ("Video Games", -1), ("Trains", -1) }));
+                availableProfiles.Add(new ProfileScript("Cupid Cupidson", new() { ("Movies", 1), ("Anime", 3), ("Astrology", 2), ("Cars", -1), ("Video Games", -1), ("Trains", -1) }));
+                availableProfiles.Add(new ProfileScript("Cupid Cupidson", new() { ("Movies", 3), ("Anime", 1), ("Astrology", 1), ("Cars", -2), ("Video Games", -1), ("Trains", -1) }));
+                availableProfiles.Add(new ProfileScript("Cupid Cupidson", new() { ("Movies", 3), ("Anime", 1), ("Astrology", 2), ("Cars", -2), ("Video Games", -1), ("Trains", -1) }));
+                availableProfiles.Add(new ProfileScript("Cupid Cupidson", new() { ("Movies", 1), ("Anime", 1), ("Astrology", 2), ("Cars", -1), ("Video Games", -1), ("Trains", -1) }));
+                availableProfiles.Add(new ProfileScript("Cupid Cupidson", new() { ("Movies", 1), ("Anime", 1), ("Astrology", 1), ("Cars", -1), ("Video Games", -3), ("Trains", -1) }));
+                availableProfiles.Add(new ProfileScript("Cupid Cupidson", new() { ("Movies", 3), ("Anime", 1), ("Astrology", 1), ("Cars", -1), ("Video Games", -1), ("Trains", -3) }));
+                availableProfiles.Add(new ProfileScript("Cupid Cupidson", new() { ("Movies", 3), ("Anime", 2), ("Astrology", 3), ("Cars", -1), ("Video Games", -1), ("Trains", -1) }));
+                availableProfiles.Add(new ProfileScript("Cupid Cupidson", new() { ("Movies", 1), ("Anime", 2), ("Astrology", 1), ("Cars", -1), ("Video Games", -3), ("Trains", -1) }));
+                availableProfiles.Add(new ProfileScript("Cupid Cupidson", new() { ("Movies", 1), ("Anime", 2), ("Astrology", 3), ("Cars", -3), ("Video Games", -1), ("Trains", -1) }));
                 break;
-            default:
+            case 1:
                 profileDrop.Add(0);
                 profileDrop.Add(120);
                 profileDrop.Add(280);
                 batchSize = 5;
-                int previousLink = -1;
+
                 for (int i = 0; i < 15; i++)
                 {
                     string makeshiftName = "";
@@ -326,19 +320,125 @@ public class GameplayScript : MonoBehaviour
                                 break;
                             }
                         }
-                        //Debug.Log("" + chosenPreferences[randomChoice].Item1 + " : " + makeshiftName);
+                    }
+                    else
+                    {
+                        previousLink = -1;
+                    }
+                    ProfileScript newProfile = new(makeshiftName, chosenPreferences);
+                    availableProfiles.Add(newProfile);
+                }
+                break;
+            case 2:
+                profileDrop.Add(0);
+                profileDrop.Add(120);
+                profileDrop.Add(280);
+                batchSize = 8;
+                totalFakeProfiles = 3;
+                //3 Fake Profiles
+                for (int i = 0; i < 24; i++)
+                {
+                    string makeshiftName = "";
+                    int rand = Random.Range(0, 2);
+                    if (rand == 0)
+                    {
+                        rand = Random.Range(0, maleNames.Length);
+                        makeshiftName += maleNames[rand] + " ";
+                    }
+                    else
+                    {
+                        rand = Random.Range(0, femaleNames.Length);
+                        makeshiftName += femaleNames[rand] + " ";
+                    }
+                    rand = Random.Range(0, surnames.Length);
+                    makeshiftName += surnames[rand];
+                    List<(string, int)> chosenPreferences = RandomizePreferences(previousLink);
+                    int j = 0;
+                    int randomChoice = Random.Range(0, 3);
+                    if (Random.Range(0, 1f) <= 0.4f)
+                    {
+                        for (j = 0; j < preferences.Length; j++)
+                        {
+                            if (preferences[j].Equals(chosenPreferences[randomChoice].Item1))
+                            {
+                                previousLink = j;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        previousLink = -1;
+                    }
+                    ProfileScript newProfile;
+                    if (totalFakeProfiles> 0)
+                    {
+                        totalFakeProfiles--;
+                        if (Random.Range(0, 1f)>0.5f)
+                        {
+                            newProfile = new(makeshiftName, chosenPreferences, 6);
+                        }
+                        else
+                        {
+                            newProfile = new(makeshiftName, chosenPreferences, Random.Range(1,6));
+                        }
+                        Debug.Log(makeshiftName);
+                    }
+                    else
+                    {
+                        newProfile = new(makeshiftName, chosenPreferences, 0);
+                    }
+                    
+                    availableProfiles.Add(newProfile);
+                }
+                
+                break;
+            default:
+                profileDrop.Add(0);
+                profileDrop.Add(120);
+                profileDrop.Add(280);
+                batchSize = 5;
+                previousLink = -1;
+                for (int i = 0; i < 15; i++)
+                {
+                    string makeshiftName = "";
+                    int rand = Random.Range(0, 2);
+                    if (rand == 0)
+                    {
+                        rand = Random.Range(0, maleNames.Length);
+                        makeshiftName += maleNames[rand] + " ";
+                    }
+                    else
+                    {
+                        rand = Random.Range(0, femaleNames.Length);
+                        makeshiftName += femaleNames[rand] + " ";
+                    }
+                    rand = Random.Range(0, surnames.Length);
+                    makeshiftName += surnames[rand];
+                    List<(string, int)> chosenPreferences = RandomizePreferences(previousLink);
+                    int j = 0;
+                    int randomChoice = Random.Range(0, 3);
+                    if (Random.Range(0, 1f) <= 0.4f)
+                    {
+                        for (j = 0; j < preferences.Length; j++)
+                        {
+                            if (preferences[j].Equals(chosenPreferences[randomChoice].Item1))
+                            {
+                                previousLink = j;
+                                break;
+                            }
+                        }
                     }
                     else
                     {
                         previousLink = -1;
                     }
                     ProfileScript newProfile = new(makeshiftName,chosenPreferences);
-                    
-                    
-                    availableProfiles.Enqueue(newProfile);
+                    availableProfiles.Add(newProfile);
                 }
                 break;
         }
+        ShuffleList(availableProfiles);
     }
 
     public Vector2 ReturnToDesk(Vector3 originalPos)
@@ -412,7 +512,7 @@ public class GameplayScript : MonoBehaviour
                 previousLink = -1;
             }
             ProfileScript newProfile = new(makeshiftName, chosenPreferences);
-            availableProfiles.Enqueue(newProfile);
+            availableProfiles.Add(newProfile);
         }
         Vector3 pos = deskCenter;
         for (int i = 0; i < batchSize; i++)
@@ -422,6 +522,21 @@ public class GameplayScript : MonoBehaviour
         }
     }
 
+    List<ProfileScript> ShuffleList(List<ProfileScript> current)
+    {
+        ProfileScript target;
+        ProfileScript old;
+        int max = current.Count;
+        for (int i = 0; i < max; i++)
+        {
+            int newPos = Random.Range(0, max);
+            target = current[newPos];
+            old = current[i];
+            current[i] = target;
+            current[newPos] = old;
+        }
+        return current;
+    }
     public void PauseGame()
     {
         if (dayGoing)

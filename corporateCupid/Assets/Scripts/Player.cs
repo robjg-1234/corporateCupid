@@ -64,7 +64,6 @@ public class Player : MonoBehaviour
                         else if (hit.collider.CompareTag("arrow"))
                         {
                             CabinetScript cab = hit.collider.gameObject.GetComponentInParent<CabinetScript>();
-                            instance.CallInteraction(instance.currentProfiles);
                             cab.ToggleFile();
                         }
                         //Checks to see if it is a punch card
