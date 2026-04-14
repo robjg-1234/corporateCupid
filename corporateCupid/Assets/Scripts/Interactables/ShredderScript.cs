@@ -23,7 +23,9 @@ public class ShredderScript : MonoBehaviour
     {
         instance.dayEnded -= EndOfDay;
     }
-
+    /// <summary>
+    /// Inititate Paper Shredding
+    /// </summary>
     public void ActivateShredder()
     {
         if (currentPaper != null && !shredding)
@@ -31,6 +33,9 @@ public class ShredderScript : MonoBehaviour
             StartCoroutine(ShredPaper());
         }
     }
+    /// <summary>
+    /// Activates the fake profile and saves a reference to the selected paper.
+    /// </summary>
     public bool AddPaper(PaperScript profile)
     {
         if (currentPaper == null)
@@ -43,6 +48,9 @@ public class ShredderScript : MonoBehaviour
         }
         return false;
     }
+    /// <summary>
+    /// Returns the existing paper. 
+    /// </summary>
     public PaperScript GrabPaper()
     {
         PaperScript temp = null;
@@ -55,6 +63,9 @@ public class ShredderScript : MonoBehaviour
         }
         return temp;
     }
+    /// <summary>
+    /// Coroutine that processes the animation for shredding the paper.
+    /// </summary>
     IEnumerator ShredPaper()
     {
         shredding = true;
@@ -96,18 +107,24 @@ public class ShredderScript : MonoBehaviour
         fakeProfile.SetActive(false);
         fakeProfile.transform.localPosition = originalPos;
     }
+    /// <summary>
+    /// Function attahced to the end of day action that handles any remaining object.
+    /// </summary>
     public void EndOfDay()
     {
         if (currentPaper != null)
         {
             instance.dailyShred++;
-            if (currentPaper.GetProfile().profileType > 0)
+            if (currentPaper.GetProfile().profileType > 0 && instance.day != 3)
             {
                 instance.dailyScore += 0.25f;
             }
             else
             {
-                instance.dailyScore -= 0.25f;
+                if (instance.day != 3)
+                {
+                    instance.dailyScore -= 0.25f;
+                }
             }
             if (instance.dailyScore < 0)
             {

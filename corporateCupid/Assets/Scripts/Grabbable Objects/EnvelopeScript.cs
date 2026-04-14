@@ -14,7 +14,6 @@ public class EnvelopeScript : MonoBehaviour
         instance.currentProfiles++;
         recency = instance.currentProfiles;
         ChangePriority(recency, instance.currentProfiles);
-        instance.currentProfiles++;
         instance.objectInteracted += ChangePriority;
     }
     private void OnDestroy()

@@ -43,6 +43,7 @@ public class GameplayScript : MonoBehaviour
     public float validScore = 0;
     public int money = 15;
     //Allows for dynamic time manipulation higher equals faster
+    bool jumpToNext = false;
     public float timeMultiplier;
     float time = 0;
     int batchSize = 5;
@@ -51,15 +52,9 @@ public class GameplayScript : MonoBehaviour
     //Contains the moments for the batch drops of the day: IGT seconds
     List<int> profileDrop = new(0);
 
-    
-
-
     void Start()
     {
         instance = this;
-        // --Temp--
-        
-        //Randomize choosing
     }
     private void Update()
     {
@@ -144,6 +139,23 @@ public class GameplayScript : MonoBehaviour
             }
         }
         return found;
+    }
+
+    /// <summary>
+    /// Speeds up the game until the next avaialble stage.
+    /// </summary>
+    public void JumpToNextStage()
+    {
+        if (day != 0)
+        {
+            if (currentProfiles < 3 && !paused && clockedIn && dayGoing)
+            {
+                if (profileDrop.Count > 0)
+                {
+                    jumpToNext = true;
+                }
+            }
+        }
     }
     /// <summary>
     /// Chooses the profiles attached to the letters.
@@ -232,6 +244,15 @@ public class GameplayScript : MonoBehaviour
                 SetTime(hour, minute);
                 time = 0;
             }
+            if (jumpToNext)
+            {
+                jumpToNext = false;
+                totalTime = profileDrop[0];
+                minuteSecond = 0;
+                hour = 9+Mathf.FloorToInt(totalTime / 60f);
+                minute = totalTime - (hour - 9) * 60;
+                SetTime(hour, minute);
+            }
             if (profileDrop.Contains(totalTime))
             {
                 profileDrop.Remove(totalTime);
@@ -266,6 +287,7 @@ public class GameplayScript : MonoBehaviour
     {
         int previousLink = -1;
         int totalFakeProfiles = 0;
+        int totalProfiles = 12;
         switch (day)
         {
             case 0:
@@ -290,44 +312,8 @@ public class GameplayScript : MonoBehaviour
                 profileDrop.Add(120);
                 profileDrop.Add(280);
                 batchSize = 5;
-
-                for (int i = 0; i < 15; i++)
-                {
-                    string makeshiftName = "";
-                    int rand = Random.Range(0, 2);
-                    if (rand == 0)
-                    {
-                        rand = Random.Range(0, maleNames.Length);
-                        makeshiftName += maleNames[rand] + " ";
-                    }
-                    else
-                    {
-                        rand = Random.Range(0, femaleNames.Length);
-                        makeshiftName += femaleNames[rand] + " ";
-                    }
-                    rand = Random.Range(0, surnames.Length);
-                    makeshiftName += surnames[rand];
-                    List<(string, int)> chosenPreferences = RandomizePreferences(previousLink);
-                    int j = 0;
-                    int randomChoice = Random.Range(0, 3);
-                    if (Random.Range(0, 1f) <= 0.4f)
-                    {
-                        for (j = 0; j < preferences.Length; j++)
-                        {
-                            if (preferences[j].Equals(chosenPreferences[randomChoice].Item1))
-                            {
-                                previousLink = j;
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        previousLink = -1;
-                    }
-                    ProfileScript newProfile = new(makeshiftName, chosenPreferences);
-                    availableProfiles.Add(newProfile);
-                }
+                totalFakeProfiles = 0;
+                totalProfiles = 15;
                 break;
             case 2:
                 profileDrop.Add(0);
@@ -335,108 +321,94 @@ public class GameplayScript : MonoBehaviour
                 profileDrop.Add(280);
                 batchSize = 8;
                 totalFakeProfiles = 3;
-                //3 Fake Profiles
-                for (int i = 0; i < 24; i++)
-                {
-                    string makeshiftName = "";
-                    int rand = Random.Range(0, 2);
-                    if (rand == 0)
-                    {
-                        rand = Random.Range(0, maleNames.Length);
-                        makeshiftName += maleNames[rand] + " ";
-                    }
-                    else
-                    {
-                        rand = Random.Range(0, femaleNames.Length);
-                        makeshiftName += femaleNames[rand] + " ";
-                    }
-                    rand = Random.Range(0, surnames.Length);
-                    makeshiftName += surnames[rand];
-                    List<(string, int)> chosenPreferences = RandomizePreferences(previousLink);
-                    int j = 0;
-                    int randomChoice = Random.Range(0, 3);
-                    if (Random.Range(0, 1f) <= 0.4f)
-                    {
-                        for (j = 0; j < preferences.Length; j++)
-                        {
-                            if (preferences[j].Equals(chosenPreferences[randomChoice].Item1))
-                            {
-                                previousLink = j;
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        previousLink = -1;
-                    }
-                    ProfileScript newProfile;
-                    if (totalFakeProfiles> 0)
-                    {
-                        totalFakeProfiles--;
-                        if (Random.Range(0, 1f)>0.5f)
-                        {
-                            newProfile = new(makeshiftName, chosenPreferences, 6);
-                        }
-                        else
-                        {
-                            newProfile = new(makeshiftName, chosenPreferences, Random.Range(1,6));
-                        }
-                        Debug.Log(makeshiftName);
-                    }
-                    else
-                    {
-                        newProfile = new(makeshiftName, chosenPreferences, 0);
-                    }
-                    
-                    availableProfiles.Add(newProfile);
-                }
-                
+                totalProfiles = 24;                
+                break;
+            case 3:
+                profileDrop.Add(0);
+                profileDrop.Add(120);
+                profileDrop.Add(280);
+                batchSize = 32;
+                totalFakeProfiles = 50;
+                totalProfiles = 96;
+                break;
+            case 4:
+                profileDrop.Add(0);
+                profileDrop.Add(120);
+                profileDrop.Add(280);
+                batchSize = 12;
+                totalFakeProfiles = 5;
+                totalProfiles = 36;
+                break;
+            case 5:
+                profileDrop.Add(0);
+                profileDrop.Add(120);
+                profileDrop.Add(280);
+                batchSize = 25;
+                totalFakeProfiles = 15;
+                totalProfiles = 75;
                 break;
             default:
                 profileDrop.Add(0);
                 profileDrop.Add(120);
                 profileDrop.Add(280);
                 batchSize = 5;
-                previousLink = -1;
-                for (int i = 0; i < 15; i++)
-                {
-                    string makeshiftName = "";
-                    int rand = Random.Range(0, 2);
-                    if (rand == 0)
-                    {
-                        rand = Random.Range(0, maleNames.Length);
-                        makeshiftName += maleNames[rand] + " ";
-                    }
-                    else
-                    {
-                        rand = Random.Range(0, femaleNames.Length);
-                        makeshiftName += femaleNames[rand] + " ";
-                    }
-                    rand = Random.Range(0, surnames.Length);
-                    makeshiftName += surnames[rand];
-                    List<(string, int)> chosenPreferences = RandomizePreferences(previousLink);
-                    int j = 0;
-                    int randomChoice = Random.Range(0, 3);
-                    if (Random.Range(0, 1f) <= 0.4f)
-                    {
-                        for (j = 0; j < preferences.Length; j++)
-                        {
-                            if (preferences[j].Equals(chosenPreferences[randomChoice].Item1))
-                            {
-                                previousLink = j;
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        previousLink = -1;
-                    }
-                    ProfileScript newProfile = new(makeshiftName,chosenPreferences);
-                    availableProfiles.Add(newProfile);
-                }
+                totalProfiles = 15;
                 break;
+        }
+        for (int i = 0; i < totalProfiles; i++)
+        {
+            string makeshiftName = "";
+            int rand = Random.Range(0, 2);
+            if (rand == 0)
+            {
+                rand = Random.Range(0, maleNames.Length);
+                makeshiftName += maleNames[rand] + " ";
+            }
+            else
+            {
+                rand = Random.Range(0, femaleNames.Length);
+                makeshiftName += femaleNames[rand] + " ";
+            }
+            rand = Random.Range(0, surnames.Length);
+            makeshiftName += surnames[rand];
+            List<(string, int)> chosenPreferences = RandomizePreferences(previousLink);
+            int j = 0;
+            int randomChoice = Random.Range(0, 3);
+            if (Random.Range(0, 1f) <= 0.4f)
+            {
+                for (j = 0; j < preferences.Length; j++)
+                {
+                    if (preferences[j].Equals(chosenPreferences[randomChoice].Item1))
+                    {
+                        previousLink = j;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                previousLink = -1;
+            }
+            ProfileScript newProfile;
+            if (totalFakeProfiles > 0)
+            {
+                totalFakeProfiles--;
+                if (Random.Range(0, 1f) > 0.5f)
+                {
+                    newProfile = new(makeshiftName, chosenPreferences, 6);
+                }
+                else
+                {
+                    newProfile = new(makeshiftName, chosenPreferences, Random.Range(1, 6));
+                }
+                Debug.Log(makeshiftName);
+            }
+            else
+            {
+                newProfile = new(makeshiftName, chosenPreferences, 0);
+            }
+
+            availableProfiles.Add(newProfile);
         }
         ShuffleList(availableProfiles);
     }
@@ -521,7 +493,9 @@ public class GameplayScript : MonoBehaviour
             pos.x += 0.1f;
         }
     }
-
+    /// <summary>
+    /// Randomizes the order of the profiles that are currently available for draw.
+    /// </summary>
     List<ProfileScript> ShuffleList(List<ProfileScript> current)
     {
         ProfileScript target;

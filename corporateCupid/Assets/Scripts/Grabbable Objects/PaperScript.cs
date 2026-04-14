@@ -33,6 +33,7 @@ public class PaperScript : MonoBehaviour
         TMP_Text infoText = attachedObjects[6].GetComponent<TMP_Text>();
         spriteRend = attachedObjects[1].GetComponent<SpriteRenderer>();
         //Whenever profile icons get added, pass the path to the icon
+        spriteRend.sprite = Resources.Load<Sprite>("Humans/"+Random.Range(1,57));
         groundObject = attachedObjects[7];
         verticalObject = attachedObjects[0];
         nameText.text = identity.characterName;

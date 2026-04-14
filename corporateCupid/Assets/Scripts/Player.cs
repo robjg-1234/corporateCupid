@@ -86,6 +86,10 @@ public class Player : MonoBehaviour
                             instance.CallInteraction(selectedObject.recency);
                             StartCoroutine(selectedObject.HoldObject());
                         }
+                        else if (hit.collider.CompareTag("Clock"))
+                        {
+                            instance.JumpToNextStage();
+                        }
                     }
 
                 }

@@ -73,9 +73,11 @@ public class SubmitScript : MonoBehaviour
     /// </summary>
     public void Submit(AttachedLetter selection)
     {
-        //To-do
-        //Add confirmation
         totalScore = CalculateScores(selection.prof1.GetProfile().GetPreferences(), selection.prof2.GetProfile().GetPreferences());
+        if (!(selection.prof1.GetProfile().profileType > 0 && selection.prof2.GetProfile().profileType > 0) && !(selection.prof1.GetProfile().profileType == 0 && selection.prof2.GetProfile().profileType == 0))
+        {
+            totalScore = 0;
+        }
         relationshipMatches.Add(id, totalScore);
         id++;
         Destroy(selection.gameObject);
@@ -86,7 +88,6 @@ public class SubmitScript : MonoBehaviour
         }
         instance.dailyMatch++;
         instance.dailyScore += totalScore;
-        
     }
     /// <summary>
     /// Handles the creation of Matches after clicking a button.
@@ -192,7 +193,6 @@ public class SubmitScript : MonoBehaviour
         }
         score /= bestScore;
         Debug.Log(score);
-
         return score;
     }
     /// <summary>
