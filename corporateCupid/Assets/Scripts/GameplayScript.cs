@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class GameplayScript : MonoBehaviour
@@ -270,7 +271,7 @@ public class GameplayScript : MonoBehaviour
         //Money calculation
         if (validScore > 0)
         {
-            int amountGained = Mathf.RoundToInt(validScore*1.5f);
+            int amountGained = Mathf.RoundToInt(validScore*1.3f);
             Debug.Log("Money Gained: " + amountGained);
             money += amountGained;
             Debug.Log("Total money: " + money);
@@ -493,6 +494,13 @@ public class GameplayScript : MonoBehaviour
             pos.x += 0.1f;
         }
     }
+
+    public void ExitToTitleScreen()
+    {
+        SceneManager.LoadScene(0);
+        //Fade out
+    }
+
     /// <summary>
     /// Randomizes the order of the profiles that are currently available for draw.
     /// </summary>

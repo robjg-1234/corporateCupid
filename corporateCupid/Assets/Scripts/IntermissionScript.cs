@@ -29,10 +29,15 @@ public class IntermissionScript : MonoBehaviour
     [SerializeField] TMP_Text resultsText;
     [SerializeField] Toggle foodTog;
     [SerializeField] Toggle rentTog;
+    int rent = 3;
+    int food = 1;
     bool waiting = false;
     private void Start()
     {
+        
         instance = GameplayScript.instance;
+        rent = 3 + 2 * instance.day;
+        food = 1 + 1 * instance.day;
         dayText.color = new(dayText.color.r, dayText.color.g, dayText.color.b, 0);
         resultObject.color = new(resultObject.color.r, resultObject.color.g, resultObject.color.b, 0);
         reportText.color = new(reportText.color.r, reportText.color.g, reportText.color.b, 0);
@@ -68,8 +73,10 @@ public class IntermissionScript : MonoBehaviour
         }
         savingText.text = "Savings: " + instance.money +"$";
         resultsText.text = "Remaining: " + instance.money + "$";
+        rentText.text = "Rent: -"+rent+"$";
+        foodText.text = "Food: -"+food+"$";
         //TO-DO: Add the total overall score
-        
+
     }
     public void Proceed()
     {
@@ -84,9 +91,9 @@ public class IntermissionScript : MonoBehaviour
         int fakeFinal = instance.money;
         if (foodTog.isOn)
         {
-            if (fakeFinal - 3 >= 0)
+            if (fakeFinal - food >= 0)
             {
-                fakeFinal -= 3;
+                fakeFinal -= food;
             }
             else
             {
@@ -95,9 +102,9 @@ public class IntermissionScript : MonoBehaviour
         }
         if (rentTog.isOn)
         {
-            if (fakeFinal - 12 >= 0)
+            if (fakeFinal - rent >= 0)
             {
-                fakeFinal -= 12;
+                fakeFinal -= rent;
             }
             else
             {
@@ -112,10 +119,10 @@ public class IntermissionScript : MonoBehaviour
         int fakeFinal = instance.money;
         if (foodTog.isOn)
         {
-            if (fakeFinal - 3 >= 0)
+            if (fakeFinal - food >= 0)
             {
-                fakeFinal -= 3;
-                instance.money -= 3;
+                fakeFinal -= food;
+                instance.money -= food;
                 instance.timeMultiplier -= 0.1f;
                 if (instance.timeMultiplier < 1)
                 {
@@ -129,10 +136,10 @@ public class IntermissionScript : MonoBehaviour
         }
         if (rentTog.isOn)
         {
-            if (fakeFinal - 12 >= 0)
+            if (fakeFinal - rent >= 0)
             {
-                fakeFinal -= 12;
-                instance.money -= 12;
+                fakeFinal -= rent;
+                instance.money -= rent;
                 instance.timeMultiplier -= 0.4f;
                 if (instance.timeMultiplier < 1)
                 {
@@ -344,7 +351,10 @@ public class IntermissionScript : MonoBehaviour
         }
         t = 0;
         dayText.text = "Day " + instance.day;
+        rent = 3 + 2*instance.day;
+        food = 1 + 1*instance.day;
         UpdateMoneyAndFatigue();
+        //add end;
         yield return new WaitForSeconds(0.1f);
         StartCoroutine(FadeIn());
     }

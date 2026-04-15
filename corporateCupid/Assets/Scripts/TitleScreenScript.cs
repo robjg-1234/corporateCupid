@@ -17,6 +17,10 @@ public class TitleScreenScript : MonoBehaviour
             StartCoroutine(FadeOut());
         }
     }
+    public void ExitGame()
+    {
+        Application.Quit();
+    } 
     IEnumerator FadeOut()
     {
         float val = 0;
