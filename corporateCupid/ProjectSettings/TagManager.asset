@@ -16,6 +16,7 @@ TagManager:
   - punch
   - button
   - Envelope
+  - handbook
   layers:
   - Default
   - TransparentFX

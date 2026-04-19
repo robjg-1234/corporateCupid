@@ -68,6 +68,11 @@ public class ShredderScript : MonoBehaviour
     /// </summary>
     IEnumerator ShredPaper()
     {
+        if (instance.day ==0 && instance.stepNumber == 5)
+        {
+            instance.stepNumber++;
+            instance.stepDone = true;
+        }
         shredding = true;
         buttonCollider.enabled = false;
         shredderCollider.enabled = false;

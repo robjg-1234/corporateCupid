@@ -1,6 +1,7 @@
+
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
+
 
 public class Player : MonoBehaviour
 {
@@ -23,7 +24,7 @@ public class Player : MonoBehaviour
     {
         if (instance.dayGoing)
         {
-            if (!instance.paused)
+            if (!instance.paused && !HandbookScript.instance.open)
             {
                 //Checks for interactable objects and changes the selected object based on it.
                 if (Mouse.current.leftButton.wasPressedThisFrame && selectedObject == null && selectedMatch == null && selectedPunch == null && selectedEnvelope == null)
@@ -43,9 +44,12 @@ public class Player : MonoBehaviour
                         }
                         else if (hit.collider.CompareTag("Envelope"))
                         {
-                            selectedEnvelope = Instantiate(envelopePrefab, Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), Quaternion.identity).GetComponent<EnvelopeScript>();
-                            instance.CallInteraction(selectedEnvelope.recency);
-                            StartCoroutine(selectedEnvelope.HoldObject());
+                            if (instance.day!=0 || instance.stepNumber >= 2)
+                            {
+                                selectedEnvelope = Instantiate(envelopePrefab, Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), Quaternion.identity).GetComponent<EnvelopeScript>();
+                                instance.CallInteraction(selectedEnvelope.recency);
+                                StartCoroutine(selectedEnvelope.HoldObject());
+                            }
                         }
                         else if (hit.collider.CompareTag("Shredder"))
                         {
@@ -58,7 +62,10 @@ public class Player : MonoBehaviour
                         }
                         else if (hit.collider.CompareTag("button"))
                         {
-                            GameplayScript.shredInstance.ActivateShredder();
+                            if (instance.day != 0 || instance.stepNumber >= 5)
+                            {
+                                GameplayScript.shredInstance.ActivateShredder();
+                            }
                         }
                         //Checks to see if it is the arrow to open/close cabinet
                         else if (hit.collider.CompareTag("arrow"))
@@ -86,6 +93,10 @@ public class Player : MonoBehaviour
                             instance.CallInteraction(selectedObject.recency);
                             StartCoroutine(selectedObject.HoldObject());
                         }
+                        else if (hit.collider.CompareTag("handbook"))
+                        {
+                            HandbookScript.instance.OpenBook();
+                        }
                         else if (hit.collider.CompareTag("Clock"))
                         {
                             instance.JumpToNextStage();
@@ -110,13 +121,21 @@ public class Player : MonoBehaviour
                 else if (Keyboard.current.escapeKey.wasPressedThisFrame)
                 {
                     instance.PauseGame();
+
                 }
             }
             else
             {
                 if (Keyboard.current.escapeKey.wasPressedThisFrame)
                 {
-                    instance.PauseGame();
+                    if (HandbookScript.instance.open)
+                    {
+                        HandbookScript.instance.CloseBook();
+                    }
+                    else
+                    {
+                        instance.PauseGame();
+                    }
                 }
             }
         }

@@ -80,10 +80,18 @@ public class CabinetScript : MonoBehaviour
     {
         if (!opening && !isOpen)
         {
-            StartCoroutine(SlideOpen());
+            if (GameplayScript.instance.day != 0 || GameplayScript.instance.stepNumber >= 4)
+            {
+                StartCoroutine(SlideOpen());
+            }
         }
         else if (!opening && isOpen)
         {
+            if (GameplayScript.instance.day != 0 || GameplayScript.instance.stepNumber == 4)
+            {
+                GameplayScript.instance.stepNumber++;
+                GameplayScript.instance.stepDone = true;
+            }
             StartCoroutine(SlideClose());
         }
     }
@@ -126,6 +134,10 @@ public class CabinetScript : MonoBehaviour
             {
                 unit.ClearInventory();
             }
+        }
+        if (!opening && isOpen)
+        {
+            StartCoroutine(SlideClose());
         }
     }
 }

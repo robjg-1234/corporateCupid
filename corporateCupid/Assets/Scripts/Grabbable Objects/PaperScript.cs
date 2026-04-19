@@ -264,7 +264,11 @@ public class PaperScript : MonoBehaviour
             transform.position = instance.ReturnToDesk(prevPos);
         }
         GameplayScript.player.Unselect();
-        
+        if (instance.day==0 && instance.stepNumber == 0)
+        {
+            instance.stepNumber++;
+            instance.stepDone = true;
+        }
     }
 
     public void EndOfDayCheck()

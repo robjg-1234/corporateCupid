@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class GameplayScript : MonoBehaviour
@@ -20,6 +21,9 @@ public class GameplayScript : MonoBehaviour
     [NonSerialized] public static Player player;
     [NonSerialized] public static SubmitScript mailInstance;
     [NonSerialized] public static ShredderScript shredInstance;
+    [SerializeField] TMP_Text tutorial;
+    [SerializeField] GameObject circle;
+    [SerializeField] GameObject bossChat;
     public int currentProfiles = 0;
     string[] preferences = {"Movies","Astrology","Programming","Cars","Video Games","Trains","Winter","Travelling","Reading","Music","Social Events","Animals","Sports","Hiking","Cooking" };
     string[] maleNames = { "Liam","Noah", "Oliver","Elijah","William","James","Benjamin","Lucas","Henry","Alexander","Mason","Michael","Ethan","Daniel","Jacob","Logan","Jackson","Levi","Sebastian","John","Jack","Owen","Theodore","Aiden","Samuel"};
@@ -43,6 +47,9 @@ public class GameplayScript : MonoBehaviour
     public int dailyShred = 0;
     public float validScore = 0;
     public int money = 15;
+    public int amountGained = 0;
+    [NonSerialized] public bool stepDone = false;
+    [NonSerialized] public int stepNumber = 0;
     //Allows for dynamic time manipulation higher equals faster
     bool jumpToNext = false;
     public float timeMultiplier;
@@ -199,87 +206,464 @@ public class GameplayScript : MonoBehaviour
         
         FetchDay();
         dayGoing = true;
-        while (!clockedIn)
-        {
-            yield return null;
-        }
         if (day == 0)
         {
+
+            bool proceed = false;
+            Image sprite = bossChat.GetComponent<Image>();
+            yield return new WaitForSeconds(0.5f);
+            //Text 1 "Since this is your first day at the office, you need to get up to speed. Drag your punch card onto the clock to start the day."
+            tutorial.text = "Since this is your first day at the office, you need to get up to speed. Drag your punch card onto the clock to start the day.";
+            bossChat.SetActive(true);
+            float t = 0;
+            while (!clockedIn)
+            {
+                t += Time.deltaTime;
+                if (t > 5f)
+                {
+                    sprite.color = new Color(1, 1, 1, 0.5f);
+                }
+                yield return null;
+            }
+            yield return new WaitForSeconds(0.5f);
+            sprite.color = new Color(1, 1, 1, 1);
+            proceed = false;
+            //Click once
+            //Text 2 "First, look through the profiles on the desk by right-clicking them. You can drag them around to reorder them as you please."
+            tutorial.text = "First, look through the profiles on the desk by right-clicking them. You can drag them around to reorder them as you please.";
+            Vector3 pos = deskCenter + new Vector2(2.5f, 0); ;
             for (int i = 0; i < 2; i++)
             {
-                PaperScript pfRef = Instantiate(profilePrefab, deskCenter, Quaternion.identity).GetComponent<PaperScript>();
-                yield return new WaitForEndOfFrame();
-                cabinetRef.individualUnits[i].SaveProfile(pfRef);
+                Instantiate(profilePrefab, pos, Quaternion.identity);
+                pos.x += 0.1f;
             }
-        }
-        Debug.Log("Clocked In");
-        //Oh no!!!!!!!, the table! It's broken!
-        int hour = 9;
-        int minute = 0;
-        int totalTime = 0;
-        int minuteSecond = 0;
-        //Control time for when we add pauses which would stop the in-game timer.
-        //Current timer lasts 8 minutes.
-        while (totalTime < 480)
-        {
-            //Debug function
-            if (!paused && !debugPaused)
+            //Right click on a profile and then click again
+            t = 0;
+            while (!stepDone)
             {
-                time += timeMultiplier * Time.deltaTime;
-            }
-            if (time > 1)
-            {
-                minuteSecond += 1;
-                if (minuteSecond > 9)
+                t += Time.deltaTime;
+                if (t > 5f)
                 {
-                    minute += 10;
+                    sprite.color = new Color(1, 1, 1, 0.5f);
+                }
+                yield return null;
+            }
+            yield return new WaitForSeconds(0.5f);
+            sprite.color = new Color(1, 1, 1, 1);
+            stepDone = false;
+            tutorial.text = "In each profile, you can see important information about our clients. Try to match profiles based on what they agree and disagree on.";
+            //Text 3 "In each profile, you can see important information about our clients. Try to match profiles based on what they agree and disagree on."
+            t = 0;
+            while (!proceed)
+            {
+                t += Time.deltaTime;
+                if (t > 5f)
+                {
+                    sprite.color = new Color(1, 1, 1, 0.5f);
+                }
+                if (Mouse.current.leftButton.wasReleasedThisFrame)
+                {
+                    proceed = true;
+                }
+                yield return null;
+            }
+            yield return new WaitForSeconds(0.25f);
+            sprite.color = new Color(1, 1, 1, 1);
+            proceed = false;
+            //Click once
+            tutorial.text = "The more traits they share, the better the match is. Since this is real life, perfect matches don't exist, so go for the second-best thing. Remember, time is of the essence!";
+            //Text 4 "The more traits they share, the better the match is. Since this is real life, perfect matches don't exist, so go for the second-best thing. Remember, time is of the essence!"
+            //Click once
+            t = 0;
+            while (!proceed)
+            {
+                t += Time.deltaTime;
+                if (t > 5f)
+                {
+                    sprite.color = new Color(1, 1, 1, 0.5f);
+                }
+                if (Mouse.current.leftButton.wasReleasedThisFrame)
+                {
+                    proceed = true;
+                    stepNumber++;
+                }
+                yield return null;
+            }
+            yield return new WaitForSeconds(0.25f);
+            sprite.color = new Color(1, 1, 1, 1);
+            proceed = false;
+            tutorial.text = "To create matches drag the two profiles that you want to match onto the pinboard, and then drag an envelope from the stack and drop on top of them.";
+            //Text 5 "To create matches drag the two profiles that you want to match onto the pinboard, and then drag an envelope from the stack and drop on top of them."
+            t = 0;
+            while (!stepDone)
+            {
+                t += Time.deltaTime;
+                if (t > 5f)
+                {
+                    sprite.color = new Color(1, 1, 1, 0.5f);
+                }
+                yield return null;
+            }
+            yield return new WaitForSeconds(0.25f);
+            sprite.color = new Color(1, 1, 1, 1);
+            stepDone = false;
+            //Drop envelope.
+            tutorial.text = "This action is irreversible but you can change the profiles before putting them inside the envelope.";
+            //Text 6 "This action is irreversible but you can change the profiles before putting them inside the envelope."
+            t = 0;
+            while (!proceed)
+            {
+                t += Time.deltaTime;
+                if (t > 5f)
+                {
+                    sprite.color = new Color(1, 1, 1, 0.5f);
+                }
+                if (Mouse.current.leftButton.wasReleasedThisFrame)
+                {
+                    proceed = true;
+                }
+                yield return null;
+            }
+            yield return new WaitForSeconds(0.25f);
+            sprite.color = new Color(1, 1, 1, 1);
+            proceed = false;
+            //Click once
+            tutorial.text = "Now you need to drag and drop the newly created match into the submission slot. You cannot make new matches until the match has been submitted.";
+            //Text 7 "Now you need to drag and drop the newly created match into the submission slot. You cannot make new matches until the match has been submitted."
+            circle.SetActive(true);
+            t = 0;
+            while (!stepDone)
+            {
+                t += Time.deltaTime;
+                if (t > 5f)
+                {
+                    sprite.color = new Color(1, 1, 1, 0.5f);
+                }
+                yield return null;
+            }
+            yield return new WaitForSeconds(0.25f);
+            sprite.color = new Color(1, 1, 1, 1);
+            circle.SetActive(false);
+            stepDone = false;
+            //Submit the envelope
+            tutorial.text = "The overall quality and quantity of your matches will be reflected on your paycheck at the end of the day, so try to get as much done within the day.";
+            //Text 8 "The overall quality and quantity of your matches will be reflected on your paycheck at the end of the day, so try to get as much done within the day."
+            //Click once
+            t = 0;
+            while (!proceed)
+            {
+                t += Time.deltaTime;
+                if (t > 5f)
+                {
+                    sprite.color = new Color(1, 1, 1, 0.5f);
+                }
+                if (Mouse.current.leftButton.wasReleasedThisFrame)
+                {
+                    proceed = true;
+                }
+                yield return null;
+            }
+            yield return new WaitForSeconds(0.25f);
+            sprite.color = new Color(1, 1, 1, 1);
+            proceed = false;
+            tutorial.text = "There are two outcomes for profiles that are not matched by the end of the day: They get saved or they get shredded.";
+            //Text 9 "There are two outcomes for profiles that are not matched by the end of the day: They get saved or they get shredded."
+            //Click once
+            t = 0;
+            while (!proceed)
+            {
+                t += Time.deltaTime;
+                if (t > 5f)
+                {
+                    sprite.color = new Color(1, 1, 1, 0.5f);
+                }
+                if (Mouse.current.leftButton.wasReleasedThisFrame)
+                {
+                    proceed = true;
+                }
+                yield return null;
+            }
+            yield return new WaitForSeconds(0.25f);
+            sprite.color = new Color(1, 1, 1, 1);
+            proceed = false;
+            tutorial.text = "Click on the file cabinet handle to open it, here you can drop profiles for later access. Profiles inside the cabinet are not shredded at the end of the day and can be accessed the next day.";
+            //Text 10 "Click on the file cabinet handle to open it, here you can drop profiles for later access. Profiles inside the cabinet are not shredded at the end of the day and can be accessed the next day."
+            //Click the handle, close it or click once
+            t = 0;
+            while (!stepDone)
+            {
+                t += Time.deltaTime;
+                if (t > 5f)
+                {
+                    sprite.color = new Color(1, 1, 1, 0.5f);
+                }
+                yield return null;
+            }
+            yield return new WaitForSeconds(0.25f);
+            sprite.color = new Color(1, 1, 1, 1);
+            stepDone = false;
+            tutorial.text = "Due to the popularity of our company. We receive profiles from lots of sources, including non-humans. However, your objective is to only match humans.";
+            //Text 11 "Due to the popularity of our company. We receive profiles from lots of sources, including non-humans. However, your objective is to only match humans."
+            //click once
+            t = 0;
+            while (!proceed)
+            {
+                t += Time.deltaTime;
+                if (t > 5f)
+                {
+                    sprite.color = new Color(1, 1, 1, 0.5f);
+                }
+                if (Mouse.current.leftButton.wasReleasedThisFrame)
+                {
+                    proceed = true;
+                }
+                yield return null;
+            }
+            yield return new WaitForSeconds(0.25f);
+            sprite.color = new Color(1, 1, 1, 1);
+            proceed = false;
+            tutorial.text = "If you look at this profile, you will notice some inconsistencies, which are explained in the employee handbook.";
+            Instantiate(profilePrefab, pos, Quaternion.identity);
+            //Text 12 "If you look at this profile, you will notice some inconsistencies, which are explained in the employee handbook."
+            //Click once
+            t = 0;
+            while (!proceed)
+            {
+                t += Time.deltaTime;
+                if (t > 5f)
+                {
+                    sprite.color = new Color(1, 1, 1, 0.5f);
+                }
+                if (Mouse.current.leftButton.wasReleasedThisFrame)
+                {
+                    proceed = true;
+                }
+                yield return null;
+            }
+            yield return new WaitForSeconds(0.25f);
+            sprite.color = new Color(1, 1, 1, 1);
+            proceed = false;
+            tutorial.text = "To solve this problem, grab the profile and drop it in the shredder, then press the button to shred it. Correctly shredding non-human profiles benefits your overall score, so keep an eye out.";
+            //Text 13 "To solve this problem, grab the profile and drop it in the shredder, then press the button to shred it. Correctly shredding non-human profiles benefits your overall score, so keep an eye out."
+            //Shred a profile
+            t = 0;
+            while (!stepDone)
+            {
+                t += Time.deltaTime;
+                if (t > 5f)
+                {
+                    sprite.color = new Color(1, 1, 1, 0.5f);
+                }
+                yield return null;
+            }
+            yield return new WaitForSeconds(0.25f);
+            sprite.color = new Color(1, 1, 1, 1);
+            stepDone = false;
+            tutorial.text = "If you fail to identify them and match them with a real person, it will affect our company reputation and it will be reflected on your score.";
+            //Text 14 "If you fail to identify them and match them with a real person, it will affect our company reputation and it will be reflected on your score."
+            //Click once
+            t = 0;
+            while (!proceed)
+            {
+                t += Time.deltaTime;
+                if (t > 5f)
+                {
+                    sprite.color = new Color(1, 1, 1, 0.5f);
+                }
+                if (Mouse.current.leftButton.wasReleasedThisFrame)
+                {
+                    proceed = true;
+                }
+                yield return null;
+            }
+            yield return new WaitForSeconds(0.25f);
+            sprite.color = new Color(1, 1, 1, 1);
+            proceed = false;
+            tutorial.text = "Each day there will be 3 batches of profiles, spread out along the day. Each batch will happen only after some time has passed, so you can keep some profiles for the next batch.";
+            //Text 15 "Each day there will be 3 batches of profiles, spread out along the day. Each batch will happen only after some time has passed, so you can keep some profiles for the next batch."
+            //Click once
+            t = 0;
+            while (!proceed)
+            {
+                t += Time.deltaTime;
+                if (t > 5f)
+                {
+                    sprite.color = new Color(1, 1, 1, 0.5f);
+                }
+                if (Mouse.current.leftButton.wasReleasedThisFrame)
+                {
+                    proceed = true;
+                }
+                yield return null;
+            }
+            yield return new WaitForSeconds(0.25f);
+            sprite.color = new Color(1, 1, 1, 1);
+            proceed = false;
+            tutorial.text = "After your day is done, you will be shown the end-of-day report, where you can pay for your mortal needs. Failing to do so may impact your perception of time.";
+            //Text 16 "After your day is done, you will be shown the end-of-day report, where you can pay for your mortal needs. Failing to do so may impact your perception of time."
+            //Click once
+            t = 0;
+            while (!proceed)
+            {
+                t += Time.deltaTime;
+                if (t > 5f)
+                {
+                    sprite.color = new Color(1, 1, 1, 0.5f);
+                }
+                if (Mouse.current.leftButton.wasReleasedThisFrame)
+                {
+                    proceed = true;
+                }
+                yield return null;
+            }
+            yield return new WaitForSeconds(0.25f);
+            sprite.color = new Color(1, 1, 1, 1);
+            proceed = false;
+            tutorial.text = "There will be a final test badge today so that you can put everything into practice, nothing from today will carry over tomorrow. I'll check on your progress with the company in 5 days.";
+            //Text 17 "There will be a final test badge today so that you can put everything into practice, nothing from today will carry over tomorrow. I'll check on your progress with the company in 5 days."
+            //Click once 5 profiles are dropped
+            t = 0;
+            while (!proceed)
+            {
+                t += Time.deltaTime;
+                if (t > 5f)
+                {
+                    sprite.color = new Color(1, 1, 1, 0.5f);
+                }
+                if (Mouse.current.leftButton.wasReleasedThisFrame)
+                {
+                    proceed = true;
+                }
+                yield return null;
+            }
+            yield return new WaitForSeconds(0.25f);
+            sprite.color = new Color(1, 1, 1, 1);
+            proceed = false;
+            pos = deskCenter;
+            bossChat.SetActive(false);
+            for (int i = 0; i < 5; i++)
+            {
+                Instantiate(profilePrefab, pos, Quaternion.identity);
+                pos.x += 0.1f;
+            }
+            int hour = 15;
+            int minute = 0;
+            int totalTime = 360;
+            int minuteSecond = 0;
+            SetTime(hour, minute);
+            while (totalTime < 480)
+            {
+                if (!paused && !debugPaused)
+                {
+                    time += timeMultiplier * Time.deltaTime;
+                }
+                if (time > 1)
+                {
+                    minuteSecond += 1;
+                    if (minuteSecond > 9)
+                    {
+                        minute += 10;
+                        minuteSecond = 0;
+                    }
+                    totalTime += 1;
+
+                    if (minute > 59)
+                    {
+                        hour += 1;
+                        minute = 0;
+                    }
+                    SetTime(hour, minute);
+                    time = 0;
+                }
+                yield return null;
+            }
+            profileDrop.Clear();
+            dayGoing = false;
+            if (validScore > 0)
+            {
+                amountGained = 4;
+                money += amountGained;
+            }
+            validScore = 0;
+            overallScore += dailyScore;
+            profilesMatched += dailyMatch;
+            StartCoroutine(fades.FadeOut());
+        }
+        else
+        {
+            while (!clockedIn)
+            {
+                yield return null;
+            }
+            Debug.Log("Clocked In");
+            //Oh no!!!!!!!, the table! It's broken!
+            int hour = 9;
+            int minute = 0;
+            int totalTime = 0;
+            int minuteSecond = 0;
+            //Control time for when we add pauses which would stop the in-game timer.
+            //Current timer lasts 8 minutes.
+            while (totalTime < 480)
+            {
+                //Debug function
+                if (!paused && !debugPaused)
+                {
+                    time += timeMultiplier * Time.deltaTime;
+                }
+                if (time > 1)
+                {
+                    minuteSecond += 1;
+                    if (minuteSecond > 9)
+                    {
+                        minute += 10;
+                        minuteSecond = 0;
+                    }
+                    totalTime += 1;
+
+                    if (minute > 59)
+                    {
+                        hour += 1;
+                        minute = 0;
+                    }
+                    SetTime(hour, minute);
+                    time = 0;
+                }
+                if (jumpToNext)
+                {
+                    jumpToNext = false;
+                    totalTime = profileDrop[0];
                     minuteSecond = 0;
+                    hour = 9 + Mathf.FloorToInt(totalTime / 60f);
+                    minute = totalTime - (hour - 9) * 60;
+                    SetTime(hour, minute);
                 }
-                totalTime += 1;
-                
-                if (minute > 59)
+                if (profileDrop.Contains(totalTime))
                 {
-                    hour += 1;
-                    minute = 0;
+                    profileDrop.Remove(totalTime);
+                    Vector3 pos = deskCenter;
+                    for (int i = 0; i < batchSize; i++)
+                    {
+                        Instantiate(profilePrefab, pos, Quaternion.identity);
+                        pos.x += 0.1f;
+                    }
                 }
-                SetTime(hour, minute);
-                time = 0;
+                yield return null;
             }
-            if (jumpToNext)
+            profileDrop.Clear();
+            dayGoing = false;
+            //Money calculation
+            if (validScore > 0)
             {
-                jumpToNext = false;
-                totalTime = profileDrop[0];
-                minuteSecond = 0;
-                hour = 9+Mathf.FloorToInt(totalTime / 60f);
-                minute = totalTime - (hour - 9) * 60;
-                SetTime(hour, minute);
+                amountGained = Mathf.RoundToInt(validScore * 1.3f);
+                Debug.Log("Money Gained: " + amountGained);
+                money += amountGained;
+                Debug.Log("Total money: " + money);
             }
-            if (profileDrop.Contains(totalTime))
-            {
-                profileDrop.Remove(totalTime);
-                Vector3 pos = deskCenter;
-                for (int i = 0; i < batchSize; i++)
-                {
-                    Instantiate(profilePrefab, pos, Quaternion.identity);
-                    pos.x += 0.1f;
-                }
-            }
-            yield return null;
+            validScore = 0;
+            overallScore += dailyScore;
+            profilesMatched += dailyMatch;
+            StartCoroutine(fades.FadeOut());
         }
-        profileDrop.Clear();
-        dayGoing = false;
-        //Money calculation
-        if (validScore > 0)
-        {
-            int amountGained = Mathf.RoundToInt(validScore*1.3f);
-            Debug.Log("Money Gained: " + amountGained);
-            money += amountGained;
-            Debug.Log("Total money: " + money);
-        }
-        validScore = 0;
-        overallScore += dailyScore;
-        profilesMatched += dailyMatch;
-        StartCoroutine(fades.FadeOut());
     }
     /// <summary>
     /// Create profiles and setup day characteristics (waves and time)
@@ -295,18 +679,10 @@ public class GameplayScript : MonoBehaviour
                 batchSize = 5;
                 profileDrop.Add(0);
                 profileDrop.Add(240);
-                availableProfiles.Add(new ProfileScript("Cupid Cupidson", new() { ("Movies", 1), ("Anime", 1), ("Astrology", 1),("Cars", -1), ("Video Games", -1), ("Trains", -1) }));
-                availableProfiles.Add(new ProfileScript("Cupid Cupidson", new() { ("Movies", 2), ("Anime", 1), ("Astrology", 1), ("Cars", -1), ("Video Games", -1), ("Trains", -1) }));
-                availableProfiles.Add(new ProfileScript("Cupid Cupidson", new() { ("Movies", 2), ("Anime", 1), ("Astrology", 1), ("Cars", -1), ("Video Games", -1), ("Trains", -1) }));
-                availableProfiles.Add(new ProfileScript("Cupid Cupidson", new() { ("Movies", 1), ("Anime", 3), ("Astrology", 2), ("Cars", -1), ("Video Games", -1), ("Trains", -1) }));
-                availableProfiles.Add(new ProfileScript("Cupid Cupidson", new() { ("Movies", 3), ("Anime", 1), ("Astrology", 1), ("Cars", -2), ("Video Games", -1), ("Trains", -1) }));
-                availableProfiles.Add(new ProfileScript("Cupid Cupidson", new() { ("Movies", 3), ("Anime", 1), ("Astrology", 2), ("Cars", -2), ("Video Games", -1), ("Trains", -1) }));
-                availableProfiles.Add(new ProfileScript("Cupid Cupidson", new() { ("Movies", 1), ("Anime", 1), ("Astrology", 2), ("Cars", -1), ("Video Games", -1), ("Trains", -1) }));
-                availableProfiles.Add(new ProfileScript("Cupid Cupidson", new() { ("Movies", 1), ("Anime", 1), ("Astrology", 1), ("Cars", -1), ("Video Games", -3), ("Trains", -1) }));
-                availableProfiles.Add(new ProfileScript("Cupid Cupidson", new() { ("Movies", 3), ("Anime", 1), ("Astrology", 1), ("Cars", -1), ("Video Games", -1), ("Trains", -3) }));
-                availableProfiles.Add(new ProfileScript("Cupid Cupidson", new() { ("Movies", 3), ("Anime", 2), ("Astrology", 3), ("Cars", -1), ("Video Games", -1), ("Trains", -1) }));
-                availableProfiles.Add(new ProfileScript("Cupid Cupidson", new() { ("Movies", 1), ("Anime", 2), ("Astrology", 1), ("Cars", -1), ("Video Games", -3), ("Trains", -1) }));
-                availableProfiles.Add(new ProfileScript("Cupid Cupidson", new() { ("Movies", 1), ("Anime", 2), ("Astrology", 3), ("Cars", -3), ("Video Games", -1), ("Trains", -1) }));
+                availableProfiles.Add(new ProfileScript("Maria Stuart", new() { ("Movies", 1), ("Anime", 3), ("Astrology", 1),("Hiking", -1), ("Cooking", -1), ("Trains", -1) }));
+                availableProfiles.Add(new ProfileScript("Cupid Cupidson", new() { ("Movies", 2), ("Anime", 3), ("Social Events", 1), ("Cars", -1), ("Video Games", -2), ("Trains", -1) }));
+                totalProfiles = 6;
+                totalFakeProfiles = 1;
                 break;
             case 1:
                 profileDrop.Add(0);
@@ -394,7 +770,8 @@ public class GameplayScript : MonoBehaviour
             if (totalFakeProfiles > 0)
             {
                 totalFakeProfiles--;
-                if (Random.Range(0, 1f) > 0.5f)
+
+                if (Random.Range(0, 1f) > 0.5f || day==0)
                 {
                     newProfile = new(makeshiftName, chosenPreferences, 6);
                 }
@@ -411,7 +788,10 @@ public class GameplayScript : MonoBehaviour
 
             availableProfiles.Add(newProfile);
         }
-        ShuffleList(availableProfiles);
+        if (day != 0)
+        {
+            ShuffleList(availableProfiles);
+        }
     }
 
     public Vector2 ReturnToDesk(Vector3 originalPos)

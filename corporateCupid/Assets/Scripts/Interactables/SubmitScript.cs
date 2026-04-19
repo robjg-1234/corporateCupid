@@ -73,6 +73,11 @@ public class SubmitScript : MonoBehaviour
     /// </summary>
     public void Submit(AttachedLetter selection)
     {
+        if (instance.day == 0 && instance.stepNumber == 3)
+        {
+            instance.stepNumber++;
+            instance.stepDone = true;
+        }
         totalScore = CalculateScores(selection.prof1.GetProfile().GetPreferences(), selection.prof2.GetProfile().GetPreferences());
         if (!(selection.prof1.GetProfile().profileType > 0 && selection.prof2.GetProfile().profileType > 0) && !(selection.prof1.GetProfile().profileType == 0 && selection.prof2.GetProfile().profileType == 0))
         {
@@ -96,6 +101,11 @@ public class SubmitScript : MonoBehaviour
     {
         if (submissionOne != null && submissionTwo != null && instance.clockedIn)
         {
+            if (instance.day==0 && instance.stepNumber == 2)
+            {
+                instance.stepNumber++;
+                instance.stepDone = true;
+            }
             AttachedLetter newMatch = Instantiate(matchObject, transform.position, Quaternion.identity).GetComponent<AttachedLetter>();
             newMatch.JoinPapers(submissionOne, submissionTwo, envelope);
             submissionTwo = null;

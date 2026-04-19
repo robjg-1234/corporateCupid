@@ -1,7 +1,6 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class IntermissionScript : MonoBehaviour
@@ -11,24 +10,21 @@ public class IntermissionScript : MonoBehaviour
     [SerializeField] Image fadeScreen;
     [SerializeField] TMP_Text dayText;
     //Result Screen
+    [SerializeField] Slider matchQualityBar;
     [SerializeField] Image resultObject;
-    [SerializeField] TMP_Text reportText;
+    [SerializeField] Image stamp;
+    [SerializeField] TMP_Text gainedText;
     [SerializeField] TMP_Text matchesText;
     [SerializeField] TMP_Text shredsText;
     [SerializeField] TMP_Text qualityText;
-    [SerializeField] TMP_Text buttonText;
-    [SerializeField] Image buttonBack;
-    //
     [SerializeField] TMP_Text savingText;
     [SerializeField] TMP_Text rentText;
     [SerializeField] TMP_Text foodText;
-    [SerializeField] Image foodToggle;
-    [SerializeField] Image rentToggle;
-    [SerializeField] Image foodCheck;
-    [SerializeField] Image rentCheck;
     [SerializeField] TMP_Text resultsText;
+    [SerializeField] TMP_Text paperDayText;
     [SerializeField] Toggle foodTog;
     [SerializeField] Toggle rentTog;
+    [SerializeField] Image secondFade;
     int rent = 3;
     int food = 1;
     bool waiting = false;
@@ -38,43 +34,50 @@ public class IntermissionScript : MonoBehaviour
         instance = GameplayScript.instance;
         rent = 3 + 2 * instance.day;
         food = 1 + 1 * instance.day;
-        dayText.color = new(dayText.color.r, dayText.color.g, dayText.color.b, 0);
-        resultObject.color = new(resultObject.color.r, resultObject.color.g, resultObject.color.b, 0);
-        reportText.color = new(reportText.color.r, reportText.color.g, reportText.color.b, 0);
-        matchesText.color = new(matchesText.color.r, matchesText.color.g, matchesText.color.b, 0);
-        shredsText.color = new(shredsText.color.r, shredsText.color.g, shredsText.color.b, 0);
-        qualityText.color = new(qualityText.color.r, qualityText.color.g, qualityText.color.b, 0);
-        buttonText.color = new(buttonText.color.r, buttonText.color.g, buttonText.color.b, 0);
-        buttonBack.color = new(buttonBack.color.r, buttonBack.color.g, buttonBack.color.b, 0);
-
-        savingText.color = new(savingText.color.r, savingText.color.g, savingText.color.b, 0);
-        rentText.color = new(rentText.color.r, rentText.color.g, rentText.color.b, 0);
-        foodText.color = new(foodText.color.r, foodText.color.g, foodText.color.b, 0);
-        foodToggle.color = new(foodToggle.color.r, foodToggle.color.g, foodToggle.color.b, 0);
-        rentToggle.color = new(rentToggle.color.r, rentToggle.color.g, rentToggle.color.b, 0);
-        foodCheck.color = new(foodCheck.color.r, foodCheck.color.g, foodCheck.color.b, 0);
-        rentCheck.color = new(rentCheck.color.r, rentCheck.color.g, rentCheck.color.b, 0);
-        resultsText.color = new(resultsText.color.r, resultsText.color.g, resultsText.color.b, 0);
+        resultObject.gameObject.SetActive(false);
         StartCoroutine(FadeIn());
     }
     void UpdateText()
     {
         //TO-DO: Separate information for day by day and total
-        matchesText.text = "Profiles Matched: " + instance.dailyMatch + "\r\n";
-        shredsText.text = "Profiles Shredded: " + instance.dailyShred + "\r\n";
+        gainedText.text = "+"+instance.amountGained + "$";
+        matchesText.text = instance.dailyMatch + "";
+        
+        shredsText.text = instance.dailyShred + "";
         if (instance.profilesMatched > 0)
         {
             float val = (instance.dailyScore / instance.dailyMatch)*100;
-            qualityText.text = "Matches Quality: " + val.ToString("0.00") + "%\r\n";
+            
+            qualityText.text = val.ToString("0.00") + "%";
+            val /= 100.0f;
+            matchQualityBar.value = val;
+            if (val> 0.8f)
+            {
+                stamp.sprite = Resources.Load<Sprite>("endofday/Stamp/A");
+            }
+            else if (val > 0.65f)
+            {
+                stamp.sprite = Resources.Load<Sprite>("endofday/Stamp/B");
+            }
+            else if (val > 0.5f)
+            {
+                stamp.sprite = Resources.Load<Sprite>("endofday/Stamp/C");
+            }
+            else
+            {
+                stamp.sprite = Resources.Load<Sprite>("endofday/Stamp/D");
+            }
         }
         else
         {
-            qualityText.text = "Matches Quality: 0%\r\n";
+            matchQualityBar.value = 0;
+            stamp.sprite = Resources.Load<Sprite>("endofday/Stamp/D");
+            qualityText.text = "0%";
         }
-        savingText.text = "Savings: " + instance.money +"$";
-        resultsText.text = "Remaining: " + instance.money + "$";
-        rentText.text = "Rent: -"+rent+"$";
-        foodText.text = "Food: -"+food+"$";
+        savingText.text = instance.money-instance.amountGained +"$";
+        resultsText.text = instance.money + "$";
+        rentText.text = "-"+rent+"$";
+        foodText.text = "-"+food+"$";
         //TO-DO: Add the total overall score
 
     }
@@ -111,7 +114,7 @@ public class IntermissionScript : MonoBehaviour
                 rentTog.isOn = false;
             }
         }
-        resultsText.text = "Remaining: " + fakeFinal + "$";
+        resultsText.text = fakeFinal + "$";
     }
 
     void UpdateMoneyAndFatigue()
@@ -156,6 +159,9 @@ public class IntermissionScript : MonoBehaviour
     }
     IEnumerator FadeIn()
     {
+        secondFade.color = new(secondFade.color.r, secondFade.color.g, secondFade.color.b, 0);
+        paperDayText.text = "" + instance.day;
+        secondFade.gameObject.SetActive(false);
         instance.SetTime(9, 0);
         dayText.text = "Day " + instance.day;
         fadeScreen.gameObject.SetActive(true);
@@ -174,6 +180,7 @@ public class IntermissionScript : MonoBehaviour
         }
         t = 0;
         yield return new WaitForSeconds(1.5f);
+        HandbookScript.instance.CloseBook();
         while (alpha > 0)
         {
             t += Time.deltaTime;
@@ -204,6 +211,7 @@ public class IntermissionScript : MonoBehaviour
     }
     public IEnumerator FadeOut()
     {
+        
         fadeScreen.gameObject.SetActive(true);
         float t = 0;
         float alpha = 0;
@@ -260,49 +268,34 @@ public class IntermissionScript : MonoBehaviour
             dayText.color = new(dayText.color.r, dayText.color.g, dayText.color.b, alpha);
             yield return null;
         }
+        secondFade.gameObject.SetActive(true);
+        secondFade.color = new(secondFade.color.r, secondFade.color.g, secondFade.color.b, 1);
+        resultObject.gameObject.SetActive(true);
         t = 0;
-        alpha = 0;
+        alpha = 1;
         yield return new WaitForSeconds(0.25f);
         waiting = false;
-        while (alpha < 1)
+        while (alpha >0)
         {
             t += Time.deltaTime;
             if (t > 1)
             {
                 t = 1;
             }
-            alpha = Mathf.Lerp(0, 1, t);
-            resultObject.color = new(resultObject.color.r, resultObject.color.g, resultObject.color.b, alpha);
-            reportText.color = new(reportText.color.r, reportText.color.g, reportText.color.b, alpha);
-            matchesText.color = new(matchesText.color.r, matchesText.color.g, matchesText.color.b, alpha);
-            shredsText.color = new(shredsText.color.r, shredsText.color.g, shredsText.color.b, alpha);
-            qualityText.color = new(qualityText.color.r, qualityText.color.g, qualityText.color.b, alpha);
-            buttonText.color = new(buttonText.color.r, buttonText.color.g, buttonText.color.b, alpha);
-            buttonBack.color = new(buttonBack.color.r, buttonBack.color.g, buttonBack.color.b, alpha);
+            alpha = Mathf.Lerp(1, 0, t);
+            secondFade.color = new(secondFade.color.r, secondFade.color.g, secondFade.color.b, alpha);
             yield return null;
         }
         waiting = true;
+        secondFade.color = new(secondFade.color.r, secondFade.color.g, secondFade.color.b, 0);
+        secondFade.gameObject.SetActive(false);
         yield return new WaitForSeconds(0.1f);
         t = 0;
         while (waiting)
         {
             yield return null;
         }
-        while (alpha > 0)
-        {
-            t += Time.deltaTime;
-            if (t > 1)
-            {
-                t = 1;
-            }
-            alpha = Mathf.Lerp(1, 0, t);
-            matchesText.color = new(matchesText.color.r, matchesText.color.g, matchesText.color.b, alpha);
-            shredsText.color = new(shredsText.color.r, shredsText.color.g, shredsText.color.b, alpha);
-            qualityText.color = new(qualityText.color.r, qualityText.color.g, qualityText.color.b, alpha);
-            yield return null;
-        }
-        alpha = 0;
-        t = 0;
+        secondFade.gameObject.SetActive(true);
         while (alpha < 1)
         {
             t += Time.deltaTime;
@@ -311,45 +304,10 @@ public class IntermissionScript : MonoBehaviour
                 t = 1;
             }
             alpha = Mathf.Lerp(0, 1, t);
-            savingText.color = new(savingText.color.r, savingText.color.g, savingText.color.b, alpha);
-            rentText.color = new(rentText.color.r, rentText.color.g, rentText.color.b, alpha);
-            foodText.color = new(foodText.color.r, foodText.color.g, foodText.color.b, alpha);
-            foodToggle.color = new(foodToggle.color.r, foodToggle.color.g, foodToggle.color.b, alpha);
-            rentToggle.color = new(rentToggle.color.r, rentToggle.color.g, rentToggle.color.b, alpha);
-            foodCheck.color = new(foodCheck.color.r, foodCheck.color.g, foodCheck.color.b, alpha);
-            rentCheck.color = new(rentCheck.color.r, rentCheck.color.g, rentCheck.color.b, alpha);
-            resultsText.color = new(resultsText.color.r, resultsText.color.g, resultsText.color.b, alpha);
+            secondFade.color = new(secondFade.color.r, secondFade.color.g, secondFade.color.b, alpha);
             yield return null;
         }
-        waiting = true;
-        while (waiting)
-        {
-            yield return null;
-        }
-        t = 0;
-        while (alpha > 0)
-        {
-            t += Time.deltaTime;
-            if (t > 1)
-            {
-                t = 1;
-            }
-            alpha = Mathf.Lerp(1, 0, t);
-            resultObject.color = new(resultObject.color.r, resultObject.color.g, resultObject.color.b, alpha);
-            reportText.color = new(reportText.color.r, reportText.color.g, reportText.color.b, alpha);
-            savingText.color = new(savingText.color.r, savingText.color.g, savingText.color.b, alpha);
-            rentText.color = new(rentText.color.r, rentText.color.g, rentText.color.b, alpha);
-            foodText.color = new(foodText.color.r, foodText.color.g, foodText.color.b, alpha);
-            foodToggle.color = new(foodToggle.color.r, foodToggle.color.g, foodToggle.color.b, alpha);
-            rentToggle.color = new(rentToggle.color.r, rentToggle.color.g, rentToggle.color.b, alpha);
-            foodCheck.color = new(foodCheck.color.r, foodCheck.color.g, foodCheck.color.b, alpha);
-            rentCheck.color = new(rentCheck.color.r, rentCheck.color.g, rentCheck.color.b, alpha);
-            resultsText.color = new(resultsText.color.r, resultsText.color.g, resultsText.color.b, alpha);
-            buttonText.color = new(buttonText.color.r, buttonText.color.g, buttonText.color.b, alpha);
-            buttonBack.color = new(buttonBack.color.r, buttonBack.color.g, buttonBack.color.b, alpha);
-            yield return null;
-        }
-        t = 0;
+        resultObject.gameObject.SetActive(false);
         dayText.text = "Day " + instance.day;
         rent = 3 + 2*instance.day;
         food = 1 + 1*instance.day;
