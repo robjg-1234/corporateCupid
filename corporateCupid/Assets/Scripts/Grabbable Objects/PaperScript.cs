@@ -67,14 +67,7 @@ public class PaperScript : MonoBehaviour
 
             if (recency > 0 && target < recency)
             {
-                if (recency - totalProfiles > 0)
-                {
-                    recency -= recency - totalProfiles;
-                }
-                else
-                {
-                    recency--;
-                }
+                recency--;
             }
         }
         GameObject[] temp = new GameObject[attachedObjects.Length];
@@ -278,15 +271,8 @@ public class PaperScript : MonoBehaviour
             instance.dailyShred++;
             if (identity.profileType > 0)
             {
-                instance.dailyScore += 0.25f;
-            }
-            else
-            {
-                instance.dailyScore -= 0.25f;
-            }
-            if (instance.dailyScore < 0)
-            {
-                instance.dailyScore = 0;
+                instance.fees += 0.1f;
+                instance.dailyIncorrectShreds++;
             }
             Destroy(gameObject);
         }

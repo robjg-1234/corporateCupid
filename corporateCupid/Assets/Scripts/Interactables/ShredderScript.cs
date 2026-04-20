@@ -77,17 +77,14 @@ public class ShredderScript : MonoBehaviour
         buttonCollider.enabled = false;
         shredderCollider.enabled = false;
         instance.dailyShred++;
-        if (currentPaper.GetProfile().profileType > 0)
+        if (currentPaper.GetProfile().profileType > 0 && instance.day != 0)
         {
-            instance.dailyScore += 0.25f;
+            instance.amountGained += 0.1f;
         }
-        else
+        else if (currentPaper.GetProfile().profileType==0)
         {
-            instance.dailyScore -= 0.25f;
-        }
-        if (instance.dailyScore < 0)
-        {
-            instance.dailyScore = 0;
+            instance.fees += 0.2f;
+            instance.dailyIncorrectShreds++;
         }
         Destroy(currentPaper.gameObject);
         currentPaper = null;
@@ -120,20 +117,10 @@ public class ShredderScript : MonoBehaviour
         if (currentPaper != null)
         {
             instance.dailyShred++;
-            if (currentPaper.GetProfile().profileType > 0 && instance.day != 3)
+            if (currentPaper.GetProfile().profileType == 0 && instance.day != 3)
             {
-                instance.dailyScore += 0.25f;
-            }
-            else
-            {
-                if (instance.day != 3)
-                {
-                    instance.dailyScore -= 0.25f;
-                }
-            }
-            if (instance.dailyScore < 0)
-            {
-                instance.dailyScore = 0;
+                instance.fees += 0.2f;
+                instance.incorrectShreds++;
             }
             Destroy(currentPaper.gameObject);
             currentPaper = null;

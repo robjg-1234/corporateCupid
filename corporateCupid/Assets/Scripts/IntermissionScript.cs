@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class IntermissionScript : MonoBehaviour
@@ -21,12 +22,15 @@ public class IntermissionScript : MonoBehaviour
     [SerializeField] TMP_Text rentText;
     [SerializeField] TMP_Text foodText;
     [SerializeField] TMP_Text resultsText;
+    [SerializeField] TMP_Text feesText;
     [SerializeField] TMP_Text paperDayText;
     [SerializeField] Toggle foodTog;
     [SerializeField] Toggle rentTog;
     [SerializeField] Image secondFade;
+    [SerializeField] Image endingScreen;
     int rent = 3;
     int food = 1;
+    int ending = 0;
     bool waiting = false;
     private void Start()
     {
@@ -40,13 +44,13 @@ public class IntermissionScript : MonoBehaviour
     void UpdateText()
     {
         //TO-DO: Separate information for day by day and total
-        gainedText.text = "+"+instance.amountGained + "$";
+        gainedText.text = "+"+instance.amountGained.ToString("0.00") + "$";
         matchesText.text = instance.dailyMatch + "";
         
         shredsText.text = instance.dailyShred + "";
         if (instance.profilesMatched > 0)
         {
-            float val = (instance.dailyScore / instance.dailyMatch)*100;
+            float val = (instance.dailyScore /( instance.dailyMatch+instance.dailyIncorrectShreds))*100;
             
             qualityText.text = val.ToString("0.00") + "%";
             val /= 100.0f;
@@ -74,11 +78,11 @@ public class IntermissionScript : MonoBehaviour
             stamp.sprite = Resources.Load<Sprite>("endofday/Stamp/D");
             qualityText.text = "0%";
         }
-        savingText.text = instance.money-instance.amountGained +"$";
-        resultsText.text = instance.money + "$";
-        rentText.text = "-"+rent+"$";
-        foodText.text = "-"+food+"$";
-        //TO-DO: Add the total overall score
+        savingText.text = (instance.money-instance.amountGained + instance.fees).ToString("0.00") +"$";
+        resultsText.text = (instance.money).ToString("0.00") + "$";
+        rentText.text = "-"+rent.ToString("0.00")+"$";
+        foodText.text = "-"+food.ToString("0.00")+ "$";
+        feesText.text = "-" + instance.fees.ToString("0.00") + "$";
 
     }
     public void Proceed()
@@ -91,7 +95,7 @@ public class IntermissionScript : MonoBehaviour
 
     public void UpdateCost()
     {
-        int fakeFinal = instance.money;
+        float fakeFinal = instance.money;
         if (foodTog.isOn)
         {
             if (fakeFinal - food >= 0)
@@ -114,12 +118,12 @@ public class IntermissionScript : MonoBehaviour
                 rentTog.isOn = false;
             }
         }
-        resultsText.text = fakeFinal + "$";
+        resultsText.text = fakeFinal.ToString("0.00") + "$";
     }
 
     void UpdateMoneyAndFatigue()
     {
-        int fakeFinal = instance.money;
+        float fakeFinal = instance.money;
         if (foodTog.isOn)
         {
             if (fakeFinal - food >= 0)
@@ -230,17 +234,46 @@ public class IntermissionScript : MonoBehaviour
         instance.clockedIn = false;
         instance.dayEnded?.Invoke();
         instance.profilesShredded += instance.dailyShred;
+        instance.overallScore += instance.dailyScore;
+        instance.incorrectShreds += instance.dailyIncorrectShreds;
+        instance.profilesMatched += instance.dailyMatch;
+        if (instance.validScore > 0 && instance.day>0)
+        {
+            instance.amountGained += (instance.validScore * 1.3f);
+            Debug.Log("Money Gained: " + instance.amountGained);
+            instance.money += instance.amountGained;
+            Debug.Log("Total money: " + instance.money);
+            if (instance.money - instance.fees >= 0)
+            {
+                instance.money -= instance.fees;
+            }
+            else
+            {
+                instance.fees = instance.money;
+                instance.money -= instance.fees;
+            }
+            
+
+        }
+        else
+        {
+            instance.fees = 0;
+        }
+        instance.validScore = 0;
         UpdateText();
         
         if (instance.day == 0)
         {
             instance.profilesShredded -= instance.dailyShred;
             instance.profilesMatched -= instance.dailyMatch;
+            instance.incorrectShreds -= instance.dailyIncorrectShreds;
             instance.overallScore -= instance.dailyScore;
         }
         instance.dailyMatch = 0;
         instance.dailyScore = 0;
         instance.dailyShred = 0;
+        instance.dailyIncorrectShreds = 0;
+        
         alpha = 0;
         t = 0;
         instance.day++;
@@ -312,8 +345,66 @@ public class IntermissionScript : MonoBehaviour
         rent = 3 + 2*instance.day;
         food = 1 + 1*instance.day;
         UpdateMoneyAndFatigue();
-        //add end;
+        instance.fees = 0;
+        instance.amountGained = 0;
         yield return new WaitForSeconds(0.1f);
-        StartCoroutine(FadeIn());
+        if (instance.timeMultiplier >= 2)
+        {
+            ending = 3;
+            StartCoroutine(EndGame());
+        }
+        else
+        {
+            if (instance.day == 6)
+            {
+                float finalScore = instance.overallScore / instance.profilesMatched * 100;
+                if (finalScore > 80)
+                {
+                    ending = 1;
+                }
+                else if (finalScore > 40)
+                {
+                    ending = 2;
+                }
+                else
+                {
+                    ending = 3;
+                }
+                StartCoroutine(EndGame());
+            }
+            else
+            {
+                StartCoroutine(FadeIn());
+            }
+        }
+    }
+
+    IEnumerator EndGame()
+    {
+        endingScreen.sprite = Resources.Load<Sprite>("Ending/" + ending);
+        float a = 0;
+        endingScreen.color = new(1, 1, 1, a);
+        endingScreen.gameObject.SetActive(true);
+        while (a < 1)
+        {
+            a += Time.deltaTime * 0.5f;
+            if (a > 1)
+            {
+                a = 1;
+            }
+            endingScreen.color = new(1, 1, 1, a);
+            yield return null;
+        }
+        yield return new WaitForSeconds(2.5f);
+        bool wait = true;
+        while (wait)
+        {
+            if (Keyboard.current.anyKey.wasPressedThisFrame)
+            {
+                wait = false;
+            }
+            yield return null;
+        }
+        instance.ExitToTitleScreen();
     }
 }

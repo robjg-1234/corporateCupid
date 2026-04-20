@@ -38,14 +38,7 @@ public class EnvelopeScript : MonoBehaviour
         {
             if (recency > 0 && target < recency)
             {
-                if (recency - totalProfiles > 0)
-                {
-                    recency -= recency - totalProfiles;
-                }
-                else
-                {
-                    recency--;
-                }
+                recency--;
             }
         }
         back.sortingOrder = 3 * recency + frontVal;

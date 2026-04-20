@@ -28,13 +28,14 @@ public class ProfileScript
         "Fries > Guys.","Hufflepuff girl looking for her Gryffindor man."};
     readonly string[] dislikeEmotes = { ". <font=\"CcEmotionSDF\"><color=#FAB525><size=200%>|</size></color></font> " , ". <font=\"CcEmotionSDF\"><color=#FA9125><size=200%>}</size></color></font> ", ". <font=\"CcEmotionSDF\"><color=#D52915><size=200%>{</size></color></font> " };
     readonly string[] likeEmotes = { ". <font=\"CcEmotionSDF\"><color=#a1cc14><size=200%>\\</size></color></font> ", ". <font=\"CcEmotionSDF\"><color=#47910a><size=200%>]</size></color></font> ", ". <font=\"CcEmotionSDF\"><color=#3e6320><size=200%>[</size></color></font> " };
+    readonly string[] jobs = { "Doctor", "Teacher", "Engineer", "Nurse", "Architect", "Lawyer", "Chef", "Accountant", "Pharmacist", "Journalist", "Police Officer", "Firefighter", "Software Developer","Electrician","Plumber","Pilot","Graphic Designer","Psychologist", "Scientist","Soical Worker"};
     public ProfileScript(string newName, List<(string, int)> newPreferences, int type =0)
     {
         characterName = newName;
         age = Random.Range(18,35);
         //Pharloom Reference :O
         profileType = type;
-        profession = "Bell Ringer";
+        profession = jobs[Random.Range(0,20)];
         preferences = newPreferences;
         profiling(profileType);
         
@@ -43,34 +44,118 @@ public class ProfileScript
     void profiling(int type)
     {
         int randVal = Random.Range(0, bios.Length);
+        int choice = Random.Range(0, 2);
+        bio = bios[randVal];
         switch (type)
         {
             //Lamia
             case 1:
-                bio = "Hi, I am a Lamia.";
+                if (choice == 0)
+                {
+                    visibleRobot = true;
+                }
+                else if (choice == 1)
+                {
+                    choice = Random.Range(0, 2);
+                    if (choice == 1)
+                    {
+                        bio = "I love going for a midnight snack, some say I even crave them!";
+                    }
+                    else
+                    {
+                        bio = "Looking for a fellow night-owl, to match my snacking habbits.";
+                    }
+                }
                 break;
             //Mormo
             case 2:
-                bio = "Hi, I am a Mormo.";
+                choice = Random.Range(0, 2);
+                if (choice == 1)
+                {
+                    bio = "I enjoy deep conversations... especially about our deepest fears.";
+                }
+                else
+                {
+                    bio = "Lets share our childhood nightmares together.";
+                }
                 break;
             //Nymph
             case 3:
-                age = Random.Range(18, 20);
-                bio = "Hi, I am a Nymph.";
+                if (choice == 0)
+                {
+                    visibleRobot = true;
+                }
+                else if (choice == 1)
+                {
+                    choice = Random.Range(0, 2);
+                    if (choice == 1)
+                    {
+                        bio = "You'll usually find me by the water, its where i feel the most like myself.";
+                    }
+                    else
+                    {
+                        bio = "Nature is everything to me, I could literally spend my entire life in it.";
+                    }
+                }
                 break;
             //Satyr
             case 4:
-                bio = "Hi, I am a Satyr.";
+                if (choice == 0)
+                {
+                    visibleRobot = true;
+                }
+                else if (choice == 1)
+                {
+                    choice = Random.Range(0, 2);
+                    if (choice == 1)
+                    {
+                        bio = "If there's a party, i'm already there; with my drink in hand!";
+                    }
+                    else
+                    {
+                        bio = "You definetely wont be able to keep up with me, im an animal.";
+                    }
+                }
                 break;
             //Cyclops
             case 5:
-                bio = "Hi, I am a Cyclops.";
+                visibleRobot = true;
+                break;
+            //Silenus
+            case 6:
+                choice = Random.Range(0, 2);
+                if (choice == 1)
+                {
+                    bio = "Some call me a philosopher but I say its just the drink.";
+                }
+                else
+                {
+                    bio = "I ramble allot when im drunk, though sometimes people say I make sense.";
+                }
+                break;
+            //Siren
+            case 7:
+                if (choice == 0)
+                {
+                    visibleRobot = true;
+                }
+                else if (choice == 1)
+                {
+                    choice = Random.Range(0, 2);
+                    if (choice == 1)
+                    {
+                        bio = "Some say my voice captivates them, I disagree; maybe you can be the deciding factor.";
+                    }
+                    else
+                    {
+                        bio = "Follow me like a lost puppy while I sing a melody to our future.";
+                    }
+                }
                 break;
             //Regular Bot
-            case 6:
+            case 8:
                 //Choose 1 of 3 implicit errors (Image, bio, age)
-                int choice = Random.Range(0, 3);
-                bio = bios[randVal];
+                choice = Random.Range(0, 3);
                 if (choice == 0)
                 {
                     visibleRobot = true;
@@ -78,16 +163,12 @@ public class ProfileScript
                 else if (choice == 1)
                 {
                     //Create list of robot bios
-                    bio = "I am robot";
+                    bio = "Beep Beep";
                 }
                 else if (choice == 2)
                 {
                     age = Random.Range(18, 100);
                 }
-                break;
-            //normal
-            default:
-                bio = bios[randVal];
                 break;
 
         }

@@ -37,17 +37,24 @@ public class HandbookScript : MonoBehaviour
             {
                 leftButton.SetActive(false);
                 leftSideTitle.text = "Lamia";
-                leftText.text = "Human features, feeds on young men and loves to scare and or eat kids.";
+                leftText.text = "Typically talks about 'midnight cravings' and being a 'night owl', sometimes their eyes will look 'off' or some 'serpent' features might be visible.";
                 rightSideTitle.text = "Mormo";
-                rightText.text = "Does not like Nurses and Mothers, who use her name to scare children into behaving; lost their child and will seek a replacement.";
+                rightText.text = "Feeds on the fear of people, though has a special interest in the nightmares of children.";
             }
             else if (current == 1)
             {
-                rightButton.SetActive(true);
                 leftSideTitle.text = "Nymph";
-                leftText.text = "Will appear young and have a strong love for nature, though only in a very specific way, depending on their variance (Naids, Dyads, Oreads and Oceanids); their profile image may also show ‘growths’ aligned with their variant.";
+                leftText.text = "Nature Spirit, which is tied to is specific natural environments; often speaks about its specification, be is a Naid, Dyad, Oread, or Oceanid.";
                 rightSideTitle.text = "Satyr";
-                rightText.text = "Satyrs love partying; they may be able to blend in with waist up shots, however they have no fool proof way of hiding their goat horns.";
+                rightText.text = "Sometimes described as a 'Party Animal', with a strong desire for alcohol; can be indistinguisable from the waist up, except for its goat horns; which it struggles to hide.";
+            }
+            else if (current == 2)
+            {
+                rightButton.SetActive(true);
+                leftSideTitle.text = "Cyclops";
+                leftText.text = "Though very human like, the single; usually central, eye can be a big giveaway, if not disguised well.";
+                rightSideTitle.text = "Silenus";
+                rightText.text = "Often seen as your typical drunkard, with a strong love for wine, though don't let that fool you as they can have more wisdom than the greatest philosophers.";
             }
         }
     }
@@ -60,15 +67,22 @@ public class HandbookScript : MonoBehaviour
             {
                 leftButton.SetActive(true);
                 leftSideTitle.text = "Nymph";
-                leftText.text = "Will appear young and have a strong love for nature, though only in a very specific way, depending on their variance (Naids, Dyads, Oreads and Oceanids); their profile image may also show ‘growths’ aligned with their variant.";
+                leftText.text = "Nature Spirit, which is tied to is specific natural environments; often speaks about its specification, be is a Naid, Dyad, Oread, or Oceanid.";
                 rightSideTitle.text = "Satyr";
-                rightText.text = "Satyrs love partying; they may be able to blend in with waist up shots, however they have no fool proof way of hiding their goat horns.";
+                rightText.text = "Sometimes described as a 'Party Animal', with a strong desire for alcohol; can be indistinguisable from the waist up, except for its goat horns; which it struggles to hide.";
             }
             else if (current == 2)
             {
-                rightButton.SetActive(false);
                 leftSideTitle.text = "Cyclops";
-                leftText.text = "Will attempt to hide their, single eye using a multitude of ways; glasses, eye patches, paint or fake eyes.";
+                leftText.text = "Though very human like, the single; usually central, eye can be a big giveaway, if not disguised well.";
+                rightSideTitle.text = "Silenus";
+                rightText.text = "Often seen as your typical drunkard, with a strong love for wine, though don't let that fool you as they can have more wisdom than the greatest philosophers.";
+            }
+            else if (current == 3)
+            {
+                rightButton.SetActive(false);
+                leftSideTitle.text = "Siren";
+                leftText.text = "Sirens can come in two forms, an Avian-humanoid or a Mermaid, though they will typically look normal in a headshot, you may still be able to notice minor differences. They typically use their voice to lure their victims.";
                 rightSideTitle.text = "Bots";
                 rightText.text = "Generic, almost rhythmic sentence structure. Weird tone or strange phrasing. Impossible information (Age, Name, or Emote mismatch).";
             }

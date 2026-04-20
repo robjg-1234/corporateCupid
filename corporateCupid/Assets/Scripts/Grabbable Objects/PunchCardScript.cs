@@ -37,14 +37,7 @@ public class PunchCardScript : MonoBehaviour
         {
             if (recency > 0 && target < recency)
             {
-                if (recency - totalProfiles > 0)
-                {
-                    recency -= recency - totalProfiles;
-                }
-                else
-                {
-                    recency--;
-                }
+                recency--;
             }
         }
         sr.sortingOrder = 3 * recency + frontVal;

@@ -405,8 +405,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.26, y: 2.88}
-  m_SizeDelta: {x: 2.805, y: 0.464}
+  m_AnchoredPosition: {x: 0.26, y: 2.315}
+  m_SizeDelta: {x: 2.805, y: 0.663}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &2723505812786948531
 MeshRenderer:
@@ -473,7 +473,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Biodd dddddddddddddddddddddddd
+  m_text: Some say my voice captivates them, I disagree; maybe you can be the deciding
+    factor.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 24137fc10254aaf43ae7a797ee27d628, type: 2}
   m_sharedMaterial: {fileID: -8506923448228658366, guid: 24137fc10254aaf43ae7a797ee27d628, type: 2}
@@ -500,8 +501,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 1.5
-  m_fontSizeBase: 1.5
+  m_fontSize: 1.4
+  m_fontSizeBase: 1.4
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -897,7 +898,7 @@ SpriteRenderer:
   m_Size: {x: 20, y: 20}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 2
   m_SpriteSortPoint: 0
 --- !u!1 &6356986332865469400

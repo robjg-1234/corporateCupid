@@ -79,9 +79,10 @@ public class SubmitScript : MonoBehaviour
             instance.stepDone = true;
         }
         totalScore = CalculateScores(selection.prof1.GetProfile().GetPreferences(), selection.prof2.GetProfile().GetPreferences());
-        if (!(selection.prof1.GetProfile().profileType > 0 && selection.prof2.GetProfile().profileType > 0) && !(selection.prof1.GetProfile().profileType == 0 && selection.prof2.GetProfile().profileType == 0))
+        if (!(selection.prof1.GetProfile().profileType > 0 || selection.prof2.GetProfile().profileType > 0) && instance.day != 3)
         {
             totalScore = 0;
+            instance.fees += 0.1f;
         }
         relationshipMatches.Add(id, totalScore);
         id++;
@@ -92,6 +93,7 @@ public class SubmitScript : MonoBehaviour
             instance.validScore += totalScore;
         }
         instance.dailyMatch++;
+        Debug.Log(totalScore);
         instance.dailyScore += totalScore;
     }
     /// <summary>
@@ -202,7 +204,6 @@ public class SubmitScript : MonoBehaviour
             score = bestScore;
         }
         score /= bestScore;
-        Debug.Log(score);
         return score;
     }
     /// <summary>

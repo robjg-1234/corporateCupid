@@ -22,8 +22,12 @@ public class GameplayScript : MonoBehaviour
     [NonSerialized] public static SubmitScript mailInstance;
     [NonSerialized] public static ShredderScript shredInstance;
     [SerializeField] TMP_Text tutorial;
-    [SerializeField] GameObject circle;
+    [SerializeField] GameObject submit;
     [SerializeField] GameObject bossChat;
+    [SerializeField] GameObject shred;
+    [SerializeField] GameObject file;
+    [SerializeField] GameObject envelope;
+    [SerializeField] GameObject clock;
     public int currentProfiles = 0;
     string[] preferences = {"Movies","Astrology","Programming","Cars","Video Games","Trains","Winter","Travelling","Reading","Music","Social Events","Animals","Sports","Hiking","Cooking" };
     string[] maleNames = { "Liam","Noah", "Oliver","Elijah","William","James","Benjamin","Lucas","Henry","Alexander","Mason","Michael","Ethan","Daniel","Jacob","Logan","Jackson","Levi","Sebastian","John","Jack","Owen","Theodore","Aiden","Samuel"};
@@ -46,8 +50,11 @@ public class GameplayScript : MonoBehaviour
     public int dailyMatch = 0;
     public int dailyShred = 0;
     public float validScore = 0;
-    public int money = 15;
-    public int amountGained = 0;
+    public float money = 15;
+    public float amountGained = 0;
+    public int incorrectShreds = 0;
+    public int dailyIncorrectShreds = 0;
+    public float fees = 0;
     [NonSerialized] public bool stepDone = false;
     [NonSerialized] public int stepNumber = 0;
     //Allows for dynamic time manipulation higher equals faster
@@ -68,15 +75,15 @@ public class GameplayScript : MonoBehaviour
     {
         if (dayGoing)
         {
-            if (Keyboard.current.pKey.wasPressedThisFrame)
-            {
-                debugPaused = !debugPaused;
-                Debug.Log("Time paused: " + debugPaused);
-            }
-            else if (Keyboard.current.oKey.wasPressedThisFrame)
-            {
-                SummonProfiles();
-            }
+            //if (Keyboard.current.pKey.wasPressedThisFrame)
+            //{
+            //    debugPaused = !debugPaused;
+            //    Debug.Log("Time paused: " + debugPaused);
+            //}
+            //else if (Keyboard.current.oKey.wasPressedThisFrame)
+            //{
+            //    SummonProfiles();
+            //}
         }
     }
     /// <summary>
@@ -215,6 +222,7 @@ public class GameplayScript : MonoBehaviour
             //Text 1 "Since this is your first day at the office, you need to get up to speed. Drag your punch card onto the clock to start the day."
             tutorial.text = "Since this is your first day at the office, you need to get up to speed. Drag your punch card onto the clock to start the day.";
             bossChat.SetActive(true);
+            clock.SetActive(true);
             float t = 0;
             while (!clockedIn)
             {
@@ -227,6 +235,7 @@ public class GameplayScript : MonoBehaviour
             }
             yield return new WaitForSeconds(0.5f);
             sprite.color = new Color(1, 1, 1, 1);
+            clock.SetActive(false);
             proceed = false;
             //Click once
             //Text 2 "First, look through the profiles on the desk by right-clicking them. You can drag them around to reorder them as you please."
@@ -294,6 +303,7 @@ public class GameplayScript : MonoBehaviour
             proceed = false;
             tutorial.text = "To create matches drag the two profiles that you want to match onto the pinboard, and then drag an envelope from the stack and drop on top of them.";
             //Text 5 "To create matches drag the two profiles that you want to match onto the pinboard, and then drag an envelope from the stack and drop on top of them."
+            envelope.SetActive(true);
             t = 0;
             while (!stepDone)
             {
@@ -305,8 +315,10 @@ public class GameplayScript : MonoBehaviour
                 yield return null;
             }
             yield return new WaitForSeconds(0.25f);
+            envelope.SetActive(false);
             sprite.color = new Color(1, 1, 1, 1);
             stepDone = false;
+            
             //Drop envelope.
             tutorial.text = "This action is irreversible but you can change the profiles before putting them inside the envelope.";
             //Text 6 "This action is irreversible but you can change the profiles before putting them inside the envelope."
@@ -330,7 +342,7 @@ public class GameplayScript : MonoBehaviour
             //Click once
             tutorial.text = "Now you need to drag and drop the newly created match into the submission slot. You cannot make new matches until the match has been submitted.";
             //Text 7 "Now you need to drag and drop the newly created match into the submission slot. You cannot make new matches until the match has been submitted."
-            circle.SetActive(true);
+            submit.SetActive(true);
             t = 0;
             while (!stepDone)
             {
@@ -343,7 +355,7 @@ public class GameplayScript : MonoBehaviour
             }
             yield return new WaitForSeconds(0.25f);
             sprite.color = new Color(1, 1, 1, 1);
-            circle.SetActive(false);
+            submit.SetActive(false);
             stepDone = false;
             //Submit the envelope
             tutorial.text = "The overall quality and quantity of your matches will be reflected on your paycheck at the end of the day, so try to get as much done within the day.";
@@ -389,6 +401,7 @@ public class GameplayScript : MonoBehaviour
             tutorial.text = "Click on the file cabinet handle to open it, here you can drop profiles for later access. Profiles inside the cabinet are not shredded at the end of the day and can be accessed the next day.";
             //Text 10 "Click on the file cabinet handle to open it, here you can drop profiles for later access. Profiles inside the cabinet are not shredded at the end of the day and can be accessed the next day."
             //Click the handle, close it or click once
+            file.SetActive(true);
             t = 0;
             while (!stepDone)
             {
@@ -402,6 +415,7 @@ public class GameplayScript : MonoBehaviour
             yield return new WaitForSeconds(0.25f);
             sprite.color = new Color(1, 1, 1, 1);
             stepDone = false;
+            file.SetActive(false);
             tutorial.text = "Due to the popularity of our company. We receive profiles from lots of sources, including non-humans. However, your objective is to only match humans.";
             //Text 11 "Due to the popularity of our company. We receive profiles from lots of sources, including non-humans. However, your objective is to only match humans."
             //click once
@@ -446,6 +460,7 @@ public class GameplayScript : MonoBehaviour
             tutorial.text = "To solve this problem, grab the profile and drop it in the shredder, then press the button to shred it. Correctly shredding non-human profiles benefits your overall score, so keep an eye out.";
             //Text 13 "To solve this problem, grab the profile and drop it in the shredder, then press the button to shred it. Correctly shredding non-human profiles benefits your overall score, so keep an eye out."
             //Shred a profile
+            shred.SetActive(true);
             t = 0;
             while (!stepDone)
             {
@@ -459,6 +474,7 @@ public class GameplayScript : MonoBehaviour
             yield return new WaitForSeconds(0.25f);
             sprite.color = new Color(1, 1, 1, 1);
             stepDone = false;
+            shred.SetActive(false);
             tutorial.text = "If you fail to identify them and match them with a real person, it will affect our company reputation and it will be reflected on your score.";
             //Text 14 "If you fail to identify them and match them with a real person, it will affect our company reputation and it will be reflected on your score."
             //Click once
@@ -585,8 +601,6 @@ public class GameplayScript : MonoBehaviour
                 money += amountGained;
             }
             validScore = 0;
-            overallScore += dailyScore;
-            profilesMatched += dailyMatch;
             StartCoroutine(fades.FadeOut());
         }
         else
@@ -651,17 +665,6 @@ public class GameplayScript : MonoBehaviour
             }
             profileDrop.Clear();
             dayGoing = false;
-            //Money calculation
-            if (validScore > 0)
-            {
-                amountGained = Mathf.RoundToInt(validScore * 1.3f);
-                Debug.Log("Money Gained: " + amountGained);
-                money += amountGained;
-                Debug.Log("Total money: " + money);
-            }
-            validScore = 0;
-            overallScore += dailyScore;
-            profilesMatched += dailyMatch;
             StartCoroutine(fades.FadeOut());
         }
     }
@@ -773,11 +776,11 @@ public class GameplayScript : MonoBehaviour
 
                 if (Random.Range(0, 1f) > 0.5f || day==0)
                 {
-                    newProfile = new(makeshiftName, chosenPreferences, 6);
+                    newProfile = new(makeshiftName, chosenPreferences, 8);
                 }
                 else
                 {
-                    newProfile = new(makeshiftName, chosenPreferences, Random.Range(1, 6));
+                    newProfile = new(makeshiftName, chosenPreferences, Random.Range(1, 8));
                 }
                 Debug.Log(makeshiftName);
             }
