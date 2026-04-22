@@ -22,6 +22,10 @@ public class SaveScript
         return File.Exists(GetSaveFilePath());
     }
 
+    public static void DeleteSaveFile()
+    {
+        File.Delete(GetSaveFilePath());
+    }
     public static void Save()
     {
         SaveFile();

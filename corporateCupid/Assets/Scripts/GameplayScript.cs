@@ -908,7 +908,12 @@ public class GameplayScript : MonoBehaviour
 
     public void ExitToTitleScreen()
     {
+        
         SaveScript.Save();
+        if (day == 6)
+        {
+            SaveScript.DeleteSaveFile();
+        }
         SceneManager.LoadScene(0);
         //Fade out
     }
