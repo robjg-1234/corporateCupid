@@ -60,7 +60,7 @@ public class HandbookScript : MonoBehaviour
     }
     public void TurnRight()
     {
-        if (current < 2)
+        if (current < 3)
         {
             current++;
             if (current == 1)

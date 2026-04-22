@@ -34,7 +34,6 @@ public class IntermissionScript : MonoBehaviour
     bool waiting = false;
     private void Start()
     {
-        
         instance = GameplayScript.instance;
         rent = 3 + 2 * instance.day;
         food = 1 + 1 * instance.day;
@@ -348,7 +347,7 @@ public class IntermissionScript : MonoBehaviour
         instance.fees = 0;
         instance.amountGained = 0;
         yield return new WaitForSeconds(0.1f);
-        if (instance.timeMultiplier >= 2)
+        if (instance.timeMultiplier >= 2.3f)
         {
             ending = 3;
             StartCoroutine(EndGame());
@@ -360,15 +359,15 @@ public class IntermissionScript : MonoBehaviour
                 float finalScore = instance.overallScore / instance.profilesMatched * 100;
                 if (finalScore > 80)
                 {
-                    ending = 1;
+                    ending = 0;
                 }
                 else if (finalScore > 40)
                 {
-                    ending = 2;
+                    ending = 1;
                 }
                 else
                 {
-                    ending = 3;
+                    ending = 2;
                 }
                 StartCoroutine(EndGame());
             }

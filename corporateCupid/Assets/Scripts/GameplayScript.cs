@@ -28,13 +28,12 @@ public class GameplayScript : MonoBehaviour
     [SerializeField] GameObject file;
     [SerializeField] GameObject envelope;
     [SerializeField] GameObject clock;
+    [SerializeField] GameObject slot;
     public int currentProfiles = 0;
     string[] preferences = {"Movies","Astrology","Programming","Cars","Video Games","Trains","Winter","Travelling","Reading","Music","Social Events","Animals","Sports","Hiking","Cooking" };
     string[] maleNames = { "Liam","Noah", "Oliver","Elijah","William","James","Benjamin","Lucas","Henry","Alexander","Mason","Michael","Ethan","Daniel","Jacob","Logan","Jackson","Levi","Sebastian","John","Jack","Owen","Theodore","Aiden","Samuel"};
     string[] femaleNames = { "Olivia", "Emma", "Ava", "Charlotte", "Sophia", "Amelia", "Isabella", "Mia","Evelyn","Harper","Camila", "Abigail", "Gianna", "Luna", "Ella", "Elizabeth", "Sofia", "Emily", "Avery", "Mila", "Scarlett", "Eleanor", "Madison", "Layla", "Penelope" };
     string[] surnames = { "Smith", "Johnson", "Williams", "Brown","Jones","Garcia","Miller","Davis","Rodriguez","Martinez","Hernandez","Lopez","Gonzales","Wilson","Anderson","Thomas","Taylor","Moore","Jackson","Martin","Lee","Perez","Thompson","White","Harris" };
-    //List<ProfileScript> People = new List<ProfileScript>();
-    //Queue<ProfileScript> availableProfiles = new Queue<ProfileScript>();
     List<ProfileScript> availableProfiles = new List<ProfileScript>();
     public Action<int, int> objectInteracted;
     public Action dayEnded;
@@ -69,22 +68,34 @@ public class GameplayScript : MonoBehaviour
 
     void Start()
     {
+
         instance = this;
+
+        int saveCheck = PlayerPrefs.GetInt("Save");
+        int tutorialSkipped = PlayerPrefs.GetInt("SkipTutorial");
+        if (saveCheck== 0)
+        {
+            SaveScript.Load();
+        }
+        if (tutorialSkipped == 1)
+        {
+            day = tutorialSkipped;
+        }
     }
     private void Update()
     {
-        if (dayGoing)
-        {
-            //if (Keyboard.current.pKey.wasPressedThisFrame)
-            //{
-            //    debugPaused = !debugPaused;
-            //    Debug.Log("Time paused: " + debugPaused);
-            //}
-            //else if (Keyboard.current.oKey.wasPressedThisFrame)
-            //{
-            //    SummonProfiles();
-            //}
-        }
+        //if (dayGoing)
+        //{
+        //    //if (Keyboard.current.pKey.wasPressedThisFrame)
+        //    //{
+        //    //    debugPaused = !debugPaused;
+        //    //    Debug.Log("Time paused: " + debugPaused);
+        //    //}
+        //    //else if (Keyboard.current.oKey.wasPressedThisFrame)
+        //    //{
+        //    //    SummonProfiles();
+        //    //}
+        //}
     }
     /// <summary>
     /// A global call to update rendering priority.
@@ -239,13 +250,16 @@ public class GameplayScript : MonoBehaviour
             proceed = false;
             //Click once
             //Text 2 "First, look through the profiles on the desk by right-clicking them. You can drag them around to reorder them as you please."
-            tutorial.text = "First, look through the profiles on the desk by right-clicking them. You can drag them around to reorder them as you please.";
+            tutorial.text = "First, check this profile on the desk by right-clicking them. You can drag it around as you please.";
             Vector3 pos = deskCenter + new Vector2(2.5f, 0); ;
+            PaperScript example = null; 
             for (int i = 0; i < 2; i++)
             {
-                Instantiate(profilePrefab, pos, Quaternion.identity);
+                example = Instantiate(profilePrefab, pos, Quaternion.identity).GetComponent<PaperScript>();
                 pos.x += 0.1f;
             }
+            yield return new WaitForEndOfFrame();
+            cabinetRef.individualUnits[0].SaveProfile(example);
             //Right click on a profile and then click again
             t = 0;
             while (!stepDone)
@@ -298,9 +312,28 @@ public class GameplayScript : MonoBehaviour
                 }
                 yield return null;
             }
-            yield return new WaitForSeconds(0.25f);
             sprite.color = new Color(1, 1, 1, 1);
             proceed = false;
+            tutorial.text = "Click on the file cabinet handle to open it and drag the profile on the first slot out. You can use this place to store up to 5 profiles.";
+            //Text 4 "Click on the file cabinet handle to open it, here you can drop profiles for later access. Profiles inside the cabinet are not shredded at the end of the day and can be accessed the next day."
+            //Click the handle, close it or click once
+            file.SetActive(true);
+            slot.SetActive(true);
+            t = 0;
+            while (!stepDone)
+            {
+                t += Time.deltaTime;
+                if (t > 5f)
+                {
+                    sprite.color = new Color(1, 1, 1, 0.5f);
+                }
+                yield return null;
+            }
+            yield return new WaitForSeconds(0.25f);
+            sprite.color = new Color(1, 1, 1, 1);
+            stepDone = false;
+            file.SetActive(false);
+            slot.SetActive(false);
             tutorial.text = "To create matches drag the two profiles that you want to match onto the pinboard, and then drag an envelope from the stack and drop on top of them.";
             //Text 5 "To create matches drag the two profiles that you want to match onto the pinboard, and then drag an envelope from the stack and drop on top of them."
             envelope.SetActive(true);
@@ -314,7 +347,6 @@ public class GameplayScript : MonoBehaviour
                 }
                 yield return null;
             }
-            yield return new WaitForSeconds(0.25f);
             envelope.SetActive(false);
             sprite.color = new Color(1, 1, 1, 1);
             stepDone = false;
@@ -333,10 +365,10 @@ public class GameplayScript : MonoBehaviour
                 if (Mouse.current.leftButton.wasReleasedThisFrame)
                 {
                     proceed = true;
+                    stepNumber++;
                 }
                 yield return null;
             }
-            yield return new WaitForSeconds(0.25f);
             sprite.color = new Color(1, 1, 1, 1);
             proceed = false;
             //Click once
@@ -378,7 +410,7 @@ public class GameplayScript : MonoBehaviour
             yield return new WaitForSeconds(0.25f);
             sprite.color = new Color(1, 1, 1, 1);
             proceed = false;
-            tutorial.text = "There are two outcomes for profiles that are not matched by the end of the day: They get saved or they get shredded.";
+            tutorial.text = "Any profile that does not get matched or saved, gets shredded.";
             //Text 9 "There are two outcomes for profiles that are not matched by the end of the day: They get saved or they get shredded."
             //Click once
             t = 0;
@@ -398,24 +430,6 @@ public class GameplayScript : MonoBehaviour
             yield return new WaitForSeconds(0.25f);
             sprite.color = new Color(1, 1, 1, 1);
             proceed = false;
-            tutorial.text = "Click on the file cabinet handle to open it, here you can drop profiles for later access. Profiles inside the cabinet are not shredded at the end of the day and can be accessed the next day.";
-            //Text 10 "Click on the file cabinet handle to open it, here you can drop profiles for later access. Profiles inside the cabinet are not shredded at the end of the day and can be accessed the next day."
-            //Click the handle, close it or click once
-            file.SetActive(true);
-            t = 0;
-            while (!stepDone)
-            {
-                t += Time.deltaTime;
-                if (t > 5f)
-                {
-                    sprite.color = new Color(1, 1, 1, 0.5f);
-                }
-                yield return null;
-            }
-            yield return new WaitForSeconds(0.25f);
-            sprite.color = new Color(1, 1, 1, 1);
-            stepDone = false;
-            file.SetActive(false);
             tutorial.text = "Due to the popularity of our company. We receive profiles from lots of sources, including non-humans. However, your objective is to only match humans.";
             //Text 11 "Due to the popularity of our company. We receive profiles from lots of sources, including non-humans. However, your objective is to only match humans."
             //click once
@@ -571,7 +585,12 @@ public class GameplayScript : MonoBehaviour
             {
                 if (!paused && !debugPaused)
                 {
-                    time += timeMultiplier * Time.deltaTime;
+                    float increment = timeMultiplier * Time.deltaTime;
+                    if (HandbookScript.instance.open)
+                    {
+                        increment *= 1 / 3;
+                    }
+                    time += increment;
                 }
                 if (time > 1)
                 {
@@ -622,7 +641,12 @@ public class GameplayScript : MonoBehaviour
                 //Debug function
                 if (!paused && !debugPaused)
                 {
-                    time += timeMultiplier * Time.deltaTime;
+                    float increment = timeMultiplier * Time.deltaTime;
+                    if (HandbookScript.instance.open)
+                    {
+                        increment *= 1 / 3;
+                    }
+                    time += increment;
                 }
                 if (time > 1)
                 {
@@ -659,6 +683,10 @@ public class GameplayScript : MonoBehaviour
                     {
                         Instantiate(profilePrefab, pos, Quaternion.identity);
                         pos.x += 0.1f;
+                    }
+                    if (day == 3)
+                    {
+                        batchSize = 40;
                     }
                 }
                 yield return null;
@@ -707,9 +735,9 @@ public class GameplayScript : MonoBehaviour
                 profileDrop.Add(0);
                 profileDrop.Add(120);
                 profileDrop.Add(280);
-                batchSize = 32;
+                batchSize = 18;
                 totalFakeProfiles = 50;
-                totalProfiles = 96;
+                totalProfiles = 98;
                 break;
             case 4:
                 profileDrop.Add(0);
@@ -880,6 +908,7 @@ public class GameplayScript : MonoBehaviour
 
     public void ExitToTitleScreen()
     {
+        SaveScript.Save();
         SceneManager.LoadScene(0);
         //Fade out
     }
@@ -924,4 +953,36 @@ public class GameplayScript : MonoBehaviour
             }
         }
     }
+
+    public void Save(ref SaveData data)
+    {
+        data.currentday = day;
+        data.money = money;
+        data.score = overallScore;
+        data.matches = profilesMatched;
+        data.shreds = profilesShredded;
+        data.incShreds = incorrectShreds;
+        data.mult = timeMultiplier;
+    }
+    public void Load(SaveData data)
+    {
+        day = data.currentday;
+        money = data.money;
+        timeMultiplier = data.mult;
+        overallScore = data.score;
+        profilesMatched = data.matches;
+        profilesShredded = data.shreds;
+        incorrectShreds = data.incShreds;
+    }
+}
+[Serializable]
+public struct SaveData
+{
+    public int currentday;
+    public float money;
+    public int matches;
+    public int shreds;
+    public int incShreds;
+    public float score;
+    public float mult;
 }

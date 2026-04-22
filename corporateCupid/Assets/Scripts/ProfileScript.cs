@@ -167,7 +167,7 @@ public class ProfileScript
                 }
                 else if (choice == 2)
                 {
-                    age = Random.Range(18, 100);
+                    age = Random.Range(40, 100);
                 }
                 break;
 
@@ -213,7 +213,7 @@ public class ProfileScript
             }
             if (preferences[i].Item2 == 1)
             {
-                if (profileType == 6 && Random.Range(0,1f)>0.5f)
+                if (profileType == 8 && Random.Range(0,1f)>0.5f)
                 {
                     formattedString[i] += slightLikeStrings[randomVal] + likeEmotes[Random.Range(0,3)];
                 }
@@ -225,7 +225,7 @@ public class ProfileScript
             }
             else if (preferences[i].Item2 == 2)
             {
-                if (profileType == 6 && Random.Range(0, 1f) > 0.5f)
+                if (profileType == 8 && Random.Range(0, 1f) > 0.5f)
                 {
                     formattedString[i] += likesStrings[randomVal] + likeEmotes[Random.Range(0, 3)];
                 }
@@ -236,7 +236,7 @@ public class ProfileScript
             }
             else if (preferences[i].Item2 == 3)
             {
-                if (profileType == 6 && Random.Range(0, 1f) > 0.5f)
+                if (profileType == 8 && Random.Range(0, 1f) > 0.5f)
                 {
                     formattedString[i] += loveStrings[randomVal] + likeEmotes[Random.Range(0, 3)];
                 }
@@ -274,7 +274,7 @@ public class ProfileScript
             previousVal[i - 3] = randomVal;
             if (preferences[i].Item2 == -1)
             {
-                if (profileType == 6 && Random.Range(0, 1f) > 0.5f)
+                if (profileType == 8 && Random.Range(0, 1f) > 0.5f)
                 {
                     formattedString[i-3] += slightDisikeStrings[randomVal] + dislikeEmotes[Random.Range(0, 3)];
                 }
@@ -285,7 +285,7 @@ public class ProfileScript
             }
             else if (preferences[i].Item2 == -2)
             {
-                if (profileType == 6 && Random.Range(0, 1f) > 0.5f)
+                if (profileType == 8 && Random.Range(0, 1f) > 0.5f)
                 {
                     formattedString[i - 3] += dislikesStrings[randomVal] + dislikeEmotes[Random.Range(0, 3)];
                 }
@@ -296,7 +296,7 @@ public class ProfileScript
             }
             else if (preferences[i].Item2 == -3)
             {
-                if (profileType == 6 && Random.Range(0, 1f) > 0.5f)
+                if (profileType == 8 && Random.Range(0, 1f) > 0.5f)
                 {
                     formattedString[i - 3] += hatesStrings[randomVal] + dislikeEmotes[Random.Range(0, 3)];
                 }

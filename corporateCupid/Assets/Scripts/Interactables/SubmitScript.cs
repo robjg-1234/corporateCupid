@@ -73,13 +73,21 @@ public class SubmitScript : MonoBehaviour
     /// </summary>
     public void Submit(AttachedLetter selection)
     {
-        if (instance.day == 0 && instance.stepNumber == 3)
+        if (instance.day == 0 && instance.stepNumber == 4)
         {
             instance.stepNumber++;
             instance.stepDone = true;
         }
         totalScore = CalculateScores(selection.prof1.GetProfile().GetPreferences(), selection.prof2.GetProfile().GetPreferences());
-        if (!(selection.prof1.GetProfile().profileType > 0 || selection.prof2.GetProfile().profileType > 0) && instance.day != 3)
+        if (selection.prof1.GetProfile().profileType > 0 && selection.prof2.GetProfile().profileType > 0)
+        {
+            if (instance.day !=3)
+            {
+                totalScore = 0;
+                instance.fees += 0.1f;
+            }
+        }
+        else if (selection.prof1.GetProfile().profileType > 0 || selection.prof2.GetProfile().profileType > 0)
         {
             totalScore = 0;
             instance.fees += 0.1f;
@@ -103,9 +111,8 @@ public class SubmitScript : MonoBehaviour
     {
         if (submissionOne != null && submissionTwo != null && instance.clockedIn)
         {
-            if (instance.day==0 && instance.stepNumber == 2)
+            if (instance.day==0 && instance.stepNumber == 3)
             {
-                instance.stepNumber++;
                 instance.stepDone = true;
             }
             AttachedLetter newMatch = Instantiate(matchObject, transform.position, Quaternion.identity).GetComponent<AttachedLetter>();

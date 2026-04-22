@@ -80,18 +80,13 @@ public class CabinetScript : MonoBehaviour
     {
         if (!opening && !isOpen)
         {
-            if (GameplayScript.instance.day != 0 || GameplayScript.instance.stepNumber >= 4)
+            if (GameplayScript.instance.day != 0 || GameplayScript.instance.stepNumber >= 2)
             {
                 StartCoroutine(SlideOpen());
             }
         }
         else if (!opening && isOpen)
         {
-            if (GameplayScript.instance.day != 0 || GameplayScript.instance.stepNumber == 4)
-            {
-                GameplayScript.instance.stepNumber++;
-                GameplayScript.instance.stepDone = true;
-            }
             StartCoroutine(SlideClose());
         }
     }

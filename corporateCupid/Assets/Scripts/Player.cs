@@ -38,13 +38,18 @@ public class Player : MonoBehaviour
                             selectedObject = hit.collider.GetComponent<FolderUnit>().PickUp();
                             if (selectedObject != null)
                             {
+                                if (instance.day == 0 && instance.stepNumber == 2)
+                                {
+                                    instance.stepDone = true;
+                                    instance.stepNumber++;
+                                }
                                 instance.CallInteraction(selectedObject.recency);
                                 StartCoroutine(selectedObject.HoldObject());
                             }
                         }
                         else if (hit.collider.CompareTag("Envelope"))
                         {
-                            if (instance.day!=0 || instance.stepNumber >= 2)
+                            if (instance.day!=0 || instance.stepNumber >= 3)
                             {
                                 selectedEnvelope = Instantiate(envelopePrefab, Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), Quaternion.identity).GetComponent<EnvelopeScript>();
                                 instance.CallInteraction(selectedEnvelope.recency);
@@ -83,8 +88,11 @@ public class Player : MonoBehaviour
                         //Checks if the object is a Match.
                         else if (hit.collider.CompareTag("Match"))
                         {
-                            selectedMatch = hit.collider.GetComponent<AttachedLetter>();
-                            StartCoroutine(selectedMatch.HoldObject());
+                            if (instance.day != 0 || instance.stepNumber >= 4)
+                            {
+                                selectedMatch = hit.collider.GetComponent<AttachedLetter>();
+                                StartCoroutine(selectedMatch.HoldObject());
+                            }
                         }
                         //Checks if the object selected is a Profile.
                         else if (hit.collider.CompareTag("Interactable"))
