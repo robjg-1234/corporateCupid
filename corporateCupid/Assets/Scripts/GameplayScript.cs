@@ -32,6 +32,8 @@ public class GameplayScript : MonoBehaviour
     [SerializeField] GameObject envelope;
     [SerializeField] GameObject clock;
     [SerializeField] GameObject slot;
+    [SerializeField] Toggle windowToggle;
+
     Vignette vigRef;
     public int currentProfiles = 0;
     string[] preferences = {"Movies","Astrology","Programming","Cars","Video Games","Trains","Winter","Travelling","Reading","Music","Social Events","Animals","Sports","Hiking","Cooking" };
@@ -83,9 +85,14 @@ public class GameplayScript : MonoBehaviour
         //vigRef = postProc.
         int saveCheck = PlayerPrefs.GetInt("Save");
         int tutorialSkipped = PlayerPrefs.GetInt("SkipTutorial");
-        if (saveCheck== 0)
+        int windowed = PlayerPrefs.GetInt("Windowed");
+        if (saveCheck== 1)
         {
             SaveScript.Load();
+        }
+        if (windowed == 1)
+        {
+            windowToggle.isOn = true;
         }
         if (tutorialSkipped == 1)
         {
@@ -989,6 +996,20 @@ public class GameplayScript : MonoBehaviour
         }
     }
 
+    public void Resize(bool windowed)
+    {
+        if (windowed)
+        {
+            Screen.SetResolution(960, 540, false);
+            PlayerPrefs.SetInt("Windowed", 1);
+        }
+        else
+        {
+            Screen.SetResolution(1920, 1080, true);
+            PlayerPrefs.SetInt("Windowed", 0);
+        }
+        PlayerPrefs.Save();
+    }
     public void Save(ref SaveData data)
     {
         data.currentday = day;

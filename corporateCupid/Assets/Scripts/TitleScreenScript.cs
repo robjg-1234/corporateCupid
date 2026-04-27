@@ -14,19 +14,24 @@ public class TitleScreenScript : MonoBehaviour
     [SerializeField] Image buttonNo;
     [SerializeField] GameObject settings;
     [SerializeField] GameObject credits;
+    [SerializeField] Toggle windowToggle;
     bool fadingOut = false;
     private void Start()
     {
         PlayerPrefs.SetInt("SkipTutorial", 0);
         if (SaveScript.SaveFileExists())
         {
-            PlayerPrefs.SetInt("Save", 0);
+            PlayerPrefs.SetInt("Save", 1);
         }
         else
         {
-            PlayerPrefs.SetInt("Save", 1);
+            PlayerPrefs.SetInt("Save", 0);
             continueButton.interactable = false;
             continueText.color = new(0.5f, 0.5f, 0.5f, 0.5f);
+        }
+        if (PlayerPrefs.GetInt("Windowed") == 1)
+        {
+            windowToggle.isOn = true;
         }
         PlayerPrefs.Save();
     }
@@ -80,7 +85,7 @@ public class TitleScreenScript : MonoBehaviour
         if (!fadingOut)
         {
             buttonYes.color = new(1, 1, 1, 1);
-            PlayerPrefs.SetInt("Save", 1);
+            PlayerPrefs.SetInt("Save", 0);
             PlayerPrefs.Save();
             fadingOut = true;
             fadeScreen.gameObject.SetActive(true);
@@ -108,7 +113,7 @@ public class TitleScreenScript : MonoBehaviour
         {
             buttonNo.color = new(1, 1, 1, 1);
             PlayerPrefs.SetInt("SkipTutorial", 1);
-            PlayerPrefs.SetInt("Save", 1);
+            PlayerPrefs.SetInt("Save", 0);
             PlayerPrefs.Save();
             fadingOut = true;
             fadeScreen.gameObject.SetActive(true);
@@ -118,7 +123,22 @@ public class TitleScreenScript : MonoBehaviour
     public void ExitGame()
     {
         Application.Quit();
-    } 
+    }
+    public void Resize(bool windowed)
+    {
+        Debug.Log(windowed);
+        if (windowed)
+        {
+            Screen.SetResolution(960, 540, false);
+            PlayerPrefs.SetInt("Windowed", 1);
+        }
+        else
+        {
+            Screen.SetResolution(1920, 1080, true);
+            PlayerPrefs.SetInt("Windowed", 0);
+        }
+        PlayerPrefs.Save();
+    }
     IEnumerator FadeOut()
     {
         float val = 0;
