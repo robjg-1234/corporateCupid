@@ -125,20 +125,20 @@ public class IntermissionScript : MonoBehaviour
         float fakeFinal = instance.money;
         if (foodTog.isOn)
         {
-            if (fakeFinal - food >= 0)
+            if ((fakeFinal - food) >= 0)
             {
                 fakeFinal -= food;
                 instance.money -= food;
-                instance.timeMultiplier -= 0.1f;
-                if (instance.timeMultiplier < 1)
+                instance.foodMisses--;
+                if (instance.foodMisses < 0)
                 {
-                    instance.timeMultiplier = 1;
+                    instance.foodMisses = 0;
                 }
             }
         }
         else
         {
-            instance.timeMultiplier += 0.1f;
+            instance.foodMisses++;
         }
         if (rentTog.isOn)
         {
@@ -146,17 +146,20 @@ public class IntermissionScript : MonoBehaviour
             {
                 fakeFinal -= rent;
                 instance.money -= rent;
-                instance.timeMultiplier -= 0.4f;
-                if (instance.timeMultiplier < 1)
+                instance.rentMisses--;
+                if (instance.rentMisses < 0)
                 {
-                    instance.timeMultiplier = 1;
+                    instance.rentMisses = 0;
                 }
             }
         }
         else
         {
-            instance.timeMultiplier += 0.4f;
+            instance.rentMisses++;
         }
+        float foodFatigue = Mathf.Pow(1.1f, instance.foodMisses) -1;
+        float rentFatigue = Mathf.Pow(1.4f, instance.rentMisses) -1;
+        instance.timeMultiplier = 1 + foodFatigue + rentFatigue;
         foodTog.isOn = false;
         rentTog.isOn = false;
     }
@@ -195,6 +198,7 @@ public class IntermissionScript : MonoBehaviour
             dayText.color = new(dayText.color.r, dayText.color.g, dayText.color.b, alpha);
             yield return null;
         }
+        instance.ChangeVig(true);
         yield return new WaitForSeconds(0.25f);
         alpha = 1;
         t = 0;
@@ -231,6 +235,7 @@ public class IntermissionScript : MonoBehaviour
         }
         yield return null;
         instance.clockedIn = false;
+        instance.ChangeVig(false);
         instance.dayEnded?.Invoke();
         instance.profilesShredded += instance.dailyShred;
         instance.overallScore += instance.dailyScore;

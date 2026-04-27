@@ -100,7 +100,6 @@ public class PaperScript : MonoBehaviour
     {
         SpriteRenderer paperType = groundObject.GetComponent<SpriteRenderer>();
         paperType.sprite = liftedPaper;
-        attachedObjects[8].transform.localPosition += new Vector3(0,0.1061f,0);
         groundObject.SetActive(true);
         verticalObject.SetActive(false);
         CabinetScript cab = null;
@@ -219,8 +218,6 @@ public class PaperScript : MonoBehaviour
             transform.position = instance.ReturnToDesk(newPosition);
         }
         paperType.sprite = groundSprite;
-        attachedObjects[8].transform.localPosition -= new Vector3(0, 0.1061f, 0);
-
     }
     /// <summary>
     /// Coroutine that zooms into the selected object.

@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class GameplayScript : MonoBehaviour
 {
+    [SerializeField] Volume processer;
     //[SerializeField] GameObject pause;
     [SerializeField] GameObject profilePrefab;
     [SerializeField] TMP_Text clockTime;
@@ -29,6 +32,7 @@ public class GameplayScript : MonoBehaviour
     [SerializeField] GameObject envelope;
     [SerializeField] GameObject clock;
     [SerializeField] GameObject slot;
+    Vignette vigRef;
     public int currentProfiles = 0;
     string[] preferences = {"Movies","Astrology","Programming","Cars","Video Games","Trains","Winter","Travelling","Reading","Music","Social Events","Animals","Sports","Hiking","Cooking" };
     string[] maleNames = { "Liam","Noah", "Oliver","Elijah","William","James","Benjamin","Lucas","Henry","Alexander","Mason","Michael","Ethan","Daniel","Jacob","Logan","Jackson","Levi","Sebastian","John","Jack","Owen","Theodore","Aiden","Samuel"};
@@ -53,6 +57,8 @@ public class GameplayScript : MonoBehaviour
     public float amountGained = 0;
     public int incorrectShreds = 0;
     public int dailyIncorrectShreds = 0;
+    public int foodMisses = 0;
+    public int rentMisses = 0;
     public float fees = 0;
     [NonSerialized] public bool stepDone = false;
     [NonSerialized] public int stepNumber = 0;
@@ -68,9 +74,13 @@ public class GameplayScript : MonoBehaviour
 
     void Start()
     {
-
         instance = this;
-
+        if (processer.profile.TryGet<Vignette>(out var vig))
+        {
+            vigRef = vig;
+        }
+        
+        //vigRef = postProc.
         int saveCheck = PlayerPrefs.GetInt("Save");
         int tutorialSkipped = PlayerPrefs.GetInt("SkipTutorial");
         if (saveCheck== 0)
@@ -192,6 +202,27 @@ public class GameplayScript : MonoBehaviour
         ProfileScript temp = availableProfiles[0];
         availableProfiles.Remove(temp);
         return temp;
+    }
+    
+    public void ChangeVig(bool val)
+    {
+        if (val)
+        {
+            float intensity = Mathf.Clamp(timeMultiplier, 1, 2.3f);
+            intensity = (intensity - 1f) / 1.3f * 0.3f;
+            if (vigRef != null)
+            {
+                vigRef.intensity.value = intensity;
+            }
+        }
+        else
+        {
+            if (vigRef != null)
+            {
+                vigRef.intensity.value = 0;
+            }
+        }
+        
     }
     public void SetTime(int hour, int minute)
     {
@@ -634,7 +665,6 @@ public class GameplayScript : MonoBehaviour
             int minute = 0;
             int totalTime = 0;
             int minuteSecond = 0;
-            //Control time for when we add pauses which would stop the in-game timer.
             //Current timer lasts 8 minutes.
             while (totalTime < 480)
             {
@@ -967,13 +997,18 @@ public class GameplayScript : MonoBehaviour
         data.matches = profilesMatched;
         data.shreds = profilesShredded;
         data.incShreds = incorrectShreds;
-        data.mult = timeMultiplier;
+        data.multFood=foodMisses;
+        data.multRent = rentMisses;
     }
     public void Load(SaveData data)
     {
         day = data.currentday;
         money = data.money;
-        timeMultiplier = data.mult;
+        foodMisses = data.multFood;
+        rentMisses = data.multRent;
+        float foodFatigue = Mathf.Pow(1.1f, foodMisses) - 1;
+        float rentFatigue = Mathf.Pow(1.4f, rentMisses) - 1;
+        timeMultiplier = 1+ foodFatigue + rentFatigue;
         overallScore = data.score;
         profilesMatched = data.matches;
         profilesShredded = data.shreds;
@@ -989,5 +1024,6 @@ public struct SaveData
     public int shreds;
     public int incShreds;
     public float score;
-    public float mult;
+    public int multFood;
+    public int multRent;
 }
