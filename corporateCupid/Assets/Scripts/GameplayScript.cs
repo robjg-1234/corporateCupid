@@ -83,7 +83,7 @@ public class GameplayScript : MonoBehaviour
         //vigRef = postProc.
         int saveCheck = PlayerPrefs.GetInt("Save");
         int tutorialSkipped = PlayerPrefs.GetInt("SkipTutorial");
-        if (saveCheck== 0)
+        if (saveCheck== 1)
         {
             SaveScript.Load();
         }

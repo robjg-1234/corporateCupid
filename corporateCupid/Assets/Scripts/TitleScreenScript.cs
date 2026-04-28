@@ -20,11 +20,11 @@ public class TitleScreenScript : MonoBehaviour
         PlayerPrefs.SetInt("SkipTutorial", 0);
         if (SaveScript.SaveFileExists())
         {
-            PlayerPrefs.SetInt("Save", 0);
+            PlayerPrefs.SetInt("Save", 1);
         }
         else
         {
-            PlayerPrefs.SetInt("Save", 1);
+            PlayerPrefs.SetInt("Save", 0);
             continueButton.interactable = false;
             continueText.color = new(0.5f, 0.5f, 0.5f, 0.5f);
         }
@@ -80,7 +80,7 @@ public class TitleScreenScript : MonoBehaviour
         if (!fadingOut)
         {
             buttonYes.color = new(1, 1, 1, 1);
-            PlayerPrefs.SetInt("Save", 1);
+            PlayerPrefs.SetInt("Save", 0);
             PlayerPrefs.Save();
             fadingOut = true;
             fadeScreen.gameObject.SetActive(true);
@@ -94,6 +94,8 @@ public class TitleScreenScript : MonoBehaviour
     {
         if (!fadingOut)
         {
+            PlayerPrefs.SetInt("Save", 1);
+            PlayerPrefs.Save();
             fadingOut = true;
             fadeScreen.gameObject.SetActive(true);
             StartCoroutine(FadeOut());
@@ -108,7 +110,7 @@ public class TitleScreenScript : MonoBehaviour
         {
             buttonNo.color = new(1, 1, 1, 1);
             PlayerPrefs.SetInt("SkipTutorial", 1);
-            PlayerPrefs.SetInt("Save", 1);
+            PlayerPrefs.SetInt("Save", 0);
             PlayerPrefs.Save();
             fadingOut = true;
             fadeScreen.gameObject.SetActive(true);
