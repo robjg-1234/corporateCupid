@@ -19,6 +19,7 @@ public class AttachedLetter : MonoBehaviour
     }
     private void OnDestroy()
     {
+        StopAllCoroutines();
         GameplayScript.instance.dayEnded -= EndOfDayCheck;
         if (prof1 != null)
         {
@@ -79,13 +80,16 @@ public class AttachedLetter : MonoBehaviour
             //Makes the object move with the mouse.
             while (selected)
             {
-                if (Mouse.current.leftButton.wasReleasedThisFrame || Keyboard.current.escapeKey.wasPressedThisFrame)
+                if (this != null)
                 {
-                    selected = false;
+                    if (Mouse.current.leftButton.wasReleasedThisFrame || Keyboard.current.escapeKey.wasPressedThisFrame)
+                    {
+                        selected = false;
+                    }
+                    newPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+                    newPosition.z = 0;
+                    transform.position = newPosition;
                 }
-                newPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-                newPosition.z = 0;
-                transform.position = newPosition;
                 yield return null;
             }
             while (GameplayScript.instance.paused)
@@ -165,13 +169,16 @@ public class AttachedLetter : MonoBehaviour
         Vector3 currentPos = startingPos;
         while (currentPos != finalPos)
         {
-            t += 4 * Time.deltaTime;
-            if (t > 1)
+            if (this != null)
             {
-                t = 1;
+                t += 4 * Time.deltaTime;
+                if (t > 1)
+                {
+                    t = 1;
+                }
+                currentPos = new Vector3(startingPos.x, Mathf.Lerp(startingPos.y, finalPos.y, t), 0);
+                envelope.transform.localPosition = currentPos;
             }
-            currentPos = new Vector3(startingPos.x, Mathf.Lerp(startingPos.y, finalPos.y, t), 0);
-            envelope.transform.localPosition = currentPos;
             yield return null;
         }
         yield return new WaitForSeconds(0.1f);
@@ -184,6 +191,8 @@ public class AttachedLetter : MonoBehaviour
     }
     public void EndOfDayCheck()
     {
+        GameplayScript.player.Unselect();
+        StopAllCoroutines();
         GameplayScript.instance.profilesShredded += 2;
         Destroy(gameObject);
     }

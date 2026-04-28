@@ -18,6 +18,8 @@ public class EnvelopeScript : MonoBehaviour
     }
     private void OnDestroy()
     {
+        GameplayScript.player.Unselect();
+        StopAllCoroutines();
         instance.currentProfiles--;
         instance.objectInteracted -= ChangePriority;
     }
@@ -52,13 +54,16 @@ public class EnvelopeScript : MonoBehaviour
         //Keeps the object attached to the mouse position.
         while (selected)
         {
-            if (Mouse.current.leftButton.wasReleasedThisFrame || Keyboard.current.escapeKey.wasPressedThisFrame)
+            if (this != null)
             {
-                selected = false;
+                if (Mouse.current.leftButton.wasReleasedThisFrame || Keyboard.current.escapeKey.wasPressedThisFrame)
+                {
+                    selected = false;
+                }
+                newPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+                newPosition.z = 0;
+                transform.position = newPosition;
             }
-            newPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-            newPosition.z = 0;
-            transform.position = newPosition;
             yield return null;
         }
         while (instance.paused)

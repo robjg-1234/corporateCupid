@@ -114,25 +114,28 @@ public class PaperScript : MonoBehaviour
         //Keeps the object attached to the mouse position.
         while (selected)
         {
-            if (Mouse.current.leftButton.wasReleasedThisFrame || Keyboard.current.escapeKey.wasPressedThisFrame)
+            if (this != null)
             {
-                selected = false;
-            }
-            RaycastHit2D shot = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), Vector2.zero, float.MaxValue, LayerMask.GetMask("Cabinet"));
-            if (shot.collider != null)
-            {
-                if (shot.collider.CompareTag("arrow"))
+                if (Mouse.current.leftButton.wasReleasedThisFrame || Keyboard.current.escapeKey.wasPressedThisFrame)
                 {
-                    cab = shot.collider.gameObject.GetComponentInParent<CabinetScript>();
-                    if (!cab.isOpen)
+                    selected = false;
+                }
+                RaycastHit2D shot = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), Vector2.zero, float.MaxValue, LayerMask.GetMask("Cabinet"));
+                if (shot.collider != null)
+                {
+                    if (shot.collider.CompareTag("arrow"))
                     {
-                        cab.ToggleFile();
+                        cab = shot.collider.gameObject.GetComponentInParent<CabinetScript>();
+                        if (!cab.isOpen)
+                        {
+                            cab.ToggleFile();
+                        }
                     }
                 }
+                newPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+                newPosition.z = 0;
+                transform.position = newPosition;
             }
-            newPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-            newPosition.z = 0;
-            transform.position = newPosition;
             yield return null;
         }
         while (GameplayScript.instance.paused)
@@ -263,6 +266,8 @@ public class PaperScript : MonoBehaviour
 
     public void EndOfDayCheck()
     {
+        GameplayScript.player.Unselect();
+        StopAllCoroutines();
         if (!saved)
         {
             instance.dailyShred++;

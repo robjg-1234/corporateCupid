@@ -936,11 +936,10 @@ public class GameplayScript : MonoBehaviour
         }
     }
 
-    public void ExitToTitleScreen()
+    public void ExitToTitleScreen(int restart = 0)
     {
-        
         SaveScript.Save();
-        if (day == 6)
+        if (restart == 1)
         {
             SaveScript.DeleteSaveFile();
         }
@@ -988,6 +987,22 @@ public class GameplayScript : MonoBehaviour
             }
         }
     }
+
+    public void Resize(bool windowed)
+    {
+        if (windowed)
+        {
+            Screen.SetResolution(960, 540, false);
+            PlayerPrefs.SetInt("Windowed", 1);
+        }
+        else
+        {
+            Screen.SetResolution(1920, 1080, true);
+            PlayerPrefs.SetInt("Windowed", 0);
+        }
+        PlayerPrefs.Save();
+    }
+    //Save system inspired from this video: https://www.youtube.com/watch?v=1mf730eb5Wo by Brandon & Nikki from Sasquatch B Studios
 
     public void Save(ref SaveData data)
     {
