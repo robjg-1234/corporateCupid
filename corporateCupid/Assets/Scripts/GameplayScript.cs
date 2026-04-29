@@ -67,6 +67,7 @@ public class GameplayScript : MonoBehaviour
     public float timeMultiplier;
     float time = 0;
     int batchSize = 5;
+    bool endDayEarly = false;
     [NonSerialized] public bool paused = false;
     bool debugPaused = false;
     //Contains the moments for the batch drops of the day: IGT seconds
@@ -182,16 +183,19 @@ public class GameplayScript : MonoBehaviour
     /// </summary>
     public void JumpToNextStage()
     {
-        if (day != 0)
+
+        if (currentProfiles < 3 && !paused && clockedIn && dayGoing)
         {
-            if (currentProfiles < 3 && !paused && clockedIn && dayGoing)
+            if (profileDrop.Count > 0 && day != 0)
             {
-                if (profileDrop.Count > 0)
-                {
-                    jumpToNext = true;
-                }
+                jumpToNext = true;
+            }
+            else
+            {
+                endDayEarly = true;
             }
         }
+
     }
     /// <summary>
     /// Chooses the profiles attached to the letters.
@@ -346,7 +350,7 @@ public class GameplayScript : MonoBehaviour
             sprite.color = new Color(1, 1, 1, 1);
             proceed = false;
             tutorial.text = "Click on the file cabinet handle to open it and drag the profile on the first slot out. You can use this place to store up to 5 profiles.";
-            //Text 4 "Click on the file cabinet handle to open it, here you can drop profiles for later access. Profiles inside the cabinet are not shredded at the end of the day and can be accessed the next day."
+            //Text 5 "Click on the file cabinet handle to open it, here you can drop profiles for later access. Profiles inside the cabinet are not shredded at the end of the day and can be accessed the next day."
             //Click the handle, close it or click once
             file.SetActive(true);
             slot.SetActive(true);
@@ -607,6 +611,8 @@ public class GameplayScript : MonoBehaviour
                 Instantiate(profilePrefab, pos, Quaternion.identity);
                 pos.x += 0.1f;
             }
+            endDayEarly = false;
+            jumpToNext = false;
             int hour = 15;
             int minute = 0;
             int totalTime = 360;
@@ -641,6 +647,14 @@ public class GameplayScript : MonoBehaviour
                     SetTime(hour, minute);
                     time = 0;
                 }
+                if (endDayEarly)
+                {
+                    endDayEarly = false;
+                    totalTime = 480;
+                    hour = 17;
+                    minute = 0;
+                    SetTime(hour, minute);
+                }
                 yield return null;
             }
             profileDrop.Clear();
@@ -659,6 +673,8 @@ public class GameplayScript : MonoBehaviour
             {
                 yield return null;
             }
+            endDayEarly = false;
+            jumpToNext = false;
             Debug.Log("Clocked In");
             //Oh no!!!!!!!, the table! It's broken!
             int hour = 9;
@@ -703,6 +719,14 @@ public class GameplayScript : MonoBehaviour
                     minuteSecond = 0;
                     hour = 9 + Mathf.FloorToInt(totalTime / 60f);
                     minute = totalTime - (hour - 9) * 60;
+                    SetTime(hour, minute);
+                }
+                if (endDayEarly)
+                {
+                    endDayEarly = false;
+                    totalTime = 480;
+                    hour = 17;
+                    minute = 0;
                     SetTime(hour, minute);
                 }
                 if (profileDrop.Contains(totalTime))
