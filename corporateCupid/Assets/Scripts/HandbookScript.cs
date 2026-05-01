@@ -32,6 +32,7 @@ public class HandbookScript : MonoBehaviour
     {
         if (current > 0)
         {
+            AudioManager.instance.Playclip("Notebook");
             current--;
             if (current == 0)
             {
@@ -62,6 +63,7 @@ public class HandbookScript : MonoBehaviour
     {
         if (current < 3)
         {
+            AudioManager.instance.Playclip("Notebook");
             current++;
             if (current == 1)
             {

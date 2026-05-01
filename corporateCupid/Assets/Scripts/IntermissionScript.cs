@@ -101,6 +101,7 @@ public class IntermissionScript : MonoBehaviour
         {
             if (fakeFinal - food >= 0)
             {
+                AudioManager.instance.Playclip("Click");
                 fakeFinal -= food;
             }
             else
@@ -112,6 +113,7 @@ public class IntermissionScript : MonoBehaviour
         {
             if (fakeFinal - rent >= 0)
             {
+                AudioManager.instance.Playclip("Click");
                 fakeFinal -= rent;
             }
             else

@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using UnityEngine;
 
 public class FolderUnit : MonoBehaviour
@@ -21,6 +22,7 @@ public class FolderUnit : MonoBehaviour
     {
         if (savedProfile == null)
         {
+            AudioManager.instance.Playclip("CPaperIN");
             savedProfile = newProf;
             newProf.saved = true;
             squareRend.sprite = fullSprite;
@@ -40,6 +42,7 @@ public class FolderUnit : MonoBehaviour
         PaperScript sending = null;
         if (savedProfile != null)
         {
+            AudioManager.instance.Playclip("CPaperOUT");
             squareRend.sprite = emptySprite;
             savedProfile.gameObject.SetActive(true);
             savedProfile.saved = false;

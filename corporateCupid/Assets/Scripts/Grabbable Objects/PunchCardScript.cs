@@ -76,6 +76,7 @@ public class PunchCardScript : MonoBehaviour
         {
             if (hit.collider.CompareTag("Clock"))
             {
+                AudioManager.instance.Playclip("PClock");
                 objectCollider.enabled = false;
                 instance.clockedIn = true;
                 //when the clock becomes its own object, I'll send the punch card behind it. For now it just gets disabled.
