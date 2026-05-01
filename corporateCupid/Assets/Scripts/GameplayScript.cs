@@ -89,6 +89,10 @@ public class GameplayScript : MonoBehaviour
         {
             SaveScript.Load();
         }
+        if (windowed == 1)
+        {
+            windowToggle.isOn = true;
+        }
         if (tutorialSkipped == 1)
         {
             day = tutorialSkipped;
