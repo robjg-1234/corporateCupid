@@ -32,6 +32,7 @@ public class SubmitScript : MonoBehaviour
             //Checks for empty spaces in the pinboard.
             if (submissionOne == null && submissionTwo != selection)
             {
+                AudioManager.instance.Playclip("PProfile");
                 if (submissionTwo != null)
                 {
                     submissionOne = submissionTwo;
@@ -48,6 +49,7 @@ public class SubmitScript : MonoBehaviour
             }
             else if (submissionTwo == null && submissionOne != selection)
             {
+                AudioManager.instance.Playclip("PProfile");
                 submissionTwo = selection;
                 submissionOne.transform.position = transform.position - new Vector3(0.3f, 0, 0);
                 submissionTwo.transform.position = transform.position;
@@ -103,6 +105,7 @@ public class SubmitScript : MonoBehaviour
         instance.dailyMatch++;
         Debug.Log(totalScore);
         instance.dailyScore += totalScore;
+        AudioManager.instance.Playclip("ESubmit");
     }
     /// <summary>
     /// Handles the creation of Matches after clicking a button.
@@ -111,6 +114,7 @@ public class SubmitScript : MonoBehaviour
     {
         if (submissionOne != null && submissionTwo != null && instance.clockedIn)
         {
+            AudioManager.instance.Playclip("PEnvelope");
             if (instance.day==0 && instance.stepNumber == 3)
             {
                 instance.stepDone = true;

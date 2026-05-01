@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -15,6 +16,7 @@ public class TitleScreenScript : MonoBehaviour
     [SerializeField] GameObject settings;
     [SerializeField] GameObject credits;
     [SerializeField] Toggle windowToggle;
+    AudioManager instance;
     bool fadingOut = false;
     private void Start()
     {
@@ -34,7 +36,10 @@ public class TitleScreenScript : MonoBehaviour
             windowToggle.isOn = true;
         }
         PlayerPrefs.Save();
+        instance = AudioManager.instance;
+        instance.Playclip("Music");
     }
+
     public void PopUp()
     {
         if (!fadingOut)
@@ -84,6 +89,7 @@ public class TitleScreenScript : MonoBehaviour
     {
         if (!fadingOut)
         {
+            instance.Playclip("Click");
             buttonYes.color = new(1, 1, 1, 1);
             PlayerPrefs.SetInt("Save", 0);
             PlayerPrefs.Save();
@@ -113,6 +119,7 @@ public class TitleScreenScript : MonoBehaviour
     {
         if (!fadingOut)
         {
+            instance.Playclip("Click");
             buttonNo.color = new(1, 1, 1, 1);
             PlayerPrefs.SetInt("SkipTutorial", 1);
             PlayerPrefs.SetInt("Save", 0);
@@ -128,6 +135,7 @@ public class TitleScreenScript : MonoBehaviour
     }
     public void Resize(bool windowed)
     {
+        instance.Playclip("Click");
         if (windowed)
         {
             Screen.SetResolution(960, 540, false);
@@ -149,6 +157,7 @@ public class TitleScreenScript : MonoBehaviour
             fadeScreen.color = new Color(0, 0, 0, val);
             yield return null;
         }
+        instance.StopAudio();  
         SceneManager.LoadScene(1);
     }
 }

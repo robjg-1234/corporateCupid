@@ -10,12 +10,14 @@ public class CabinetScript : MonoBehaviour
     [SerializeField] GameObject shredder;
     [SerializeField] SpriteRenderer[] attachedSprites;
     [SerializeField] SpriteRenderer cabinetRenderer;
+    AudioManager instanceAudio;
     bool opening = false;
     public bool isOpen = false;
     private void Start()
     {
         GameplayScript.instance.objectInteracted += ReorderLayer;
         GameplayScript.instance.dayEnded += EmptyCabinet;
+        instanceAudio = AudioManager.instance; 
     }
     private void OnDestroy()
     {
@@ -82,11 +84,13 @@ public class CabinetScript : MonoBehaviour
         {
             if (GameplayScript.instance.day != 0 || GameplayScript.instance.stepNumber >= 2)
             {
+                instanceAudio.Playclip("COpen");
                 StartCoroutine(SlideOpen());
             }
         }
         else if (!opening && isOpen)
         {
+            instanceAudio.Playclip("CClose");
             StartCoroutine(SlideClose());
         }
     }

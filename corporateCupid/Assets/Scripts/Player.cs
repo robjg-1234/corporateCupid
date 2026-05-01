@@ -70,6 +70,7 @@ public class Player : MonoBehaviour
                             if (instance.day != 0 || instance.stepNumber >= 5)
                             {
                                 GameplayScript.shredInstance.ActivateShredder();
+                                AudioManager.instance.Playclip("Shredder");
                             }
                         }
                         //Checks to see if it is the arrow to open/close cabinet
@@ -110,7 +111,10 @@ public class Player : MonoBehaviour
                             instance.JumpToNextStage();
                         }
                     }
-
+                    else
+                    {
+                        AudioManager.instance.Playclip("PTap");
+                    }
                 }
                 //Handles the zoom interactions.
                 else if (Mouse.current.rightButton.wasPressedThisFrame && selectedObject == null && selectedMatch == null && selectedPunch == null && selectedEnvelope == null)

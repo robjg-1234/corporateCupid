@@ -33,6 +33,7 @@ public class GameplayScript : MonoBehaviour
     [SerializeField] GameObject clock;
     [SerializeField] GameObject slot;
     [SerializeField] Toggle windowToggle;
+    AudioManager audioInstance;
     Vignette vigRef;
     public int currentProfiles = 0;
     string[] preferences = {"Movies","Astrology","Programming","Cars","Video Games","Trains","Winter","Travelling","Reading","Music","Social Events","Animals","Sports","Hiking","Cooking" };
@@ -77,6 +78,7 @@ public class GameplayScript : MonoBehaviour
     void Start()
     {
         instance = this;
+        audioInstance = AudioManager.instance; 
         if (processer.profile.TryGet<Vignette>(out var vig))
         {
             vigRef = vig;
@@ -250,6 +252,7 @@ public class GameplayScript : MonoBehaviour
         
         FetchDay();
         dayGoing = true;
+        StartCoroutine(BackgroundSound());
         if (day == 0)
         {
 
@@ -278,7 +281,7 @@ public class GameplayScript : MonoBehaviour
             //Text 2 "First, look through the profiles on the desk by right-clicking them. You can drag them around to reorder them as you please.."
             tutorial.text = "First, look through the profiles on the desk by right-clicking them. You can drag them around to reorder them as you please.";
             Vector3 pos = deskCenter + new Vector2(5f, 0); ;
-            PaperScript example = null; 
+            PaperScript example = null;
             for (int i = 0; i < 2; i++)
             {
                 example = Instantiate(profilePrefab, pos, Quaternion.identity).GetComponent<PaperScript>();
@@ -597,6 +600,7 @@ public class GameplayScript : MonoBehaviour
             proceed = false;
             pos = deskCenter;
             bossChat.SetActive(false);
+            audioInstance.Playclip("ClockTick");
             for (int i = 0; i < 5; i++)
             {
                 Instantiate(profilePrefab, pos, Quaternion.identity);
@@ -747,6 +751,7 @@ public class GameplayScript : MonoBehaviour
                 if (profileDrop.Contains(totalTime))
                 {
                     profileDrop.Remove(totalTime);
+                    audioInstance.Playclip("ClockTick");
                     Vector3 pos = deskCenter;
                     for (int i = 0; i < batchSize; i++)
                     {
@@ -760,6 +765,7 @@ public class GameplayScript : MonoBehaviour
                 }
                 yield return null;
             }
+            audioInstance.Playclip("EndBeeps");
             profileDrop.Clear();
             dayGoing = false;
             StartCoroutine(fades.FadeOut());
@@ -977,11 +983,13 @@ public class GameplayScript : MonoBehaviour
 
     public void ExitToTitleScreen(int restart = 0)
     {
+        FMODUnity.RuntimeManager.PauseAllEvents(false);
         SaveScript.Save();
         if (restart == 1)
         {
             SaveScript.DeleteSaveFile();
         }
+        audioInstance.AirCStop();
         SceneManager.LoadScene(0);
         //Fade out
     }
@@ -1004,6 +1012,35 @@ public class GameplayScript : MonoBehaviour
         }
         return current;
     }
+
+    System.Collections.IEnumerator BackgroundSound()
+    {
+       audioInstance.Playclip("Aircon");
+        float t = 0;
+        int creationTime = 40;
+
+        while (dayGoing)
+        {
+            if (!paused)
+            {
+                t += Time.deltaTime;
+            }
+            if (t >=creationTime)
+            {
+                t = 0;
+                creationTime += Random.Range(-5, 6);
+                if (creationTime <30)
+                {
+                    creationTime += 5;
+                }
+                string val = "" + Random.Range(1, 7);
+                audioInstance.Playclip(val);
+            }
+        yield return null;  
+        }
+        audioInstance.AirCStop();
+    }
+
     public void PauseGame()
     {
         if (dayGoing)
@@ -1013,6 +1050,7 @@ public class GameplayScript : MonoBehaviour
                 pauseMenu.SetActive(false);
                 if (paused == true)
                 {
+                    FMODUnity.RuntimeManager.PauseAllEvents(false);
                     paused = false;
                 }
             }
@@ -1021,6 +1059,7 @@ public class GameplayScript : MonoBehaviour
                 pauseMenu.SetActive(true);
                 if (paused == false)
                 {
+                    FMODUnity.RuntimeManager.PauseAllEvents(true);
                     paused = true;
                 }
             }
