@@ -33,7 +33,43 @@ public class PaperScript : MonoBehaviour
         TMP_Text infoText = attachedObjects[6].GetComponent<TMP_Text>();
         spriteRend = attachedObjects[1].GetComponent<SpriteRenderer>();
         //Whenever profile icons get added, pass the path to the icon
-        spriteRend.sprite = Resources.Load<Sprite>("Humans/"+Random.Range(1,57));
+        if (identity.visibleRobot)
+        {
+            //Lamia
+            if (identity.profileType== 1)
+            {
+                spriteRend.sprite = Resources.Load<Sprite>("Lamia/" + Random.Range(1, 3));
+            }
+            //Gorgons
+            else if (identity.profileType == 3)
+            {
+                spriteRend.sprite = Resources.Load<Sprite>("Gorgon/" + Random.Range(1, 4));
+            }
+            //Satyr
+            else if (identity.profileType == 4)
+            {
+                spriteRend.sprite = Resources.Load<Sprite>("Satyr/" + Random.Range(1, 5));
+            }
+            //Cyclops
+            else if (identity.profileType == 5)
+            {
+                spriteRend.sprite = Resources.Load<Sprite>("Cyclops/" + Random.Range(1, 4));
+            }
+            //Siren
+            else if (identity.profileType == 7)
+            {
+                spriteRend.sprite = Resources.Load<Sprite>("Siren/" + Random.Range(1, 4));
+            }
+            //Robot
+            else if (identity.profileType == 8)
+            {
+                spriteRend.sprite = Resources.Load<Sprite>("Robot/" + 1);
+            }
+        }
+        else
+        {
+            spriteRend.sprite = Resources.Load<Sprite>("Humans/" + Random.Range(1, 74));
+        } 
         groundObject = attachedObjects[7];
         verticalObject = attachedObjects[0];
         nameText.text = identity.characterName;

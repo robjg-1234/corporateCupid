@@ -8,7 +8,7 @@ using UnityEngine;
 public class ProfileScript
 {
     public int profileType = 0;
-    bool visibleRobot = false;
+    public bool visibleRobot = false;
     public string characterName;
     int age;
     string profession;
@@ -79,24 +79,9 @@ public class ProfileScript
                     bio = "Lets share our childhood nightmares together.";
                 }
                 break;
-            //Nymph
+            //Gorgons
             case 3:
-                if (choice == 0)
-                {
-                    visibleRobot = true;
-                }
-                else if (choice == 1)
-                {
-                    choice = Random.Range(0, 2);
-                    if (choice == 1)
-                    {
-                        bio = "You'll usually find me by the water, its where i feel the most like myself.";
-                    }
-                    else
-                    {
-                        bio = "Nature is everything to me, I could literally spend my entire life in it.";
-                    }
-                }
+                visibleRobot = true;
                 break;
             //Satyr
             case 4:
