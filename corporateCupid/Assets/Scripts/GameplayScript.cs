@@ -271,7 +271,7 @@ public class GameplayScript : MonoBehaviour
             //Click once
             //Text 2 "First, look through the profiles on the desk by right-clicking them. You can drag them around to reorder them as you please.."
             tutorial.text = "First, look through the profiles on the desk by right-clicking them. You can drag them around to reorder them as you please.";
-            Vector3 pos = deskCenter + new Vector2(2.5f, 0); ;
+            Vector3 pos = deskCenter + new Vector2(5f, 0); ;
             PaperScript example = null; 
             for (int i = 0; i < 2; i++)
             {
@@ -430,8 +430,8 @@ public class GameplayScript : MonoBehaviour
             yield return new WaitForSeconds(0.25f);
             sprite.color = new Color(1, 1, 1, 1);
             proceed = false;
-            tutorial.text = "While sorting through the batches you may encounter strange profiles which do not seem to align with natural human behaviour. Those profiles are Fake and belong to creatures such as nymphs or sirens. Your objective is to only match humans";
-            //Text 10 "While sorting through the batches you may encounter strange profiles which do not seem to align with natural human behaviour. Those profiles are Fake and belong to creatures such as nymphs or sirens. Your objective is to only match humans"
+            tutorial.text = "At the end of the day, profiles which have not been matched or placed in the organiser will be shredded and their overall value subtracted from your daily wage.";
+            //Text 10 "At the end of the day, profiles which have not been matched or placed in the organiser will be shredded and their overall value subtracted from your daily wage."
             //Click once
             t = 0;
             while (!proceed)
@@ -450,8 +450,8 @@ public class GameplayScript : MonoBehaviour
             yield return new WaitForSeconds(0.25f);
             sprite.color = new Color(1, 1, 1, 1);
             proceed = false;
-            tutorial.text = "While sorting through the batches you may encounter strange profiles which do not seem to align with natural human behaviour. Those profiles are Fake and belong to creatures such as nymphs or sirens. Your objective is to only match humans";
-            //Text 11 "While sorting through the batches you may encounter strange profiles which do not seem to align with natural human behaviour. Those profiles are Fake and belong to creatures such as nymphs or sirens. Your objective is to only match humans"
+            tutorial.text = "While sorting through the batches you may encounter strange profiles which do not seem to align with natural human behaviour. Those profiles are Fake and belong to creatures such as nymphs or sirens. Your objective is to only match humans.";
+            //Text 11 "While sorting through the batches you may encounter strange profiles which do not seem to align with natural human behaviour. Those profiles are Fake and belong to creatures such as nymphs or sirens. Your objective is to only match humans."
             //click once
             t = 0;
             while (!proceed)
@@ -654,6 +654,30 @@ public class GameplayScript : MonoBehaviour
         }
         else
         {
+            if (day == 3)
+            {
+                Image sprite = bossChat.GetComponent<Image>();
+                tutorial.text = "We have been informed that we are receiveing many non-human profiles today. So, just for today matching non-humans with non-humans will contribute to your score.";
+                bossChat.SetActive(true);
+                clock.SetActive(true);
+                bool proceed = false;
+                float t = 0;
+                while (!proceed)
+                {
+                    t += Time.deltaTime;
+                    if (t > 5f)
+                    {
+                        sprite.color = new Color(1, 1, 1, 0.5f);
+                    }
+                    if (Mouse.current.leftButton.wasReleasedThisFrame)
+                    {
+                        proceed = true;
+                    }
+                    yield return null;
+                }
+                bossChat.SetActive(false);
+                yield return new WaitForSeconds(0.5f);
+            }
             while (!clockedIn)
             {
                 yield return null;
