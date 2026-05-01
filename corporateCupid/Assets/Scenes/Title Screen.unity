@@ -2282,8 +2282,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.531, y: -68.065796}
-  m_SizeDelta: {x: 493.062, y: 486.1316}
+  m_AnchoredPosition: {x: -0.00002861, y: -68.065796}
+  m_SizeDelta: {x: 518.3195, y: 486.1316}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &644220787
 MonoBehaviour:
@@ -2305,18 +2305,23 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Credit 1 = Producer
+  m_text: 'Aneta Dvorakova - Designer
 
-    Credit 2 = Artist
+    John Fullerton - Designer
 
-    Credit 3 = Artist
+    Joshua
+    Hennig - Designer
 
-    Credit
-    4 = Designer
+    Manvydas Uleckas - Designer
 
-    Credit 5 = Designer
+    Evni Weerasekara - Artist
 
-    Credit 6 = Programmer'
+    Nate
+    Taylor - Artist
+
+    Pippa Ferguson - Artist
+
+    Roberto Guerra - Programmer'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 24137fc10254aaf43ae7a797ee27d628, type: 2}
   m_sharedMaterial: {fileID: -8506923448228658366, guid: 24137fc10254aaf43ae7a797ee27d628, type: 2}
@@ -2355,7 +2360,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: 5
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
