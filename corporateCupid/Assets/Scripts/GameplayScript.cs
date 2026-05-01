@@ -93,21 +93,6 @@ public class GameplayScript : MonoBehaviour
             day = tutorialSkipped;
         }
     }
-    private void Update()
-    {
-        //if (dayGoing)
-        //{
-        //    //if (Keyboard.current.pKey.wasPressedThisFrame)
-        //    //{
-        //    //    debugPaused = !debugPaused;
-        //    //    Debug.Log("Time paused: " + debugPaused);
-        //    //}
-        //    //else if (Keyboard.current.oKey.wasPressedThisFrame)
-        //    //{
-        //    //    SummonProfiles();
-        //    //}
-        //}
-    }
     /// <summary>
     /// A global call to update rendering priority.
     /// </summary>
@@ -265,8 +250,8 @@ public class GameplayScript : MonoBehaviour
             bool proceed = false;
             Image sprite = bossChat.GetComponent<Image>();
             yield return new WaitForSeconds(0.5f);
-            //Text 1 "Since this is your first day at the office, you need to get up to speed. Drag your punch card onto the clock to start the day."
-            tutorial.text = "Since this is your first day at the office, you need to get up to speed. Drag your punch card onto the clock to start the day.";
+            //Text 1 "Good morning Employee and welcome to Cupid Corp. Since this is your first day at the office, you need to get up to speed. Clock in by dragging your punch in card to the clock on the wall to start the day."
+            tutorial.text = "Good morning Employee and welcome to Cupid Corp. Since this is your first day at the office, you need to get up to speed. Clock in by dragging your punch in card to the clock on the wall to start the day.";
             bossChat.SetActive(true);
             clock.SetActive(true);
             float t = 0;
@@ -284,8 +269,8 @@ public class GameplayScript : MonoBehaviour
             clock.SetActive(false);
             proceed = false;
             //Click once
-            //Text 2 "First, look through the profiles on the desk by right-clicking them. You can drag them around to reorder them as you please."
-            tutorial.text = "First, check this profile on the desk by right-clicking them. You can drag it around as you please.";
+            //Text 2 "First, look through the profiles on the desk by right-clicking them. You can drag them around to reorder them as you please.."
+            tutorial.text = "First, look through the profiles on the desk by right-clicking them. You can drag them around to reorder them as you please.";
             Vector3 pos = deskCenter + new Vector2(2.5f, 0); ;
             PaperScript example = null; 
             for (int i = 0; i < 2; i++)
@@ -309,8 +294,8 @@ public class GameplayScript : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             sprite.color = new Color(1, 1, 1, 1);
             stepDone = false;
-            tutorial.text = "In each profile, you can see important information about our clients. Try to match profiles based on what they agree and disagree on.";
-            //Text 3 "In each profile, you can see important information about our clients. Try to match profiles based on what they agree and disagree on."
+            tutorial.text = "As part of your employment here, you are tasked with helping our human cohabitants find their one true mate. Your role is to diligently analyse the profile contents and identify the best match possible based on the humans' likes and dislikes.";
+            //Text 3 "As part of your employment here, you are tasked with helping our human cohabitants find their one true mate. Your role is to diligently analyse the profile contents and identify the best match possible based on the humans' likes and dislikes."
             t = 0;
             while (!proceed)
             {
@@ -349,8 +334,8 @@ public class GameplayScript : MonoBehaviour
             }
             sprite.color = new Color(1, 1, 1, 1);
             proceed = false;
-            tutorial.text = "Click on the file cabinet handle to open it and drag the profile on the first slot out. You can use this place to store up to 5 profiles.";
-            //Text 5 "Click on the file cabinet handle to open it, here you can drop profiles for later access. Profiles inside the cabinet are not shredded at the end of the day and can be accessed the next day."
+            tutorial.text = "Now, try to open up the file organiser on the side of your desk. In the organiser you can keep up to 5 profiles which you have not matched yet, but feel confident in being able to find a match for. Profiles inside the cabinet are not shredded at the end of the day and can be accessed the next day.";
+            //Text 5 "Now, try to open up the file organiser on the side of your desk. In the organiser you can keep up to 5 profiles which you have not matched yet, but feel confident in being able to find a match for. Profiles inside the cabinet are not shredded at the end of the day and can be accessed the next day"
             //Click the handle, close it or click once
             file.SetActive(true);
             slot.SetActive(true);
@@ -369,8 +354,8 @@ public class GameplayScript : MonoBehaviour
             stepDone = false;
             file.SetActive(false);
             slot.SetActive(false);
-            tutorial.text = "To create matches drag the two profiles that you want to match onto the pinboard, and then drag an envelope from the stack and drop on top of them.";
-            //Text 5 "To create matches drag the two profiles that you want to match onto the pinboard, and then drag an envelope from the stack and drop on top of them."
+            tutorial.text = "When you identify a suitable match, drag the two profiles onto the pin board one-by-one, and then drag an envelope from the stack and drop on top of them.";
+            //Text 6 "When you identify a suitable match, drag the two profiles onto the pin board one-by-one, and then drag an envelope from the stack and drop on top of them."
             envelope.SetActive(true);
             t = 0;
             while (!stepDone)
@@ -388,7 +373,7 @@ public class GameplayScript : MonoBehaviour
             
             //Drop envelope.
             tutorial.text = "This action is irreversible but you can change the profiles before putting them inside the envelope.";
-            //Text 6 "This action is irreversible but you can change the profiles before putting them inside the envelope."
+            //Text 7 "This action is irreversible but you can change the profiles before putting them inside the envelope."
             t = 0;
             while (!proceed)
             {
@@ -407,8 +392,8 @@ public class GameplayScript : MonoBehaviour
             sprite.color = new Color(1, 1, 1, 1);
             proceed = false;
             //Click once
-            tutorial.text = "Now you need to drag and drop the newly created match into the submission slot. You cannot make new matches until the match has been submitted.";
-            //Text 7 "Now you need to drag and drop the newly created match into the submission slot. You cannot make new matches until the match has been submitted."
+            tutorial.text = "If you are truly satisfied with this match, place it into the Mail Slot to complete the matchmaking process. You cannot make new matches until the match has been submitted.";
+            //Text 8 "If you are truly satisfied with this match, place it into the Mail Slot to complete the matchmaking process. You cannot make new matches until the match has been submitted."
             submit.SetActive(true);
             t = 0;
             while (!stepDone)
@@ -426,7 +411,7 @@ public class GameplayScript : MonoBehaviour
             stepDone = false;
             //Submit the envelope
             tutorial.text = "The overall quality and quantity of your matches will be reflected on your paycheck at the end of the day, so try to get as much done within the day.";
-            //Text 8 "The overall quality and quantity of your matches will be reflected on your paycheck at the end of the day, so try to get as much done within the day."
+            //Text 9 "The overall quality and quantity of your matches will be reflected on your paycheck at the end of the day, so try to get as much done within the day."
             //Click once
             t = 0;
             while (!proceed)
@@ -445,8 +430,8 @@ public class GameplayScript : MonoBehaviour
             yield return new WaitForSeconds(0.25f);
             sprite.color = new Color(1, 1, 1, 1);
             proceed = false;
-            tutorial.text = "Any profile that does not get matched or saved, gets shredded.";
-            //Text 9 "There are two outcomes for profiles that are not matched by the end of the day: They get saved or they get shredded."
+            tutorial.text = "While sorting through the batches you may encounter strange profiles which do not seem to align with natural human behaviour. Those profiles are Fake and belong to creatures such as nymphs or sirens. Your objective is to only match humans";
+            //Text 10 "While sorting through the batches you may encounter strange profiles which do not seem to align with natural human behaviour. Those profiles are Fake and belong to creatures such as nymphs or sirens. Your objective is to only match humans"
             //Click once
             t = 0;
             while (!proceed)
@@ -465,8 +450,8 @@ public class GameplayScript : MonoBehaviour
             yield return new WaitForSeconds(0.25f);
             sprite.color = new Color(1, 1, 1, 1);
             proceed = false;
-            tutorial.text = "Due to the popularity of our company. We receive profiles from lots of sources, including non-humans. However, your objective is to only match humans.";
-            //Text 11 "Due to the popularity of our company. We receive profiles from lots of sources, including non-humans. However, your objective is to only match humans."
+            tutorial.text = "While sorting through the batches you may encounter strange profiles which do not seem to align with natural human behaviour. Those profiles are Fake and belong to creatures such as nymphs or sirens. Your objective is to only match humans";
+            //Text 11 "While sorting through the batches you may encounter strange profiles which do not seem to align with natural human behaviour. Those profiles are Fake and belong to creatures such as nymphs or sirens. Your objective is to only match humans"
             //click once
             t = 0;
             while (!proceed)
@@ -485,9 +470,9 @@ public class GameplayScript : MonoBehaviour
             yield return new WaitForSeconds(0.25f);
             sprite.color = new Color(1, 1, 1, 1);
             proceed = false;
-            tutorial.text = "If you look at this profile, you will notice some inconsistencies, which are explained in the employee handbook.";
+            tutorial.text = "You must identify such profiles by noticing any irregularities within the profile descriptions or their appearance, which are explained in the employee handbook.";
             Instantiate(profilePrefab, pos, Quaternion.identity);
-            //Text 12 "If you look at this profile, you will notice some inconsistencies, which are explained in the employee handbook."
+            //Text 12 "You must identify such profiles by noticing any irregularities within the profile descriptions or their appearance, which are explained in the employee handbook."
             //Click once
             t = 0;
             while (!proceed)
@@ -506,8 +491,8 @@ public class GameplayScript : MonoBehaviour
             yield return new WaitForSeconds(0.25f);
             sprite.color = new Color(1, 1, 1, 1);
             proceed = false;
-            tutorial.text = "To solve this problem, grab the profile and drop it in the shredder, then press the button to shred it. Correctly shredding non-human profiles benefits your overall score, so keep an eye out.";
-            //Text 13 "To solve this problem, grab the profile and drop it in the shredder, then press the button to shred it. Correctly shredding non-human profiles benefits your overall score, so keep an eye out."
+            tutorial.text = "If you identify a profile that you deem Fake, drop it in the shredder, then press the button to shred it. All Fake profiles must not be granted a match under any circumstances and must be shredded. Correctly shredding non-human profiles benefits your overall score, so keep an eye out.";
+            //Text 13 "If you identify a profile that you deem Fake, drop it in the shredder, then press the button to shred it. All Fake profiles must not be granted a match under any circumstances and must be shredded. Correctly shredding non-human profiles benefits your overall score, so keep an eye out."
             //Shred a profile
             shred.SetActive(true);
             t = 0;
@@ -524,8 +509,8 @@ public class GameplayScript : MonoBehaviour
             sprite.color = new Color(1, 1, 1, 1);
             stepDone = false;
             shred.SetActive(false);
-            tutorial.text = "If you fail to identify them and match them with a real person, it will affect our company reputation and it will be reflected on your score.";
-            //Text 14 "If you fail to identify them and match them with a real person, it will affect our company reputation and it will be reflected on your score."
+            tutorial.text = "If you fail to identify them and match them with a real person, thus luring humans to their demise, it will affect our company reputation and will be reflected on your score";
+            //Text 14 "If you fail to identify them and match them with a real person, thus luring humans to their demise, it will affect our company reputation and will be reflected on your score."
             //Click once
             t = 0;
             while (!proceed)
@@ -544,8 +529,8 @@ public class GameplayScript : MonoBehaviour
             yield return new WaitForSeconds(0.25f);
             sprite.color = new Color(1, 1, 1, 1);
             proceed = false;
-            tutorial.text = "Each day there will be 3 batches of profiles, spread out along the day. Each batch will happen only after some time has passed, so you can keep some profiles for the next batch.";
-            //Text 15 "Each day there will be 3 batches of profiles, spread out along the day. Each batch will happen only after some time has passed, so you can keep some profiles for the next batch."
+            tutorial.text = "Throughout your daily shift you will receive several Batches of human profiles. Each batch will happen only after some time has passed, so you can keep some profiles for the next batch.";
+            //Text 15 "Throughout your daily shift you will receive several Batches of human profiles. Each batch will happen only after some time has passed, so you can keep some profiles for the next batch."
             //Click once
             t = 0;
             while (!proceed)
@@ -584,8 +569,8 @@ public class GameplayScript : MonoBehaviour
             yield return new WaitForSeconds(0.25f);
             sprite.color = new Color(1, 1, 1, 1);
             proceed = false;
-            tutorial.text = "There will be a final test badge today so that you can put everything into practice, nothing from today will carry over tomorrow. I'll check on your progress with the company in 5 days.";
-            //Text 17 "There will be a final test badge today so that you can put everything into practice, nothing from today will carry over tomorrow. I'll check on your progress with the company in 5 days."
+            tutorial.text = "There will be a final test badge today so that you can put everything into practice, nothing from today will carry over tomorrow. I'll check on your progress with the company in 5 days. This concludes your Day 0 training. We look forward to welcoming you into our company tomorrow morning. Goodbye.";
+            //Text 17 "There will be a final test badge today so that you can put everything into practice, nothing from today will carry over tomorrow. I'll check on your progress with the company in 5 days. This concludes your Day 0 training. We look forward to welcoming you into our company tomorrow morning. Goodbye."
             //Click once 5 profiles are dropped
             t = 0;
             while (!proceed)

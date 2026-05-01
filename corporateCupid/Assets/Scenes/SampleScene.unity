@@ -6363,8 +6363,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -0.93}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 74.5438, y: -68.70041}
-  m_SizeDelta: {x: 594.8981, y: 96.1152}
+  m_AnchoredPosition: {x: 97, y: -96}
+  m_SizeDelta: {x: 780.869, y: 155.4308}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1207193106
 MonoBehaviour:
@@ -6386,8 +6386,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Due to the popularity of our company. We receive profiles from lots of
-    sources. Including non-humans.
+  m_text: There will be a final test badge today so that you can put everything into
+    practice, nothing from today will carry over tomorrow. I'll check on your progress
+    with the company in 5 days. This concludes your Day 0 training. We look forward
+    to welcoming you into our company tomorrow morning. Goodbye
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 24137fc10254aaf43ae7a797ee27d628, type: 2}
   m_sharedMaterial: {fileID: -8506923448228658366, guid: 24137fc10254aaf43ae7a797ee27d628, type: 2}
@@ -9504,7 +9506,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -191, y: 755.2}
+  m_AnchoredPosition: {x: -332.1, y: 679.3}
   m_SizeDelta: {x: 148.6285, y: 125.0797}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1810518662
@@ -9654,7 +9656,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 998.66, y: 536}
+  m_AnchoredPosition: {x: 853.96, y: 493.8}
   m_SizeDelta: {x: 148.6285, y: 125.0797}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1829113759
@@ -9814,7 +9816,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -135}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 833, y: 555.5}
+  m_AnchoredPosition: {x: 691.6, y: 513}
   m_SizeDelta: {x: 148.6285, y: 125.0797}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1852548825
@@ -10619,8 +10621,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 527.1344, y: 193.65002}
-  m_SizeDelta: {x: 1054.2688, y: 387.3}
+  m_AnchoredPosition: {x: 676.8456, y: 252.1167}
+  m_SizeDelta: {x: 1353.6912, y: 504.2332}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2088753914
 MonoBehaviour:
@@ -10769,7 +10771,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -191, y: 305}
+  m_AnchoredPosition: {x: -324.4, y: 243.1}
   m_SizeDelta: {x: 148.6285, y: 125.0797}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2106481607
