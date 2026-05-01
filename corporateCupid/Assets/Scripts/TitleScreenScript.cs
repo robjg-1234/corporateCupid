@@ -99,6 +99,8 @@ public class TitleScreenScript : MonoBehaviour
     {
         if (!fadingOut)
         {
+            PlayerPrefs.SetInt("Save", 1);
+            PlayerPrefs.Save();
             fadingOut = true;
             fadeScreen.gameObject.SetActive(true);
             StartCoroutine(FadeOut());
@@ -126,7 +128,6 @@ public class TitleScreenScript : MonoBehaviour
     }
     public void Resize(bool windowed)
     {
-        Debug.Log(windowed);
         if (windowed)
         {
             Screen.SetResolution(960, 540, false);

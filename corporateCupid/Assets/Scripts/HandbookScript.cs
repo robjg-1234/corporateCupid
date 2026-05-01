@@ -43,8 +43,8 @@ public class HandbookScript : MonoBehaviour
             }
             else if (current == 1)
             {
-                leftSideTitle.text = "Nymph";
-                leftText.text = "Nature Spirit, which is tied to is specific natural environments; often speaks about its specification, be is a Naid, Dyad, Oread, or Oceanid.";
+                leftSideTitle.text = "Gorgon";
+                leftText.text = "These sisters are a very dangerous bunch, They can identified from their serpent hair, though can also be noticed, through skin texture and or colour. Viewing an image of the sisters, should not cause petrification.";
                 rightSideTitle.text = "Satyr";
                 rightText.text = "Sometimes described as a 'Party Animal', with a strong desire for alcohol; can be indistinguisable from the waist up, except for its goat horns; which it struggles to hide.";
             }
@@ -66,8 +66,8 @@ public class HandbookScript : MonoBehaviour
             if (current == 1)
             {
                 leftButton.SetActive(true);
-                leftSideTitle.text = "Nymph";
-                leftText.text = "Nature Spirit, which is tied to is specific natural environments; often speaks about its specification, be is a Naid, Dyad, Oread, or Oceanid.";
+                leftSideTitle.text = "Gorgon";
+                leftText.text = "These sisters are a very dangerous bunch, They can identified from their serpent hair, though can also be noticed, through skin texture and or colour. Viewing an image of the sisters, should not cause petrification.";
                 rightSideTitle.text = "Satyr";
                 rightText.text = "Sometimes described as a 'Party Animal', with a strong desire for alcohol; can be indistinguisable from the waist up, except for its goat horns; which it struggles to hide.";
             }

@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class IntermissionScript : MonoBehaviour
 {
@@ -28,6 +29,7 @@ public class IntermissionScript : MonoBehaviour
     [SerializeField] Toggle rentTog;
     [SerializeField] Image secondFade;
     [SerializeField] Image endingScreen;
+    [SerializeField] VideoPlayer vp;
     int rent = 3;
     int food = 1;
     int ending = 0;
@@ -355,13 +357,19 @@ public class IntermissionScript : MonoBehaviour
         if (instance.timeMultiplier >= 2.3f)
         {
             ending = 3;
+            endingScreen.enabled = true;
             StartCoroutine(EndGame());
         }
         else
         {
             if (instance.day == 6)
             {
-                float finalScore = instance.overallScore / instance.profilesMatched * 100;
+                Debug.Log("ending");
+                float finalScore = 0;
+                if (instance.profilesMatched > 0)
+                {
+                    finalScore = instance.overallScore / instance.profilesMatched * 100;
+                }
                 if (finalScore > 80)
                 {
                     ending = 0;
@@ -374,6 +382,9 @@ public class IntermissionScript : MonoBehaviour
                 {
                     ending = 2;
                 }
+                vp.gameObject.SetActive(true);
+                vp.clip = Resources.Load<VideoClip>("Ending/" + ending);
+                vp.Prepare();
                 StartCoroutine(EndGame());
             }
             else
@@ -385,21 +396,38 @@ public class IntermissionScript : MonoBehaviour
 
     IEnumerator EndGame()
     {
-        endingScreen.sprite = Resources.Load<Sprite>("Ending/" + ending);
-        float a = 0;
-        endingScreen.color = new(1, 1, 1, a);
-        endingScreen.gameObject.SetActive(true);
-        while (a < 1)
+        if (ending == 3)
         {
-            a += Time.deltaTime * 0.5f;
-            if (a > 1)
-            {
-                a = 1;
-            }
+            float a = 0;
             endingScreen.color = new(1, 1, 1, a);
-            yield return null;
+            endingScreen.gameObject.SetActive(true);
+            while (a < 1)
+            {
+                a += Time.deltaTime * 0.5f;
+                if (a > 1)
+                {
+                    a = 1;
+                }
+                endingScreen.color = new(1, 1, 1, a);
+                yield return null;
+            }
+            yield return new WaitForSeconds(0.2f);
         }
-        yield return new WaitForSeconds(2.5f);
+        else
+        {
+            while (!vp.isPrepared)
+            {
+                yield return null;
+            }
+            fadeScreen.gameObject.SetActive(false);
+            vp.Play();
+            yield return new WaitForSeconds(0.2f);
+            while (vp.isPlaying)
+            {
+                yield return null;
+            }
+            fadeScreen.gameObject.SetActive(true);
+        }
         bool wait = true;
         while (wait)
         {
@@ -409,6 +437,6 @@ public class IntermissionScript : MonoBehaviour
             }
             yield return null;
         }
-        instance.ExitToTitleScreen();
+        instance.ExitToTitleScreen(1);
     }
 }

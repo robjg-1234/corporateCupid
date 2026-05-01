@@ -18,6 +18,10 @@ public class PunchCardScript : MonoBehaviour
         instance.currentProfiles++;
         instance.objectInteracted += ChangePriority;
         instance.dayEnded += EndOfDayUpdate;
+        if (instance.day == 0)
+        {
+            transform.position = new Vector2(0, -3.57f) + new Vector2(5f, 0);
+        }
     }
     private void OnDestroy()
     {
