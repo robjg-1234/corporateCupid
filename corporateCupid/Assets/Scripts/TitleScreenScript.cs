@@ -14,6 +14,7 @@ public class TitleScreenScript : MonoBehaviour
     [SerializeField] Image buttonNo;
     [SerializeField] GameObject settings;
     [SerializeField] GameObject credits;
+    [SerializeField] Toggle windowToggle;
     bool fadingOut = false;
     private void Start()
     {
@@ -27,6 +28,10 @@ public class TitleScreenScript : MonoBehaviour
             PlayerPrefs.SetInt("Save", 0);
             continueButton.interactable = false;
             continueText.color = new(0.5f, 0.5f, 0.5f, 0.5f);
+        }
+        if (PlayerPrefs.GetInt("Windowed") == 1)
+        {
+            windowToggle.isOn = true;
         }
         PlayerPrefs.Save();
     }
@@ -120,7 +125,21 @@ public class TitleScreenScript : MonoBehaviour
     public void ExitGame()
     {
         Application.Quit();
-    } 
+    }
+    public void Resize(bool windowed)
+    {
+        if (windowed)
+        {
+            Screen.SetResolution(960, 540, false);
+            PlayerPrefs.SetInt("Windowed", 1);
+        }
+        else
+        {
+            Screen.SetResolution(1920, 1080, true);
+            PlayerPrefs.SetInt("Windowed", 0);
+        }
+        PlayerPrefs.Save();
+    }
     IEnumerator FadeOut()
     {
         float val = 0;

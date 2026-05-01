@@ -32,6 +32,7 @@ public class GameplayScript : MonoBehaviour
     [SerializeField] GameObject envelope;
     [SerializeField] GameObject clock;
     [SerializeField] GameObject slot;
+    [SerializeField] Toggle windowToggle;
     Vignette vigRef;
     public int currentProfiles = 0;
     string[] preferences = {"Movies","Astrology","Programming","Cars","Video Games","Trains","Winter","Travelling","Reading","Music","Social Events","Animals","Sports","Hiking","Cooking" };
@@ -91,6 +92,11 @@ public class GameplayScript : MonoBehaviour
         if (tutorialSkipped == 1)
         {
             day = tutorialSkipped;
+        }
+        int windowed = PlayerPrefs.GetInt("Windowed");
+        if (windowed == 1)
+        {
+            windowToggle.isOn = true;
         }
     }
     /// <summary>
